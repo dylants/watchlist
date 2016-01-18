@@ -95,3 +95,6 @@ a list of those variables:
 * Node Server
     * `PORT` : The port for the node application server, defaults to `3000` in
     all environments.
+* Movies API
+    * `MOVIES_DOMAIN` : The domain used to retrieve movie data.
+    * `MOVIES_API` : The API (URL) used to retrieve movie data.
