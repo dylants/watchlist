@@ -20,18 +20,6 @@ command to install the project dependencies:
 
 `$ npm install`
 
-### Clear or Reinstall Dependencies ###
-
-To remove all installed project dependencies, run the following command from the
-project's root directory:
-
-`$ npm run clean`
-
-To remove all installed dependencies and reinstall them in one command, run the
-following:
-
-`$ npm run reinstall`
-
 ### Start the App ###
 
 This project is configured to load separate configuration based on the
