@@ -95,6 +95,12 @@ a list of those variables:
 * Node Server
     * `PORT` : The port for the node application server, defaults to `3000` in
     all environments.
+* Mongo
+    * `MONGO_PROTOCOL` : The protocol for the mongodb connection, defaults to
+    `mongodb://`
+    * `MONGO_HOST` : Hostname for mongodb, defaults to `localhost`
+    * `MONGO_PORT` : Port for mongodb, defaults to `27017`
+    * `MONGO_DB` : Database for mongodb, defaults to `watchlist`
 * Movies API
     * `MOVIES_DOMAIN` : The domain used to retrieve movie data.
     * `MOVIES_API` : The API (URL) used to retrieve movie data.
