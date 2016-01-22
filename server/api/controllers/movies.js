@@ -1,7 +1,7 @@
 import async from 'async';
 import util from 'util';
 
-import { loadMovieData, parseMovies } from '../lib/movies';
+import { loadMovies, downloadMovieData, parseMovies, saveMovies } from '../../lib/movies';
 
 function handleError(err, res) {
   return res.status(500).send({
@@ -9,19 +9,36 @@ function handleError(err, res) {
   });
 }
 
-export function loadMovies(req, res) {
+export function getMovies(req, res) {
+  loadMovies((err, movies) => {
+    if (err) {
+      return handleError(err, res);
+    }
+
+    return res.send(movies);
+  });
+}
+
+export function pullMovieData(req, res) {
   async.waterfall([
 
     // load the raw movie data
-    loadMovieData,
+    downloadMovieData,
+
+    // parse the raw movie data into a form we understand
+    parseMovies,
+
+    // save the movies to our database
+    saveMovies,
   ], (err, movies) => {
     if (err) {
       return handleError(err, res);
     }
 
-    // convert the raw movie data into a format we can use
-    const parsedMovies = parseMovies(movies);
-
-    return res.send(parsedMovies);
+    // instead of sending them the movies, send them information on the download
+    return res.send({
+      success: true,
+      moviesLoaded: movies.length,
+    });
   });
 }

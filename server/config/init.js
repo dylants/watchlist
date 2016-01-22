@@ -1,4 +1,4 @@
-const logger = require('../logger')();
+const logger = require('../lib/logger')();
 
 module.exports = () => {
   if (process.env.NODE_ENV) {

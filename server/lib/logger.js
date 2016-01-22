@@ -1,6 +1,6 @@
 import debugCaller from 'debug-caller';
 
-import projectConfig from '../package.json';
+import projectConfig from '../../package.json';
 
 // enable project namespace to print log messages by default
 debugCaller.debug.enable(projectConfig.name + '*');

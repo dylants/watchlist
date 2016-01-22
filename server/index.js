@@ -1,7 +1,7 @@
 // initialize the configuration first!
 require('./config/init')();
 
-const logger = require('./logger')();
+const logger = require('./lib/logger')();
 
 // load and output the configuration
 import config from './config';
