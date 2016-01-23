@@ -1,6 +1,7 @@
 import request from 'request';
 import async from 'async';
 import mongoose from 'mongoose';
+import _ from 'lodash';
 import config from '../config';
 import slugify from './slugify';
 
@@ -18,24 +19,18 @@ export function loadMovies(callback) {
  * Downloads movie metadata from the remote service
  */
 export function downloadMovieData(callback) {
-  // the domain and API are read from the config (so they can be overridden)
-  const DOMAIN = config.movies.domain;
-  const API = config.movies.api;
+  // pull values from the config
+  const domain = config.movies.domain;
+  const api = config.movies.api;
+  const limit = config.movies.limit;
+  const type = config.movies.type;
+  const sortBy = config.movies.sortBy;
 
-  // the amount of movies we should pull in
-  const LIMIT = 10;
-
-  // available types include 'in-theaters' and 'opening'
-  const TYPE = 'in-theaters';
-
-  // not really sure here on the values for sortBy
-  const SORT_BY = 'popularity';
-
-  const URL = DOMAIN + API + `?limit=${LIMIT}&type=${TYPE}&sortBy=${SORT_BY}`;
+  const url = domain + api + `?limit=${limit}&type=${type}&sortBy=${sortBy}`;
 
   // request the movie data, and return the results if found
   request({
-    url: URL,
+    url,
     method: 'GET',
     json: true,
   }, (error, response, body) => {
@@ -83,16 +78,68 @@ export function parseMovies(movies, callback) {
   }));
 }
 
+export function filterMovies(movies, callback) {
+  logger.log(`filterMovies: incoming movies: ${movies.length}`);
+
+  // pull values from the config
+  const topMoviesIndex = config.movieFilter.topMoviesIndex;
+  const minUserScore = config.movieFilter.minUserScore;
+  const minCriticScore = config.movieFilter.minCriticScore;
+  const minUserCriticScore = config.movieFilter.minUserCriticScore;
+
+  // filter the movies...
+  const filteredMovies = _(movies)
+    .filter((movie, index) => {
+      // take the first 10 movies (no matter what)
+      if (index < topMoviesIndex) {
+        logger.log(`filterMovies: keeping ${movie.title} because of index`);
+        return true;
+      }
+
+      // if a movie has a user score above the required amount, include it
+      if (movie.userScore >= minUserScore) {
+        logger.log(`filterMovies: keeping ${movie.title} because of user score`);
+        return true;
+      }
+
+      // if a movie has a critic score above the required amount, include it
+      if (movie.criticScore >= minCriticScore) {
+        logger.log(`filterMovies: keeping ${movie.title} because of critic score`);
+        return true;
+      }
+
+      // if a movie has both a user and critic score above required amount, include it
+      if ((movie.userScore >= minUserCriticScore) &&
+        (movie.criticScore >= minUserCriticScore)) {
+        logger.log(`filterMovies: keeping ${movie.title} because of user and critic score`);
+        return true;
+      }
+    })
+    .value();
+
+  logger.log(`filterMovies: after filtering, returning ${filteredMovies.length} movies`);
+
+  return callback(null, filteredMovies);
+}
+
 /**
  * Saves a single movie to the database, updating it if it already exists
  */
 function saveMovie(movie, callback) {
   logger.log(`saveMovie: movie title: ${movie.title}`);
 
+  // because we're doing an update, we must remove undefined values to avoid
+  // problems with mongoose/mongo $set's
+  const movieMetadata = _(movie)
+    .omitBy(_.isUndefined)
+    .omitBy(_.isNull)
+    .value();
+
   // attempt to update the movie if possible
-  const id = slugify(movie.title);
+  const id = slugify(movieMetadata.title);
   logger.log(`saveMovie: attempting to find and update ${id}`);
-  return Movie.findByIdAndUpdate(id, movie, { upsert: true, new: true }, callback);
+  return Movie.findByIdAndUpdate(id, movieMetadata, { upsert: true, new: true },
+    callback);
 }
 
 /**

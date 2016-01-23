@@ -92,3 +92,21 @@ a list of those variables:
 * Movies API
     * `MOVIES_DOMAIN` : The domain used to retrieve movie data.
     * `MOVIES_API` : The API (URL) used to retrieve movie data.
+    * `MOVIES_LIMIT` : Limit on the amount of movies retrieved, defaults to `100`.
+    * `MOVIES_TYPE` : Type of movies to retrieve, possible values include
+    `in-theaters` and `opening`, defaults to `in-theaters`.
+    * `MOVIES_SORT_BY` : How to sort the movies retrieved, possible values
+    include `popularity` and `release`, defaults to `popularity`.
+* Movie Filter - Attributes here define how the movies are filtered after they
+are retrieved from the movies API. These rules are listed in order of evaluation
+within the filter, so if a movie does not match the first rule, it can still
+be included by matching the next rule, and so on.
+    * `TOP_MOVIES_INDEX` : Number of movies to include from the start of the
+    list (so with a value of 10, the first 10 movies would be included in the
+    filter). Defaults to `0`.
+    * `MIN_USER_SCORE` : Minimum user score to include in the filter if the
+    movie has not yet been included, defaults to `70`.
+    * `MIN_CRITIC_SCORE` : Minimum critic score to include in the filter if
+    the movie has not yet been included, defaults to `80`.
+    * `MIN_USER_CRITIC_SCORE` : Minimum user AND critic score to include in
+    the filter if the movie has not yet been included, defaults to `60`.
