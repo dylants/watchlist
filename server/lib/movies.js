@@ -9,16 +9,9 @@ const Movie = mongoose.model('Movie');
 const logger = require('./logger')();
 
 /**
- * Returns the movies in our internal database
+ * Requests movie metadata from the remote service
  */
-export function loadMovies(callback) {
-  return Movie.find(callback);
-}
-
-/**
- * Downloads movie metadata from the remote service
- */
-export function downloadMovieData(callback) {
+function retrieveMovieData(callback) {
   // pull values from the config
   const domain = config.movies.domain;
   const api = config.movies.api;
@@ -48,7 +41,7 @@ export function downloadMovieData(callback) {
 /**
  * Converts the raw movie data into our internal representation
  */
-export function parseMovies(movies, callback) {
+function parseMovies(movies, callback) {
   // convert each movie contained within our list to our schema
   return callback(null, movies.map(movie => {
     const { title, mpaaRating, runtime, theaterReleaseDate, synopsis } = movie;
@@ -78,7 +71,10 @@ export function parseMovies(movies, callback) {
   }));
 }
 
-export function filterMovies(movies, callback) {
+/**
+ * Filters the movies list based on our criteria, which can be configured
+ */
+function filterMovies(movies, callback) {
   logger.log(`filterMovies: incoming movies: ${movies.length}`);
 
   // pull values from the config
@@ -90,7 +86,7 @@ export function filterMovies(movies, callback) {
   // filter the movies...
   const filteredMovies = _(movies)
     .filter((movie, index) => {
-      // take the first 10 movies (no matter what)
+      // take the first set of movies configured (no matter what)
       if (index < topMoviesIndex) {
         logger.log(`filterMovies: keeping ${movie.title} because of index`);
         return true;
@@ -145,6 +141,41 @@ function saveMovie(movie, callback) {
 /**
  * Saves all movies to the database
  */
-export function saveMovies(movies, callback) {
+function saveMovies(movies, callback) {
   return async.map(movies, saveMovie, callback);
+}
+
+// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
+// -------------------------- EXPORTED FUNCTIONS ---------------------------
+// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
+
+/**
+ * Returns the movies in our internal database
+ */
+export function loadMovies(callback) {
+  return Movie.find(callback);
+}
+
+/**
+ * This function pulls the whole process together of retrieving the movie
+ * metadata, parsing it into a format that we understand, filtering it based
+ * on our criteria, and finally, saving it to our database.
+ */
+export function downloadMovieData(callback) {
+  async.waterfall([
+
+    // load the raw movie data
+    retrieveMovieData,
+
+    // parse the raw movie data into a form we understand
+    parseMovies,
+
+    // filter the movies to only save those we want to look at later
+    filterMovies,
+
+    // save the movies to our database
+    saveMovies,
+  ], callback);
 }
