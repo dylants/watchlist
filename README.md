@@ -110,3 +110,19 @@ be included by matching the next rule, and so on.
     the movie has not yet been included, defaults to `80`.
     * `MIN_USER_CRITIC_SCORE` : Minimum user AND critic score to include in
     the filter if the movie has not yet been included, defaults to `60`.
+
+## Tests ##
+
+There are tests for the server side code, which use
+[Jasmine](https://jasmine.github.io/) as the test framework. Running the `test`
+script will lint the files and run the server side tests. This can be done by
+executing the following command:
+
+`$ npm test`
+
+To only run the server side tests, execute:
+
+`$ npm run test:server`
+
+Note that because this project uses Babel, Jasmine uses the `babel-core` helper
+when running the tests. This causes the tests to take longer than normal to start.

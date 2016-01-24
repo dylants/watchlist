@@ -18,7 +18,9 @@
     "build:server": "./node_modules/.bin/babel -d ./build ./server -s",
     "build": "npm run lint && npm run clean:build && npm run build:server && npm run build:client",
     "production-build": "npm run build && npm run clean:node_modules && npm install --production",
-    "production": "NODE_ENV=production node ./build/index.js"
+    "production": "NODE_ENV=production node ./build/index.js",
+    "test:server": "NODE_ENV=test ./node_modules/.bin/jasmine JASMINE_CONFIG_PATH=test/server/jasmine.json",
+    "test": "npm run lint && npm run test:server"
   },
   "dependencies": {
     "async": "1.5.2",
@@ -47,9 +49,11 @@
     "eslint-loader": "1.2.0",
     "eslint-plugin-react": "3.15.0",
     "html-webpack-plugin": "1.7.0",
+    "jasmine": "2.4.1",
     "node-sass": "3.4.2",
     "nodemon": "1.8.1",
     "react-transform-hmr": "1.0.1",
+    "rewire": "2.5.1",
     "rimraf": "2.5.0",
     "sass-loader": "3.1.2",
     "style-loader": "0.13.0",
