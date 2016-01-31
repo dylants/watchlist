@@ -1,4 +1,5 @@
 import rewire from 'rewire';
+import should from 'should';
 
 describe('The logger library', () => {
   let logger;
@@ -8,13 +9,13 @@ describe('The logger library', () => {
   });
 
   it('should exist', () => {
-    expect(logger).toBeDefined();
+    should.exist(logger);
   });
 
   it('should return a log and error function for logger', () => {
     const myLogger = logger();
 
-    expect(myLogger.log).toBeDefined();
-    expect(myLogger.error).toBeDefined();
+    should.exist(myLogger.log);
+    should.exist(myLogger.error);
   });
 });

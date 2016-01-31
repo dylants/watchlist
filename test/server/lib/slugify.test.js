@@ -1,4 +1,5 @@
 import rewire from 'rewire';
+import should from 'should';
 
 describe('The slugify library', () => {
   let slugify;
@@ -8,21 +9,21 @@ describe('The slugify library', () => {
   });
 
   it('should exist', () => {
-    expect(slugify).toBeDefined();
+    should.exist(slugify);
   });
 
   it('should work for a normal string', () => {
-    expect(slugify("hey how's it going")).toEqual('hey-hows-it-going');
+    slugify("hey how's it going").should.equal('hey-hows-it-going');
   });
 
   it('should lowercase', () => {
-    expect(slugify('YES')).toEqual('yes');
+    slugify('YES').should.equal('yes');
   });
 
   it('should work with a really long string', () => {
     const string = 'this is something that is really long and should not be kept' +
       'as one string because it\'s too long. Yes, really really long!';
-    expect(string.length > 60).toBeTruthy();
-    expect(slugify(string).length).toEqual(60);
+    (string.length).should.be.above(60);
+    (slugify(string).length).should.equal(60);
   });
 });

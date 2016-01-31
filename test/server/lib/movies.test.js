@@ -1,15 +1,16 @@
 import rewire from 'rewire';
 import testHelper from '../test-helper';
+import should from 'should';
 
 describe('The movies library', () => {
   let moviesLib;
 
-  beforeAll(() => {
+  before(() => {
     // create fake mongoose models
     testHelper.loadMongooseModels();
   });
 
-  afterAll(() => {
+  after(() => {
     // clear 'fake' models after tests complete
     testHelper.clearMongooseModels();
   });
@@ -19,7 +20,7 @@ describe('The movies library', () => {
   });
 
   it('should exist', () => {
-    expect(moviesLib).toBeDefined();
+    should.exist(moviesLib);
   });
 
   describe('parseMovies', () => {
@@ -80,8 +81,8 @@ describe('The movies library', () => {
 
     it('should correctly parse movies', (done) => {
       parseMovies(MOVIES, (err, movies) => {
-        expect(err).toBeNull();
-        expect(movies).toEqual([
+        should(err).be.null();
+        movies.should.deepEqual([
           {
             title: 'Ride Along 2',
             userScore: 59,
@@ -156,8 +157,8 @@ describe('The movies library', () => {
 
     it('should filter movies', (done) => {
       filterMovies(MOVIES, (err, movies) => {
-        expect(err).toBeNull();
-        expect(movies).toEqual([
+        should(err).be.null();
+        movies.should.deepEqual([
           {
             title: 'A',
             userScore: 86,
@@ -205,13 +206,13 @@ describe('The movies library', () => {
         c: null,
         d: 'hey',
       }, () => {});
-      expect(Movie._id).toEqual('the-movie-title');
-      expect(Movie._update).toEqual({
+      (Movie._id.should).equal('the-movie-title');
+      (Movie._update).should.deepEqual({
         title: 'The movie title',
         a: 1,
         d: 'hey',
       });
-      expect(Movie._options).toEqual({
+      (Movie._options).should.deepEqual({
         upsert: true,
         new: true,
       });
