@@ -114,7 +114,7 @@ be included by matching the next rule, and so on.
 ## Tests ##
 
 There are tests for the server side code, which use
-[Jasmine](https://jasmine.github.io/) as the test framework. Running the `test`
+[Mocha](https://mochajs.org/) as the test framework. Running the `test`
 script will lint the files and run the server side tests. This can be done by
 executing the following command:
 
@@ -124,5 +124,6 @@ To only run the server side tests, execute:
 
 `$ npm run test:server`
 
-Note that because this project uses Babel, Jasmine uses the `babel-core` helper
-when running the tests. This causes the tests to take longer than normal to start.
+To run the server side tests in a "watch" mode:
+
+`$ npm run test:server:watch`
