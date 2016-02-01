@@ -3,7 +3,6 @@ import async from 'async';
 import mongoose from 'mongoose';
 import _ from 'lodash';
 import config from '../config';
-import slugify from './slugify';
 
 const Movie = mongoose.model('Movie');
 const logger = require('./logger')();
@@ -27,9 +26,7 @@ function retrieveMovieData(callback) {
     method: 'GET',
     json: true,
   }, (error, response, body) => {
-    if (error) {
-      return callback(error);
-    }
+    if (error) return callback(error);
 
     const results = body.results;
     logger.log(`loadMovieData: returning ${results.length} movies`);
@@ -119,30 +116,97 @@ function filterMovies(movies, callback) {
 }
 
 /**
- * Saves a single movie to the database, updating it if it already exists
+ * Saves a single movie to the database, updating it if it already exists.
+ * This function calls the callback with two parameters:
+ *   - optional error object
+ *   - an object which contains:
+ *     - movie: the movie object after the save operation
+ *     - isNew: boolean indicating if the movie did not exist and was created
+ *      (if this is false, the movie was found and instead updated)
  */
 function saveMovie(movie, callback) {
   logger.log(`saveMovie: movie title: ${movie.title}`);
 
-  // because we're doing an update, we must remove undefined values to avoid
-  // problems with mongoose/mongo $set's
+  // because we _may_ be doing an update, we must remove undefined values
+  // to avoid problems with mongoose/mongo $set's
   const movieMetadata = _(movie)
     .omitBy(_.isUndefined)
     .omitBy(_.isNull)
     .value();
 
-  // attempt to update the movie if possible
-  const id = slugify(movieMetadata.title);
+  // determine the ID of the movie
+  const id = Movie.generateId(movieMetadata);
   logger.log(`saveMovie: attempting to find and update ${id}`);
-  return Movie.findByIdAndUpdate(id, movieMetadata, { upsert: true, new: true },
-    callback);
+
+  return Movie.findById(id, (err, doc) => {
+    if (err) return callback(err);
+
+    if (doc) {
+      // the movie exists, update it
+      return Movie.findByIdAndUpdate(id, movieMetadata, { new: true },
+        (updateErr, updatedMovie) => {
+          if (updateErr) return callback(updateErr);
+
+          // call the callback with the updated movie and not isNew
+          return callback(null, {
+            movie: updatedMovie,
+            isNew: false,
+          });
+        }
+      );
+    } else {
+      // the movie does NOT exist, create it
+      const newMovie = new Movie(movieMetadata);
+      return newMovie.save((saveErr, savedMovie) => {
+        if (saveErr) return callback(saveErr);
+
+        // call the callback with the saved movie and isNew
+        return callback(null, {
+          movie: savedMovie,
+          isNew: true,
+        });
+      });
+    }
+  });
 }
 
 /**
- * Saves all movies to the database
+ * Saves all movies to the database.
+ * This function calls the callback with two parameters:
+ *   - optional error object
+ *   - an object which contains:
+ *     - totalMovies: number of total movies processed
+ *     - moviesAdded: number of movies added (as new movie metadata)
+ *     - moviesUpdated: number of movies updated (existing movie metadata)
  */
 function saveMovies(movies, callback) {
-  return async.map(movies, saveMovie, callback);
+  // collect statistics on the processed movie data
+  const stats = {
+    totalMovies: 0,
+    moviesAdded: 0,
+    moviesUpdated: 0,
+  };
+
+  // process each movie within the array of movies
+  return async.each(movies, (movie, eachCallback) => {
+    // for each movie, save the movie metadata
+    return saveMovie(movie, (err, data) => {
+      if (err) return eachCallback(err);
+
+      // update the stats
+      stats.totalMovies++;
+      if (data.isNew) {
+        stats.moviesAdded++;
+      } else {
+        stats.moviesUpdated++;
+      }
+
+      // next!
+      return eachCallback();
+    });
+  }, (err) => {
+    return callback(err, stats);
+  });
 }
 
 // -------------------------------------------------------------------------
@@ -162,6 +226,9 @@ export function loadMovies(callback) {
  * This function pulls the whole process together of retrieving the movie
  * metadata, parsing it into a format that we understand, filtering it based
  * on our criteria, and finally, saving it to our database.
+ * The callback is called with two parameters:
+ *   - an optional error object
+ *   - an object which contains statistics on the overall job operation
  */
 export function downloadMovieData(callback) {
   async.waterfall([

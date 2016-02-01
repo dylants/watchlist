@@ -1,6 +1,7 @@
 import rewire from 'rewire';
 import testHelper from '../test-helper';
 import should from 'should';
+import _ from 'lodash';
 
 describe('The movies library', () => {
   let moviesLib;
@@ -184,37 +185,136 @@ describe('The movies library', () => {
   describe('saveMovie', () => {
     let Movie;
     let saveMovie;
+    let _id;
+    let _update;
+    let _options;
 
     beforeEach(() => {
-      Movie = {
-        findByIdAndUpdate(id, update, options, callback) {
-          this._id = id;
-          this._update = update;
-          this._options = options;
-          return callback();
-        },
+      Movie = () => {};
+
+      Movie.generateId = (movie) => {
+        if (movie.title === 'update movie') {
+          return 'update-movie';
+        } else {
+          return 'save-movie';
+        }
       };
+
+      Movie.findById = (id, callback) => {
+        if (id === 'update-movie') {
+          return callback(null, {});
+        } else {
+          return callback();
+        }
+      };
+
+      Movie.findByIdAndUpdate = function findByIdAndUpdate(id, update, options, callback) {
+        _id = id;
+        _update = update;
+        _options = options;
+        return callback(null, {
+          x: 1,
+        });
+      };
+
+      Movie.prototype.save = (callback) => {
+        return callback(null, {
+          y: 2,
+        });
+      };
+
       moviesLib.__set__('Movie', Movie);
       saveMovie = moviesLib.__get__('saveMovie');
     });
 
-    it('should corretly pass the movieMetadata', () => {
+    it('should corretly pass the movieMetadata on update', (done) => {
       saveMovie({
-        title: 'The movie title',
+        title: 'update movie',
         a: 1,
         b: undefined,
         c: null,
         d: 'hey',
-      }, () => {});
-      (Movie._id.should).equal('the-movie-title');
-      (Movie._update).should.deepEqual({
-        title: 'The movie title',
-        a: 1,
-        d: 'hey',
+      }, (err, stats) => {
+        should(err).be.null();
+        (_id).should.equal('update-movie');
+        (_update).should.deepEqual({
+          title: 'update movie',
+          a: 1,
+          d: 'hey',
+        });
+        (_options).should.deepEqual({
+          new: true,
+        });
+        (stats).should.deepEqual({
+          movie: { x: 1 },
+          isNew: false,
+        });
+
+        done();
       });
-      (Movie._options).should.deepEqual({
-        upsert: true,
-        new: true,
+    });
+
+    it('should corretly pass the movieMetadata on create', (done) => {
+      saveMovie({
+        title: 'save movie',
+        a: 2,
+        b: null,
+        c: undefined,
+        d: 'ho',
+      }, (err, stats) => {
+        should(err).be.null();
+        (stats).should.deepEqual({
+          movie: { y: 2 },
+          isNew: true,
+        });
+
+        done();
+      });
+    });
+  });
+
+  describe('saveMovies', () => {
+    let saveMovies;
+    let MOVIES;
+
+    beforeEach(() => {
+      MOVIES = [
+        {
+          title: 'new movie 1',
+        },
+        {
+          title: 'old movie 1',
+        },
+        {
+          title: 'old movie 2',
+        },
+      ];
+
+      moviesLib.__set__('saveMovie', (movie, callback) => {
+        if (_.includes(movie.title, 'new')) {
+          return callback(null, {
+            isNew: true,
+          });
+        } else {
+          return callback(null, {
+            isNew: false,
+          });
+        }
+      });
+
+      saveMovies = moviesLib.__get__('saveMovies');
+    });
+
+    it('should correctly return the stats', (done) => {
+      saveMovies(MOVIES, (err, stats) => {
+        should(err).be.null();
+        (stats).should.deepEqual({
+          totalMovies: 3,
+          moviesAdded: 1,
+          moviesUpdated: 2,
+        });
+
+        done();
       });
     });
   });

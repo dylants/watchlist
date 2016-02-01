@@ -10,24 +10,16 @@ function handleError(err, res) {
 
 export function getMovies(req, res) {
   loadMovies((err, movies) => {
-    if (err) {
-      return handleError(err, res);
-    }
+    if (err) return handleError(err, res);
 
     return res.send(movies);
   });
 }
 
 export function pullMovieData(req, res) {
-  downloadMovieData((err, movies) => {
-    if (err) {
-      return handleError(err, res);
-    }
+  downloadMovieData((err, stats) => {
+    if (err) return handleError(err, res);
 
-    // instead of sending them the movies, send them information on the download
-    return res.send({
-      success: true,
-      moviesLoaded: movies.length,
-    });
+    return res.send(stats);
   });
 }
