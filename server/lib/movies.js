@@ -209,18 +209,48 @@ function saveMovies(movies, callback) {
   });
 }
 
+/**
+ * Takes a Movie model and translates it to our UI version of a "movie",
+ * returning this movie UI object.
+ */
+function buildMovieUI(movie) {
+  // pull common values from the movie
+  const {
+    title,
+    userScore,
+    criticScore,
+    mpaaRating,
+    runtime,
+    synopsis,
+    images,
+    saved,
+    dismissed,
+  } = movie;
+
+  // take the first image as the main display image (if available)
+  const image = images && (images.length > 0) && images[0];
+
+  return {
+    id: movie._id,
+    title,
+    userScore,
+    criticScore,
+    mpaaRating,
+    runtime,
+    synopsis,
+
+    // let's be more declaritive for these "optional" values
+    image: image ? image : null,
+    saved: saved ? saved : false,
+    dismissed: dismissed ? dismissed : false,
+  };
+}
+
 // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
 // -------------------------- EXPORTED FUNCTIONS ---------------------------
 // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
-
-/**
- * Returns the movies in our internal database
- */
-export function loadMovies(callback) {
-  return Movie.find(callback);
-}
 
 /**
  * This function pulls the whole process together of retrieving the movie
@@ -245,4 +275,19 @@ export function downloadMovieData(callback) {
     // save the movies to our database
     saveMovies,
   ], callback);
+}
+
+/**
+ * Returns the movies from our internal database, modified to fit the UI
+ */
+export function loadMovies(callback) {
+  // find all the movies in our database
+  return Movie.find((findErr, movies) => {
+    if (findErr) { return callback(findErr); }
+
+    // build the movies UI list by parsing each movie
+    const moviesUI = movies.map(movie => buildMovieUI(movie));
+
+    return callback(null, moviesUI);
+  });
 }

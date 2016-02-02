@@ -318,4 +318,64 @@ describe('The movies library', () => {
       });
     });
   });
+
+  describe('buildMovieUI', () => {
+    let buildMovieUI;
+
+    beforeEach(() => {
+      buildMovieUI = moviesLib.__get__('buildMovieUI');
+    });
+
+    it('should return correct data for normally populated movie', () => {
+      (buildMovieUI({
+        _id: 'my-movie',
+        title: 'My Movie',
+        userScore: 100,
+        criticScore: 80,
+        mpaaRating: 'G',
+        runtime: '1 hour',
+        synopsis: 'Good things',
+        images: [
+          'one.jpg',
+          'two.jpg',
+        ],
+        saved: true,
+        dismissed: false,
+      })).should.deepEqual({
+        id: 'my-movie',
+        title: 'My Movie',
+        userScore: 100,
+        criticScore: 80,
+        mpaaRating: 'G',
+        runtime: '1 hour',
+        synopsis: 'Good things',
+        image: 'one.jpg',
+        saved: true,
+        dismissed: false,
+      });
+    });
+
+    it('should return correct data for partially filled movie', () => {
+      (buildMovieUI({
+        _id: 'my-movie',
+        title: 'My Movie',
+        userScore: 100,
+        criticScore: 80,
+        mpaaRating: 'G',
+        runtime: '1 hour',
+        synopsis: 'Good things',
+      })).should.deepEqual({
+        id: 'my-movie',
+        title: 'My Movie',
+        userScore: 100,
+        criticScore: 80,
+        mpaaRating: 'G',
+        runtime: '1 hour',
+        synopsis: 'Good things',
+        image: null,
+        saved: false,
+        dismissed: false,
+      });
+    });
+  });
 });

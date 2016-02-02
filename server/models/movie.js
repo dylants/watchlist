@@ -6,7 +6,10 @@ const logger = require('../lib/logger')();
 const Schema = mongoose.Schema;
 
 const MovieSchema = new Schema({
+  // the ID is the slugify'ed version of the movie title
   _id: String,
+
+  // various movie metadata...
   title: String,
   userScore: Number,
   criticScore: Number,
@@ -15,6 +18,10 @@ const MovieSchema = new Schema({
   theaterReleaseDate: String,
   synopsis: String,
   images: Array,
+
+  // user interactions
+  saved: Boolean,
+  dismissed: Boolean,
 });
 
 // include created and modified dates
