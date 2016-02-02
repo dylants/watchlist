@@ -26,7 +26,7 @@ function retrieveMovieData(callback) {
     method: 'GET',
     json: true,
   }, (error, response, body) => {
-    if (error) return callback(error);
+    if (error) { return callback(error); }
 
     const results = body.results;
     logger.log(`loadMovieData: returning ${results.length} movies`);
@@ -139,13 +139,13 @@ function saveMovie(movie, callback) {
   logger.log(`saveMovie: attempting to find and update ${id}`);
 
   return Movie.findById(id, (err, doc) => {
-    if (err) return callback(err);
+    if (err) { return callback(err); }
 
     if (doc) {
       // the movie exists, update it
       return Movie.findByIdAndUpdate(id, movieMetadata, { new: true },
         (updateErr, updatedMovie) => {
-          if (updateErr) return callback(updateErr);
+          if (updateErr) { return callback(updateErr); }
 
           // call the callback with the updated movie and not isNew
           return callback(null, {
@@ -158,7 +158,7 @@ function saveMovie(movie, callback) {
       // the movie does NOT exist, create it
       const newMovie = new Movie(movieMetadata);
       return newMovie.save((saveErr, savedMovie) => {
-        if (saveErr) return callback(saveErr);
+        if (saveErr) { return callback(saveErr); }
 
         // call the callback with the saved movie and isNew
         return callback(null, {
@@ -191,7 +191,7 @@ function saveMovies(movies, callback) {
   return async.each(movies, (movie, eachCallback) => {
     // for each movie, save the movie metadata
     return saveMovie(movie, (err, data) => {
-      if (err) return eachCallback(err);
+      if (err) { return eachCallback(err); }
 
       // update the stats
       stats.totalMovies++;

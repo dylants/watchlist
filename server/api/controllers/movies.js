@@ -10,7 +10,7 @@ function handleError(err, res) {
 
 export function getMovies(req, res) {
   loadMovies((err, movies) => {
-    if (err) return handleError(err, res);
+    if (err) { return handleError(err, res); }
 
     return res.send(movies);
   });
@@ -18,7 +18,7 @@ export function getMovies(req, res) {
 
 export function pullMovieData(req, res) {
   downloadMovieData((err, stats) => {
-    if (err) return handleError(err, res);
+    if (err) { return handleError(err, res); }
 
     return res.send(stats);
   });
