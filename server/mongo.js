@@ -4,8 +4,8 @@ import glob from 'glob';
 import config from './config';
 
 const logger = require('./lib/logger')();
-const mongoUrl = config.mongo.protocol + config.mongo.host + ':' +
-    config.mongo.port + '/' + config.mongo.database;
+const mongoUrl = `${config.mongo.protocol}${config.mongo.host}:` +
+  `${config.mongo.port}/${config.mongo.database}`;
 
 mongoose.connect(mongoUrl, (err) => {
   if (err) {
@@ -23,7 +23,5 @@ mongoose.connect(mongoUrl, (err) => {
 
 // load all the mongoose models
 const MODELS_PATH = path.join(__dirname, 'models');
-const files = glob.sync(MODELS_PATH + '/**/*.js');
-files.map(file => {
-  require(file);
-});
+const files = glob.sync(`${MODELS_PATH}/**/*.js`);
+files.map(file => require(file));

@@ -18,7 +18,7 @@ function retrieveMovieData(callback) {
   const type = config.movies.type;
   const sortBy = config.movies.sortBy;
 
-  const url = domain + api + `?limit=${limit}&type=${type}&sortBy=${sortBy}`;
+  const url = `${domain}${api}?limit=${limit}&type=${type}&sortBy=${sortBy}`;
 
   // request the movie data, and return the results if found
   request({
@@ -107,6 +107,9 @@ function filterMovies(movies, callback) {
         logger.log(`filterMovies: keeping ${movie.title} because of user and critic score`);
         return true;
       }
+
+      // else no match
+      return false;
     })
     .value();
 
@@ -190,7 +193,7 @@ function saveMovies(movies, callback) {
   // process each movie within the array of movies
   return async.each(movies, (movie, eachCallback) => {
     // for each movie, save the movie metadata
-    return saveMovie(movie, (err, data) => {
+    saveMovie(movie, (err, data) => {
       if (err) { return eachCallback(err); }
 
       // update the stats
@@ -204,9 +207,7 @@ function saveMovies(movies, callback) {
       // next!
       return eachCallback();
     });
-  }, (err) => {
-    return callback(err, stats);
-  });
+  }, (err) => callback(err, stats));
 }
 
 /**
@@ -240,9 +241,9 @@ function buildMovieUI(movie) {
     synopsis,
 
     // let's be more declaritive for these "optional" values
-    image: image ? image : null,
-    saved: saved ? saved : false,
-    dismissed: dismissed ? dismissed : false,
+    image: image || null,
+    saved: saved || false,
+    dismissed: dismissed || false,
   };
 }
 

@@ -13,10 +13,8 @@ const app = express();
  * **************/
 const ROUTE_PATH = path.join(API_ROOT, 'routes');
 const router = new express.Router();
-glob(ROUTE_PATH + '/**/*.js', (err, files) => {
-  files.map(file => {
-    require(file)(router);
-  });
+glob(`${ROUTE_PATH}/**/*.js`, (err, files) => {
+  files.map(file => require(file)(router));
 });
 app.use(router);
 
@@ -49,7 +47,7 @@ if (!IS_PRODUCTION) {
 // if at this point we don't have a route match for /api, return 404
 app.all('/api/*', (req, res) => {
   res.status(404).send({
-    error: 'route not found: ' + req.url,
+    error: `route not found: ${req.url}`,
   });
 });
 
@@ -60,7 +58,7 @@ app.all('/api/*', (req, res) => {
  * handles all URLs under that. Know that at this point we have "reserved"
  * /api/*, for APIs. If that URL is used by the UI, it won't resolve correctly.
  */
-app.all('*', function response(req, res) {
+app.all('*', (req, res) => {
   res.sendFile(path.join(APP_ROOT, 'public', 'index.html'));
 });
 

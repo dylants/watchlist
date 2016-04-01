@@ -218,7 +218,7 @@ describe('The movies library', () => {
       };
 
       Movie.prototype.save = (callback) => {
-        return callback(null, {
+        callback(null, {
           y: 2,
         });
       };

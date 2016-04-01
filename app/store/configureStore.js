@@ -6,7 +6,7 @@ import rootReducer from '../reducers';
 
 const logger = createLogger({
   // only log when in development environment
-  predicate: () => process.env.NODE_ENV === `development`,
+  predicate: () => process.env.NODE_ENV === 'development',
 });
 
 const createStoreWithMiddleware = applyMiddleware(

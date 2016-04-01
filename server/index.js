@@ -14,11 +14,11 @@ import './mongo';
 import app from './express';
 
 // start the application
-app.listen(config.port, function onStart(err) {
+app.listen(config.port, (err) => {
   if (err) {
     logger.log(err);
   }
 
-  /* eslint max-len:0 */
-  logger.log(`Express server listening on port ${config.port} in ${process.env.NODE_ENV} environment`);
+  logger.log(`Express server listening on port ${config.port} ` +
+    `in ${process.env.NODE_ENV} environment`);
 });
