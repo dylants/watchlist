@@ -119,7 +119,7 @@ module.exports = {
 
   // more info: https://webpack.github.io/docs/build-performance.html#sourcemaps
   // more info: https://webpack.github.io/docs/configuration.html#devtool
-  devtool: IS_PRODUCTION ? 'source-map' : 'eval-source-map',
+  devtool: IS_PRODUCTION ? 'source-map' : 'cheap-module-source-map',
 
   // set to false to see a list of every file being bundled.
   noInfo: true,
