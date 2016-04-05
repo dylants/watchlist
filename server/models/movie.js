@@ -13,11 +13,13 @@ const MovieSchema = new Schema({
   title: String,
   userScore: Number,
   criticScore: Number,
+  tomatoIcon: String,
   mpaaRating: String,
   runtime: String,
   theaterReleaseDate: String,
   synopsis: String,
   images: Array,
+  url: String,
 
   // user interactions
   saved: Boolean,

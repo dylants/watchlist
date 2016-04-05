@@ -1,7 +1,9 @@
 import rewire from 'rewire';
-import testHelper from '../test-helper';
 import should from 'should';
 import _ from 'lodash';
+
+import testHelper from '../test-helper';
+import config from '../../../server/config';
 
 describe('The movies library', () => {
   let moviesLib;
@@ -88,6 +90,7 @@ describe('The movies library', () => {
             title: 'Ride Along 2',
             userScore: 59,
             criticScore: 13,
+            tomatoIcon: 'rotten',
             mpaaRating: 'PG-13',
             runtime: '1 hr. 42 min.',
             theaterReleaseDate: 'Jan 15',
@@ -96,11 +99,13 @@ describe('The movies library', () => {
               'http://image1.com',
               'http://image2.com',
             ],
+            url: `${config.movies.domain}/m/ride_along_2/`,
           },
           {
             title: 'The Revenant',
             userScore: 86,
             criticScore: 82,
+            tomatoIcon: 'certified',
             mpaaRating: 'R',
             runtime: '2 hr. 36 min.',
             theaterReleaseDate: 'Dec 25',
@@ -109,6 +114,7 @@ describe('The movies library', () => {
               'http://image1.jpg',
               'http://image2.jpg',
             ],
+            url: `${config.movies.domain}/m/the_revenant_2015/`,
           },
         ]);
 
@@ -332,6 +338,7 @@ describe('The movies library', () => {
         title: 'My Movie',
         userScore: 100,
         criticScore: 80,
+        tomatoIcon: 'certified',
         mpaaRating: 'G',
         runtime: '1 hour',
         synopsis: 'Good things',
@@ -346,6 +353,7 @@ describe('The movies library', () => {
         title: 'My Movie',
         userScore: 100,
         criticScore: 80,
+        tomatoIcon: 'certified',
         mpaaRating: 'G',
         runtime: '1 hour',
         synopsis: 'Good things',
@@ -361,6 +369,7 @@ describe('The movies library', () => {
         title: 'My Movie',
         userScore: 100,
         criticScore: 80,
+        tomatoIcon: 'fresh',
         mpaaRating: 'G',
         runtime: '1 hour',
         synopsis: 'Good things',
@@ -369,6 +378,7 @@ describe('The movies library', () => {
         title: 'My Movie',
         userScore: 100,
         criticScore: 80,
+        tomatoIcon: 'fresh',
         mpaaRating: 'G',
         runtime: '1 hour',
         synopsis: 'Good things',

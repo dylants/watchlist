@@ -41,7 +41,7 @@ function retrieveMovieData(callback) {
 function parseMovies(movies, callback) {
   // convert each movie contained within our list to our schema
   return callback(null, movies.map(movie => {
-    const { title, mpaaRating, runtime, theaterReleaseDate, synopsis } = movie;
+    const { title, tomatoIcon, mpaaRating, runtime, theaterReleaseDate, url, synopsis } = movie;
 
     // pull in the images if they exist
     const images = [];
@@ -55,15 +55,20 @@ function parseMovies(movies, callback) {
       }
     }
 
+    // generate the full url
+    const fullUrl = config.movies.domain + url;
+
     return {
       title,
       userScore: movie.popcornScore,
       criticScore: movie.tomatoScore,
+      tomatoIcon,
       mpaaRating,
       runtime,
       theaterReleaseDate,
       synopsis,
       images,
+      url: fullUrl,
     };
   }));
 }
@@ -220,6 +225,7 @@ function buildMovieUI(movie) {
     title,
     userScore,
     criticScore,
+    tomatoIcon,
     mpaaRating,
     runtime,
     synopsis,
@@ -236,6 +242,7 @@ function buildMovieUI(movie) {
     title,
     userScore,
     criticScore,
+    tomatoIcon,
     mpaaRating,
     runtime,
     synopsis,
@@ -281,9 +288,14 @@ export function downloadMovieData(callback) {
 /**
  * Returns the movies from our internal database, modified to fit the UI
  */
-export function loadMovies(callback) {
-  // find all the movies in our database
-  return Movie.find((findErr, movies) => {
+export function loadMovies(options, callback) {
+  // take the user input and add our default options if needed
+  _.defaults(options, {
+    skip: 0,
+    limit: 20,
+  });
+
+  return Movie.find({}, null, options, (findErr, movies) => {
     if (findErr) { return callback(findErr); }
 
     // build the movies UI list by parsing each movie

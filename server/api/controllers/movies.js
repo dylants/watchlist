@@ -9,7 +9,13 @@ function handleError(err, res) {
 }
 
 export function getMovies(req, res) {
-  loadMovies((err, movies) => {
+  const skip = req.query.skip;
+  const limit = req.query.limit;
+
+  loadMovies({
+    skip,
+    limit,
+  }, (err, movies) => {
     if (err) { return handleError(err, res); }
 
     return res.send(movies);
