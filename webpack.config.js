@@ -63,7 +63,14 @@ function getLoaders() {
     }, {
       test: /(\.scss)$/,
       exclude: /node_modules/,
-      loaders: ['style', 'css', 'sass'],
+      loader: 'style' +
+              '!' +
+              'css?modules' +
+                '&sourceMap' +
+                '&localIdentName=[local]___[hash:base64:5]' +
+              '!' +
+              'sass?outputStyle=expanded' +
+                '&sourceMap',
     }, {
       test: /\.js$/,
       exclude: /node_modules/,
