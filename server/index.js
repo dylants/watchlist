@@ -13,6 +13,9 @@ import './mongo';
 // load the express application
 import app from './express';
 
+// load the passport configuration
+import './passport';
+
 // start the application
 app.listen(config.port, (err) => {
   if (err) {

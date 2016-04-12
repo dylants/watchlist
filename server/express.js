@@ -1,16 +1,51 @@
 import path from 'path';
 import express from 'express';
+import bodyParser from 'body-parser';
+import session from 'cookie-session';
+import passport from 'passport';
 import glob from 'glob';
 
 const API_ROOT = path.join(__dirname, 'api');
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 const APP_ROOT = path.join(__dirname, '../');
 
+// 30 days for session cookie lifetime
+const SESSION_COOKIE_LIFETIME = 1000 * 60 * 60 * 24 * 30;
+
+// Verifies the user is authenticated, else returns unauthorized
+function requireAuthentication(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+
+  return res.status(401).send({
+    error: 'Unauthorized',
+  });
+}
+
+// Create the express application
 const app = express();
 
-/* **************
- * *** ROUTES ***
- * **************/
+// use express' body parser to access body elements later
+app.use(bodyParser.json());
+
+// use express' session
+app.use(session({
+  name: 'watchlist',
+  secret: 'super-secret-watchlist',
+  cookie: {
+    maxAge: SESSION_COOKIE_LIFETIME,
+  },
+}));
+
+// use passport session
+app.use(passport.initialize());
+app.use(passport.session());
+
+// all routes under /api/secure require authentication
+app.all('/api/secure/*', requireAuthentication);
+
+// load the server controllers (via the routes)
 const ROUTE_PATH = path.join(API_ROOT, 'routes');
 const router = new express.Router();
 glob(`${ROUTE_PATH}/**/*.js`, (err, files) => {
