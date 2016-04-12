@@ -1,11 +1,10 @@
-import rewire from 'rewire';
 import should from 'should';
 
 describe('The logger library', () => {
   let logger;
 
   beforeEach(() => {
-    logger = rewire('../../../server/lib/logger');
+    logger = require('../../../server/lib/logger');
   });
 
   it('should exist', () => {

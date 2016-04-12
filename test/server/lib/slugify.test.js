@@ -1,11 +1,10 @@
-import rewire from 'rewire';
 import should from 'should';
 
 describe('The slugify library', () => {
   let slugify;
 
   beforeEach(() => {
-    slugify = rewire('../../../server/lib/slugify');
+    slugify = require('../../../server/lib/slugify');
   });
 
   it('should exist', () => {
