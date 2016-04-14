@@ -15,6 +15,12 @@ testHelper.loadMongooseModels = () => {
   } catch (err) {
     mongoose.model('Movie', {});
   }
+
+  try {
+    mongoose.model('User');
+  } catch (err) {
+    mongoose.model('User', {});
+  }
 };
 
 /**

@@ -1,10 +1,22 @@
 import should from 'should';
 import rewire from 'rewire';
 
+import testHelper from './test-helper';
+
 const MODULE_PATH = '../../server/passport';
 
 describe('The passport configuration', () => {
   let passport;
+
+  before(() => {
+    // create fake mongoose models
+    testHelper.loadMongooseModels();
+  });
+
+  after(() => {
+    // clear 'fake' models after tests complete
+    testHelper.clearMongooseModels();
+  });
 
   beforeEach(() => {
     passport = require(MODULE_PATH);
