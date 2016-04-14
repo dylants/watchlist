@@ -1,4 +1,5 @@
 import { createAction } from 'redux-actions';
+import { checkHttpStatus, handleHttpError } from '../utils';
 
 import {
   LOADING_MOVIES,
@@ -26,15 +27,16 @@ export function loadMovies() {
   return dispatch => {
     dispatch(moviesLoading());
 
-    return fetch('/api/movies', {
+    return fetch('/api/secure/movies', {
       method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
     })
+    .then(checkHttpStatus)
     .then(response => response.json())
     .then(json => dispatch(moviesLoaded(json)))
-    .catch((error) => dispatch(failedLoadingMovies(error)));
+    .catch((error) => handleHttpError(dispatch, error, failedLoadingMovies));
   };
 }

@@ -25,7 +25,7 @@ describe('movieActions', () => {
   });
 
   describe('loadMovies', () => {
-    const LOAD_MOVIES_API = '/api/movies';
+    const LOAD_MOVIES_API = '/api/secure/movies';
 
     describe('when movies are returned', () => {
       let MOVIES;
@@ -51,20 +51,38 @@ describe('movieActions', () => {
       });
     });
 
-    describe('when the API call fails', () => {
+    describe('when the API call fails (401)', () => {
+      beforeEach(() => {
+        fetchMock.mock(LOAD_MOVIES_API, 401);
+      });
+
+      it('should return the correct actions', (done) => {
+        store.dispatch(movieActions.loadMovies())
+          .then(() => {
+            const actions = store.getActions();
+
+            should(actions.length).equal(2);
+            should(actions[0].type).equal(types.LOADING_MOVIES);
+            should(actions[1].payload.path).equal('/login');
+          })
+          .then(done)   // testing complete
+          .catch(done); // we do this in case the tests fail, to end tests
+      });
+    });
+
+    describe('when the API call fails (500)', () => {
       beforeEach(() => {
         fetchMock.mock(LOAD_MOVIES_API, 500);
       });
 
       it('should return the correct actions', (done) => {
-        const expectedActions = [
-          { type: types.LOADING_MOVIES, payload: undefined },
-          { type: types.FAILED_LOADING_MOVIES, error: new SyntaxError('Unexpected end of input') },
-        ];
-
         store.dispatch(movieActions.loadMovies())
           .then(() => {
-            should(store.getActions()).deepEqual(expectedActions);
+            const actions = store.getActions();
+
+            should(actions.length).equal(2);
+            should(actions[0].type).equal(types.LOADING_MOVIES);
+            should(actions[1].type).equal(types.FAILED_LOADING_MOVIES);
           })
           .then(done)   // testing complete
           .catch(done); // we do this in case the tests fail, to end tests
