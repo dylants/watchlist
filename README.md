@@ -1,5 +1,7 @@
 # watchlist #
 
+[![Build Status][travis-image]][travis-url]
+
 What to watch.
 
 ## Run the Application ##
@@ -120,18 +122,13 @@ executing the following command:
 
 `$ npm test`
 
-To only run the server side tests, execute:
+To only run the mocha tests, execute:
 
-`$ npm run test:server`
+`$ npm run test:mocha`
 
-To run the server side tests in a "watch" mode:
+To run the mocha tests in a "watch" mode:
 
-`$ npm run test:server:watch`
+`$ npm run test:watch`
 
-To only run the client side tests, execute:
-
-`$ npm run test:client`
-
-To run the client side tests in a "watch" mode:
-
-`$ npm run test:client:watch`
+[travis-image]: https://img.shields.io/travis/dylants/watchlist/master.svg
+[travis-url]: https://travis-ci.org/dylants/watchlist
