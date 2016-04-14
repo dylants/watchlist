@@ -19,11 +19,9 @@
     "build": "npm run lint && npm run clean:build && npm run build:server && npm run build:client",
     "production-build": "npm run build && npm run clean:node_modules && npm install --production",
     "production": "NODE_ENV=production node ./build/index.js",
-    "test:client": "NODE_ENV=test ./node_modules/.bin/mocha --compilers js:babel-core/register test/app/**",
-    "test:client:watch": "NODE_ENV=test ./node_modules/.bin/mocha --compilers js:babel-core/register --watch test/app/**",
-    "test:server": "NODE_ENV=test ./node_modules/.bin/mocha --compilers js:babel-core/register test/server/**",
-    "test:server:watch": "NODE_ENV=test ./node_modules/.bin/mocha --compilers js:babel-core/register --watch test/server/**",
-    "test": "npm run lint && npm run test:client && npm run test:server"
+    "test:mocha": "NODE_ENV=test ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive test/**",
+    "test:watch": "NODE_ENV=test ./node_modules/.bin/mocha --compilers js:babel-core/register --recursive --watch test/**",
+    "test": "npm run lint && npm run test:mocha"
   },
   "dependencies": {
     "async": "1.5.2",
