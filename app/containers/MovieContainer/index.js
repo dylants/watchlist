@@ -1,16 +1,12 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import Movie from '../../components/Movie';
 
-class MovieContainer extends Component {
-  render() {
-    const { movie } = this.props;
-
-    return (
-      <Movie {...movie} />
-    );
-  }
+function MovieContainer({ movie }) {
+  return (
+    <Movie {...movie} />
+  );
 }
 
 MovieContainer.propTypes = {
