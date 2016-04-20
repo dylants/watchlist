@@ -1,17 +1,15 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import './style.scss';
 
-class App extends Component {
-  render() {
-    const { children } = this.props;
-    return (
-      <div>
-        {children}
-      </div>
-    );
-  }
+// function input is shorthand for const { children } = this.props
+function App({ children }) {
+  return (
+    <div>
+      {children}
+    </div>
+  );
 }
 
 App.propTypes = {
