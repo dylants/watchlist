@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import session from 'cookie-session';
 import passport from 'passport';
 import glob from 'glob';
+import history from 'connect-history-api-fallback';
 
 const API_ROOT = path.join(__dirname, 'api');
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
@@ -55,6 +56,18 @@ app.use(router);
 
 // in non-production environments, configure webpack dev middleware with hot reloading
 if (!IS_PRODUCTION) {
+  // use the history middleware to rewrite requests to our SPA
+  // (only necessary in non-production mode b/c of webpack dev middleware)
+  app.use(history({
+    // to help in development, allow API requests to pass through
+    rewrites: [
+      {
+        from: /^\/api\/.*$/,
+        to: (context) => context.parsedUrl.pathname,
+      },
+    ],
+  }));
+
   // only load these dependencies if we are not in production to avoid
   // requiring them in production mode (when they are only required in dev)
   const webpack = require('webpack');
@@ -92,6 +105,9 @@ app.all('/api/*', (req, res) => {
  * This was done so that the root URL hits the UI app, and that UI app
  * handles all URLs under that. Know that at this point we have "reserved"
  * /api/*, for APIs. If that URL is used by the UI, it won't resolve correctly.
+ *
+ * Note that based on what we've done above, this will only take effect in
+ * the production environment.
  */
 app.all('*', (req, res) => {
   res.sendFile(path.join(APP_ROOT, 'public', 'index.html'));
