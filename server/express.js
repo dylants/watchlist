@@ -34,9 +34,7 @@ app.use(bodyParser.json());
 app.use(session({
   name: 'watchlist',
   secret: 'super-secret-watchlist',
-  cookie: {
-    maxAge: SESSION_COOKIE_LIFETIME,
-  },
+  maxAge: SESSION_COOKIE_LIFETIME,
 }));
 
 // use passport session

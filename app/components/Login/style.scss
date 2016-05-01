@@ -1,0 +1,28 @@
+@import "../../variables";
+.login {
+  text-align: center;
+}
+.heading {
+  font-size: 20px;
+  margin: 30px 0 20px;
+}
+.input {
+  display: block;
+  margin: 0 auto 10px;
+  width: 250px;
+  font-size: 14px;
+  border: 1px solid $swatch01;
+  border-radius: 3px;
+  padding: 3px;
+}
+.button {
+  padding: 0.5rem 1rem;
+  border-radius: 3px;
+  margin: 0 1rem;
+  border: 0;
+  background: $swatch01;
+  min-width: 70px;
+  &:hover {
+    cursor: pointer;
+  }
+}
