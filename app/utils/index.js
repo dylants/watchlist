@@ -1,4 +1,4 @@
-import { pushPath } from 'redux-simple-router';
+import { push } from 'react-router-redux';
 
 export function checkHttpStatus(response) {
   if (response.status >= 200 && response.status < 300) {
@@ -19,7 +19,7 @@ function isUnauthorized(error) {
 }
 
 function sendToLogin(dispatch) {
-  dispatch(pushPath('/login'));
+  dispatch(push('/login'));
 }
 
 export function handleHttpError(dispatch, error, errorAction) {

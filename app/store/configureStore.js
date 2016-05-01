@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
+import { routerMiddleware } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 
@@ -9,13 +10,14 @@ const logger = createLogger({
   predicate: () => process.env.NODE_ENV === 'development',
 });
 
-const createStoreWithMiddleware = applyMiddleware(
-  thunkMiddleware,
-  logger,
-)(createStore);
+function configureStore(initialState, history) {
+  const middleware = applyMiddleware(
+    thunkMiddleware,
+    routerMiddleware(history),
+    logger,
+  );
 
-function configureStore(initialState) {
-  const store = createStoreWithMiddleware(rootReducer, initialState);
+  const store = createStore(rootReducer, initialState, middleware);
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
