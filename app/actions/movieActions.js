@@ -33,6 +33,7 @@ export function loadMovies() {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
+      credentials: 'same-origin',
     })
     .then(checkHttpStatus)
     .then(response => response.json())

@@ -1,7 +1,7 @@
-$primary-color-1: #cecece;
+@import "../../variables";
 
 .movie {
-  border: 1px solid $primary-color-1;
+  border: 1px solid $swatch01;
   display: inline-block;
   margin: 1rem;
   padding: 1rem;
@@ -64,7 +64,7 @@ $primary-color-1: #cecece;
   border-radius: 3px;
   margin: 0 1rem;
   border: 0;
-  background: $primary-color-1;
+  background: $swatch01;
   min-width: 70px;
   &:hover {
     cursor: pointer;

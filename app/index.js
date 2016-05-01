@@ -8,6 +8,7 @@ import { syncReduxAndRouter } from 'redux-simple-router';
 import configureStore from './store/configureStore';
 import App from './containers/App';
 import MoviesContainer from './containers/MoviesContainer';
+import LoginContainer from './containers/LoginContainer';
 
 const store = configureStore();
 const history = createHistory();
@@ -19,6 +20,7 @@ render(
     <Router history={history}>
       <Route path="/" component={App}>
         <IndexRoute component={MoviesContainer} />
+        <Route path="login" component={LoginContainer} />
       </Route>
     </Router>
   </Provider>,
