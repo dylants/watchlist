@@ -1,19 +1,17 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router, Route, IndexRoute } from 'react-router';
-import { createHistory } from 'history';
-import { syncReduxAndRouter } from 'redux-simple-router';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
 
 import configureStore from './store/configureStore';
 import App from './containers/App';
 import MoviesContainer from './containers/MoviesContainer';
 import LoginContainer from './containers/LoginContainer';
 
-const store = configureStore();
-const history = createHistory();
+const store = configureStore(undefined, browserHistory);
 
-syncReduxAndRouter(history, store);
+const history = syncHistoryWithStore(browserHistory, store);
 
 render(
   <Provider store={store}>

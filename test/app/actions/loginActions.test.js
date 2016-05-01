@@ -93,7 +93,7 @@ describe('loginActions', () => {
             should(actions.length).equal(3);
             should(actions[0]).deepEqual({ type: types.LOGIN_INITIATED, payload: undefined });
             should(actions[1]).deepEqual({ type: types.LOGIN_SUCCESS, user: { username } });
-            should(actions[2].payload.path).equal('/');
+            should(actions[2].payload.args).deepEqual(['/']);
           })
           .then(done)   // testing complete
           .catch(done); // we do this in case the tests fail, to end tests

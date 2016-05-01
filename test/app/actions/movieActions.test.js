@@ -63,7 +63,7 @@ describe('movieActions', () => {
 
             should(actions.length).equal(2);
             should(actions[0].type).equal(types.LOADING_MOVIES);
-            should(actions[1].payload.path).equal('/login');
+            should(actions[1].payload.args).deepEqual(['/login']);
           })
           .then(done)   // testing complete
           .catch(done); // we do this in case the tests fail, to end tests

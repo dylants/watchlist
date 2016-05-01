@@ -69,7 +69,7 @@ describe('App utils', () => {
       it('should send to login', () => {
         utils.handleHttpError(dispatch, error, errorAction);
         should(dispatchResult).be.ok();
-        should(dispatchResult.payload.path).equal('/login');
+        should(dispatchResult.payload.args).deepEqual(['/login']);
       });
     });
 

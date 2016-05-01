@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import { pushPath } from 'redux-simple-router';
+import { push } from 'react-router-redux';
 
 import {
   LOGIN_INITIATED,
@@ -62,7 +62,7 @@ export function login(username, password) {
     .then(json => {
       if (responseStatus > 200 && responseStatus < 300) {
         dispatch(loginSuccess(json));
-        return dispatch(pushPath('/'));
+        return dispatch(push('/'));
       } else if (responseStatus === 401) {
         return dispatch(loginError('Incorrect username or password.'));
       } else {
