@@ -2,7 +2,7 @@ import {
   LOGIN_INITIATED,
   LOGIN_SUCCESS,
   LOGIN_ERROR,
-} from '../constants/loginActionTypes';
+} from '../constants/login.action-types';
 
 const initialState = {
   isWaiting: false,

@@ -2,8 +2,8 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import Movies from '../../components/Movies';
-import * as MovieActions from '../../actions/movieActions';
+import Movies from '../../components/movies/movies.component';
+import * as MovieActions from '../../actions/movie.actions';
 
 function MoviesContainer({ moviesState, movieActions }) {
   return (

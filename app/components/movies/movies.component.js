@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-import MovieContainer from '../../containers/MovieContainer';
+import MovieContainer from '../../containers/movie/movie.container';
 
 export default class Movies extends Component {
   componentWillMount() {
