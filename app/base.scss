@@ -1,0 +1,11 @@
+.button-default {
+  padding: 0.5rem 1rem;
+  border-radius: 3px;
+  margin: 0 1rem;
+  border: 0;
+  background: $swatch01;
+  min-width: 70px;
+}
+.button-with-hover:hover {
+  cursor: pointer;
+}
