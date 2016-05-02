@@ -10,6 +10,8 @@ describe('movies reducer', () => {
   it('should have to correct initial state', () => {
     should(reducer(undefined, {})).deepEqual({
       isWaiting: false,
+      skip: 0,
+      limit: 20,
       movies: [],
       error: null,
     });
@@ -29,6 +31,8 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: true,
+        skip: 0,
+        limit: 20,
         movies: [],
         error: null,
       });
@@ -53,6 +57,8 @@ describe('movies reducer', () => {
           })
         ).deepEqual({
           isWaiting: false,
+          skip: 20,
+          limit: 20,
           movies: [
             {
               a: 1,
@@ -70,6 +76,8 @@ describe('movies reducer', () => {
           })
         ).deepEqual({
           isWaiting: false,
+          skip: 0,
+          limit: 20,
           movies: [],
           error: 'FAIL!',
         });

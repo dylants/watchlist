@@ -1,26 +1,25 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
+
+import style from './movies.component.scss';
 
 import MovieContainer from '../../containers/movie/movie.container';
 
-export default class Movies extends Component {
-  componentWillMount() {
-    this.props.loadMovies();
-  }
+export default function Movies(props) {
+  const moviesToRender = props.movies.map(movie =>
+    <MovieContainer key={movie.id} movie={movie} />
+  );
 
-  render() {
-    const moviesToRender = this.props.movies.map(movie =>
-      <MovieContainer key={movie.id} movie={movie} />
-    );
-
-    return (
-      <div>
-        {moviesToRender}
+  return (
+    <div>
+      {moviesToRender}
+      <div className={style.buttons}>
+        <button className={style.button} onClick={::props.loadMoreMovies}>Load More</button>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 Movies.propTypes = {
-  loadMovies: PropTypes.func.isRequired,
+  loadMoreMovies: PropTypes.func.isRequired,
   movies: PropTypes.array.isRequired,
 };

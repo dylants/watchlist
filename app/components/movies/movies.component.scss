@@ -1,0 +1,7 @@
+.buttons {
+  text-align: center;
+  margin-top: 0.75rem;
+}
+.button {
+  composes: button-default button-with-hover from '../../base.scss';
+}

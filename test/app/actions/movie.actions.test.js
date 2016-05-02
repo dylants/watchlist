@@ -13,7 +13,13 @@ describe('movieActions', () => {
   let store;
 
   beforeEach(() => {
-    store = mockStore();
+    store = mockStore({
+      moviesState: {
+        movies: [{ z: 9 }],
+        skip: 0,
+        limit: 20,
+      },
+    });
   });
 
   afterEach(() => {
@@ -25,7 +31,7 @@ describe('movieActions', () => {
   });
 
   describe('loadMovies', () => {
-    const LOAD_MOVIES_API = '/api/secure/movies';
+    const LOAD_MOVIES_API = '/api/secure/movies?skip=0&limit=20';
 
     describe('when movies are returned', () => {
       let MOVIES;
@@ -39,7 +45,11 @@ describe('movieActions', () => {
       it('should return the correct actions', (done) => {
         const expectedActions = [
           { type: types.LOADING_MOVIES, payload: undefined },
-          { type: types.MOVIES_LOADED, movies: MOVIES },
+          { type: types.MOVIES_LOADED, movies: [
+            { z: 9 },
+            { a: 1 },
+            { b: 2 },
+          ] },
         ];
 
         store.dispatch(movieActions.loadMovies())

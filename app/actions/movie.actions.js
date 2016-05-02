@@ -24,10 +24,17 @@ function moviesLoaded(movies) {
 }
 
 export function loadMovies() {
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch(moviesLoading());
 
-    return fetch('/api/secure/movies', {
+    const moviesState = getState().moviesState;
+    const movies = moviesState.movies;
+    const skip = moviesState.skip;
+    const limit = moviesState.limit;
+
+    const uri = `/api/secure/movies?skip=${skip}&limit=${limit}`;
+
+    return fetch(uri, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -37,7 +44,10 @@ export function loadMovies() {
     })
     .then(checkHttpStatus)
     .then(response => response.json())
-    .then(json => dispatch(moviesLoaded(json)))
+    .then(newMovies => {
+      const updatedMovies = movies.concat(newMovies);
+      return dispatch(moviesLoaded(updatedMovies));
+    })
     .catch((error) => handleHttpError(dispatch, error, failedLoadingMovies));
   };
 }

@@ -1,14 +1,24 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import Movies from '../../components/movies/movies.component';
 import * as MovieActions from '../../actions/movie.actions';
 
-function MoviesContainer({ moviesState, movieActions }) {
-  return (
-    <Movies loadMovies={movieActions.loadMovies} movies={moviesState.movies} />
-  );
+class MoviesContainer extends Component {
+  componentWillMount() {
+    // to start, let's load some movies
+    this.props.movieActions.loadMovies();
+  }
+
+  render() {
+    return (
+      <Movies
+        loadMoreMovies={this.props.movieActions.loadMovies}
+        movies={this.props.moviesState.movies}
+      />
+    );
+  }
 }
 
 MoviesContainer.propTypes = {
@@ -18,7 +28,7 @@ MoviesContainer.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    moviesState: state.movies,
+    moviesState: state.moviesState,
   };
 }
 

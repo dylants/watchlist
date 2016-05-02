@@ -6,6 +6,8 @@ import {
 
 const initialState = {
   isWaiting: false,
+  skip: 0,
+  limit: 20,
   movies: [],
   error: null,
 };
@@ -20,6 +22,8 @@ export default function movies(state = initialState, action) {
     case MOVIES_LOADED:
       return Object.assign({}, state, {
         isWaiting: false,
+        // increase the skip by the amount we've requested
+        skip: state.skip + state.limit,
         movies: action.movies,
         error: null,
       });
