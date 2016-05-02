@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 
-import style from './style.scss';
+import style from './login.component.scss';
 
 export default class Login extends Component {
   submit(event) {

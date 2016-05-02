@@ -1,6 +1,6 @@
 import should from 'should';
 
-const MODULE_PATH = '../../../app/utils/index';
+const MODULE_PATH = '../../../app/utils/http.utils';
 
 describe('App utils', () => {
   let utils;

@@ -2,7 +2,7 @@ import {
   LOADING_MOVIES,
   MOVIES_LOADED,
   FAILED_LOADING_MOVIES,
-} from '../constants/movieActionTypes';
+} from '../constants/movie.action-types';
 
 const initialState = {
   isWaiting: false,

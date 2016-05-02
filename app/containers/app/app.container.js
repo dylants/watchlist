@@ -1,16 +1,19 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import Movie from '../../components/Movie';
+import './app.container.scss';
 
-function MovieContainer({ movie }) {
+// function input is shorthand for const { children } = this.props
+function App({ children }) {
   return (
-    <Movie {...movie} />
+    <div>
+      {children}
+    </div>
   );
 }
 
-MovieContainer.propTypes = {
-  movie: PropTypes.object.isRequired,
+App.propTypes = {
+  children: PropTypes.any,
 };
 
 function mapStateToProps() {
@@ -26,4 +29,4 @@ function mapDispatchToProps() {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(MovieContainer);
+)(App);

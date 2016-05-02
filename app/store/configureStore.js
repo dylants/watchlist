@@ -3,7 +3,7 @@ import { routerMiddleware } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 
-import rootReducer from '../reducers';
+import rootReducer from '../reducers/root.reducer';
 
 const logger = createLogger({
   // only log when in development environment
@@ -21,8 +21,8 @@ function configureStore(initialState, history) {
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
-    module.hot.accept('../reducers', () => {
-      const nextReducer = require('../reducers');
+    module.hot.accept('../reducers/root.reducer', () => {
+      const nextReducer = require('../reducers/root.reducer');
       store.replaceReducer(nextReducer);
     });
   }

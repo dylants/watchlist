@@ -1,11 +1,11 @@
 import { createAction } from 'redux-actions';
-import { checkHttpStatus, handleHttpError } from '../utils';
+import { checkHttpStatus, handleHttpError } from '../utils/http.utils';
 
 import {
   LOADING_MOVIES,
   MOVIES_LOADED,
   FAILED_LOADING_MOVIES,
-} from '../constants/movieActionTypes';
+} from '../constants/movie.action-types';
 
 const moviesLoading = createAction(LOADING_MOVIES);
 

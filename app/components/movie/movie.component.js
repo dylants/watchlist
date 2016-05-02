@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-import style from './style.scss';
+import style from './movie.component.scss';
 
 export default function Movie(props) {
   const criticIcon = style[props.tomatoIcon];

@@ -2,8 +2,8 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import Login from '../../components/Login';
-import * as LoginActions from '../../actions/loginActions';
+import Login from '../../components/login/login.component';
+import * as LoginActions from '../../actions/login.actions';
 
 function LoginContainer({ loginState, loginActions }) {
   return (
