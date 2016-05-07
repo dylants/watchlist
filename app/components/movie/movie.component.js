@@ -6,6 +6,10 @@ export default function Movie(props) {
   const criticIcon = style[props.tomatoIcon];
   const userIcon = (props.userScore >= 70) ? style.popcorn : style.spilled;
 
+  function dismissMovie() {
+    return props.dismiss(props.id);
+  }
+
   return (
     <div className={style.movie}>
       <img className={style.image} src={props.image} role="presentation" />
@@ -22,13 +26,14 @@ export default function Movie(props) {
       </div>
       <div className={style.buttons}>
         <button className={style.button}>Save</button>
-        <button className={style.button}>Dismiss</button>
+        <button className={style.button} onClick={dismissMovie}>Dismiss</button>
       </div>
     </div>
   );
 }
 
 Movie.propTypes = {
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   userScore: PropTypes.number,
@@ -36,4 +41,5 @@ Movie.propTypes = {
   tomatoIcon: PropTypes.string,
   mpaaRating: PropTypes.string.isRequired,
   runtime: PropTypes.string.isRequired,
+  dismiss: PropTypes.func.isRequired,
 };

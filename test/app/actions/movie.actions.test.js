@@ -15,7 +15,7 @@ describe('movieActions', () => {
   beforeEach(() => {
     store = mockStore({
       moviesState: {
-        movies: [{ z: 9 }],
+        movies: [{ id: 'foo' }, { id: 'bar' }, { id: 'baz' }],
         skip: 0,
         limit: 20,
       },
@@ -46,7 +46,9 @@ describe('movieActions', () => {
         const expectedActions = [
           { type: types.LOADING_MOVIES, payload: undefined },
           { type: types.MOVIES_LOADED, movies: [
-            { z: 9 },
+            { id: 'foo' },
+            { id: 'bar' },
+            { id: 'baz' },
             { a: 1 },
             { b: 2 },
           ] },
@@ -93,6 +95,52 @@ describe('movieActions', () => {
             should(actions.length).equal(2);
             should(actions[0].type).equal(types.LOADING_MOVIES);
             should(actions[1].type).equal(types.FAILED_LOADING_MOVIES);
+          })
+          .then(done)   // testing complete
+          .catch(done); // we do this in case the tests fail, to end tests
+      });
+    });
+  });
+
+  describe('dismissMovie', () => {
+    const DISMISS_MOVIE_API = '/api/secure/movies/foo';
+
+    describe('when the API call is successful', () => {
+      beforeEach(() => {
+        fetchMock.mock(DISMISS_MOVIE_API, 200);
+      });
+
+      it('should return the correct actions', (done) => {
+        const expectedActions = [
+          { type: types.DISMISSING_MOVIE, payload: undefined },
+          { type: types.DISMISSED_MOVIE, movies: [
+            { id: 'bar' },
+            { id: 'baz' },
+          ] },
+        ];
+
+        store.dispatch(movieActions.dismissMovie('foo'))
+          .then(() => {
+            should(store.getActions()).deepEqual(expectedActions);
+          })
+          .then(done)   // testing complete
+          .catch(done); // we do this in case the tests fail, to end tests
+      });
+    });
+
+    describe('when the API call fails (500)', () => {
+      beforeEach(() => {
+        fetchMock.mock(DISMISS_MOVIE_API, 500);
+      });
+
+      it('should return the correct actions', (done) => {
+        store.dispatch(movieActions.dismissMovie('foo'))
+          .then(() => {
+            const actions = store.getActions();
+
+            should(actions.length).equal(2);
+            should(actions[0].type).equal(types.DISMISSING_MOVIE);
+            should(actions[1].type).equal(types.FAILED_UPDATING_MOVIE);
           })
           .then(done)   // testing complete
           .catch(done); // we do this in case the tests fail, to end tests

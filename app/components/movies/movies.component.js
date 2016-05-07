@@ -13,7 +13,7 @@ export default function Movies(props) {
     <div>
       {moviesToRender}
       <div className={style.buttons}>
-        <button className={style.button} onClick={::props.loadMoreMovies}>Load More</button>
+        <button className={style.button} onClick={props.loadMoreMovies}>Load More</button>
       </div>
     </div>
   );

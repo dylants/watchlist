@@ -1,29 +1,28 @@
 import React, { PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import Movie from '../../components/movie/movie.component';
+import * as MovieActions from '../../actions/movie.actions';
 
-function MovieContainer({ movie }) {
+function MovieContainer({ movie, movieActions }) {
   return (
-    <Movie {...movie} />
+    <Movie
+      {...movie}
+      dismiss={movieActions.dismissMovie}
+    />
   );
 }
 
 MovieContainer.propTypes = {
   movie: PropTypes.object.isRequired,
+  movieActions: PropTypes.object.isRequired,
 };
 
-function mapStateToProps() {
+function mapDispatchToProps(dispatch) {
   return {
+    movieActions: bindActionCreators(MovieActions, dispatch),
   };
 }
 
-function mapDispatchToProps() {
-  return {
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(MovieContainer);
+export default connect(null, mapDispatchToProps)(MovieContainer);
