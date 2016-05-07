@@ -388,4 +388,94 @@ describe('The movies library', () => {
       });
     });
   });
+
+  describe('loadMovies', () => {
+    let MOVIES;
+    let Movie;
+
+    beforeEach(() => {
+      MOVIES = [{ a: 1 }, { b: 2 }];
+
+      Movie = {
+        _conditions: null,
+        _options: null,
+        find(conditions, projection, options, callback) {
+          this._conditions = conditions;
+          this._options = options;
+          return callback(null, MOVIES);
+        },
+      };
+
+      moviesLib.__set__('Movie', Movie);
+
+      moviesLib.__set__('buildMovieUI', (movie) => movie);
+    });
+
+    it('should work with defaults', () => {
+      moviesLib.loadMovies({}, {}, (err, moviesUI) => {
+        should(err).be.null();
+        should(moviesUI).deepEqual(MOVIES);
+
+        should(Movie._conditions).deepEqual({
+          dismissed: false,
+        });
+        should(Movie._options).deepEqual({
+          skip: 0,
+          limit: 20,
+        });
+      });
+    });
+
+    it('should allow for overrides of conditions/options', () => {
+      moviesLib.loadMovies({
+        dismissed: true,
+      }, {
+        skip: 12,
+        limit: 2,
+      }, (err, moviesUI) => {
+        should(err).be.null();
+        should(moviesUI).deepEqual(MOVIES);
+
+        should(Movie._conditions).deepEqual({
+          dismissed: true,
+        });
+        should(Movie._options).deepEqual({
+          skip: 12,
+          limit: 2,
+        });
+      });
+    });
+  });
+
+  describe('dismissMovie', () => {
+    let Movie;
+
+    beforeEach(() => {
+      Movie = {
+        _id: null,
+        _updates: null,
+        _options: null,
+        findByIdAndUpdate(id, updates, options, callback) {
+          this._id = id;
+          this._updates = updates;
+          this._options = options;
+          return callback();
+        },
+      };
+
+      moviesLib.__set__('Movie', Movie);
+    });
+
+    it('should work with defaults', () => {
+      moviesLib.dismissMovie('123', () => {
+        should(Movie._id).equal('123');
+        should(Movie._updates).deepEqual({
+          dismissed: true,
+        });
+        should(Movie._options).deepEqual({
+          new: true,
+        });
+      });
+    });
+  });
 });
