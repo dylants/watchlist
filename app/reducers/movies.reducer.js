@@ -2,6 +2,9 @@ import {
   LOADING_MOVIES,
   MOVIES_LOADED,
   FAILED_LOADING_MOVIES,
+  DISMISSING_MOVIE,
+  DISMISSED_MOVIE,
+  FAILED_UPDATING_MOVIE,
 } from '../constants/movie.action-types';
 
 const initialState = {
@@ -28,6 +31,22 @@ export default function movies(state = initialState, action) {
         error: null,
       });
     case FAILED_LOADING_MOVIES:
+      return Object.assign({}, state, {
+        isWaiting: false,
+        error: action.error,
+      });
+    case DISMISSING_MOVIE:
+      return Object.assign({}, state, {
+        isWaiting: true,
+        error: null,
+      });
+    case DISMISSED_MOVIE:
+      return Object.assign({}, state, {
+        isWaiting: false,
+        movies: action.movies,
+        error: null,
+      });
+    case FAILED_UPDATING_MOVIE:
       return Object.assign({}, state, {
         isWaiting: false,
         error: action.error,

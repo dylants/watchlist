@@ -35,7 +35,7 @@ describe('login reducer', () => {
     });
   });
 
-  describe('in the loading state', () => {
+  describe('in the login state', () => {
     let state;
 
     beforeEach(() => {

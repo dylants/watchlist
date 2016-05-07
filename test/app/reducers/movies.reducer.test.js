@@ -38,49 +38,106 @@ describe('movies reducer', () => {
       });
     });
 
-    describe('in loading state', () => {
-      beforeEach(() => {
-        state = reducer(state, {
-          type: types.LOADING_MOVIES,
-        });
+    it('should handle dismissed movie', () => {
+      should(
+        reducer(state, {
+          type: types.DISMISSING_MOVIE,
+        })
+      ).deepEqual({
+        isWaiting: true,
+        skip: 0,
+        limit: 20,
+        movies: [],
+        error: null,
       });
+    });
+  });
 
-      it('should handle movies loaded', () => {
-        should(
-          reducer(state, {
-            type: types.MOVIES_LOADED,
-            movies: [
-              {
-                a: 1,
-              },
-            ],
-          })
-        ).deepEqual({
-          isWaiting: false,
-          skip: 20,
-          limit: 20,
+  describe('in loading state', () => {
+    let state;
+
+    beforeEach(() => {
+      state = reducer(undefined, {
+        type: types.LOADING_MOVIES,
+      });
+    });
+
+    it('should handle movies loaded', () => {
+      should(
+        reducer(state, {
+          type: types.MOVIES_LOADED,
           movies: [
             {
               a: 1,
             },
           ],
-          error: null,
-        });
+        })
+      ).deepEqual({
+        isWaiting: false,
+        skip: 20,
+        limit: 20,
+        movies: [
+          {
+            a: 1,
+          },
+        ],
+        error: null,
       });
+    });
 
-      it('should handle failed loading movies', () => {
-        should(
-          reducer(state, {
-            type: types.FAILED_LOADING_MOVIES,
-            error: 'FAIL!',
-          })
-        ).deepEqual({
-          isWaiting: false,
-          skip: 0,
-          limit: 20,
-          movies: [],
+    it('should handle failed loading movies', () => {
+      should(
+        reducer(state, {
+          type: types.FAILED_LOADING_MOVIES,
           error: 'FAIL!',
-        });
+        })
+      ).deepEqual({
+        isWaiting: false,
+        skip: 0,
+        limit: 20,
+        movies: [],
+        error: 'FAIL!',
+      });
+    });
+  });
+
+  describe('with movies loaded', () => {
+    let state;
+
+    beforeEach(() => {
+      state = reducer(undefined, {
+        type: types.MOVIES_LOADED,
+        movies: [{ a: 1 }, { b: 2 }],
+      });
+    });
+
+    it('should handle dismissed movie', () => {
+      should(
+        reducer(state, {
+          type: types.DISMISSED_MOVIE,
+          movies: [{ a: 1 }],
+        })
+      ).deepEqual({
+        isWaiting: false,
+        skip: 20,
+        limit: 20,
+        movies: [{ a: 1 }],
+        error: null,
+      });
+    });
+
+    it('should handle failed updating movie', () => {
+      should(
+        reducer(state, {
+          type: types.FAILED_UPDATING_MOVIE,
+          error: 'bad',
+        })
+      ).deepEqual({
+        isWaiting: false,
+        skip: 20,
+        limit: 20,
+        movies: [{ a: 1 }, { b: 2 }],
+        error: 'bad',
       });
     });
   });
