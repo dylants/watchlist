@@ -1,5 +1,9 @@
 import { createAction } from 'redux-actions';
-import { checkHttpStatus, handleHttpError } from '../utils/http.utils';
+import {
+  FETCH_DEFAULT_OPTIONS,
+  checkHttpStatus,
+  handleHttpError,
+} from '../utils/http.utils';
 
 import {
   LOADING_MOVIES,
@@ -33,21 +37,17 @@ export function loadMovies() {
     const limit = moviesState.limit;
 
     const uri = `/api/secure/movies?skip=${skip}&limit=${limit}`;
-
-    return fetch(uri, {
+    const options = Object.assign({}, FETCH_DEFAULT_OPTIONS, {
       method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      credentials: 'same-origin',
-    })
-    .then(checkHttpStatus)
-    .then(response => response.json())
-    .then(newMovies => {
-      const updatedMovies = movies.concat(newMovies);
-      return dispatch(moviesLoaded(updatedMovies));
-    })
-    .catch((error) => handleHttpError(dispatch, error, failedLoadingMovies));
+    });
+
+    return fetch(uri, options)
+      .then(checkHttpStatus)
+      .then(response => response.json())
+      .then(newMovies => {
+        const updatedMovies = movies.concat(newMovies);
+        return dispatch(moviesLoaded(updatedMovies));
+      })
+      .catch((error) => handleHttpError(dispatch, error, failedLoadingMovies));
   };
 }

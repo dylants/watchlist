@@ -1,5 +1,13 @@
 import { push } from 'react-router-redux';
 
+export const FETCH_DEFAULT_OPTIONS = {
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+  credentials: 'same-origin',
+};
+
 export function checkHttpStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;

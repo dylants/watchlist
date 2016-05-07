@@ -1,6 +1,7 @@
 import { createAction } from 'redux-actions';
 import { push } from 'react-router-redux';
 
+import { FETCH_DEFAULT_OPTIONS } from '../utils/http.utils';
 import {
   LOGIN_INITIATED,
   LOGIN_SUCCESS,
@@ -43,32 +44,30 @@ export function login(username, password) {
     }
 
     let responseStatus;
-    return fetch('/api/session', {
+    const uri = '/api/session';
+    const options = Object.assign({}, FETCH_DEFAULT_OPTIONS, {
       method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
       body: JSON.stringify({
         username,
         password,
       }),
-      credentials: 'same-origin',
-    })
-    .then(response => {
-      responseStatus = response.status;
-      return response.json();
-    })
-    .then(json => {
-      if (responseStatus > 200 && responseStatus < 300) {
-        dispatch(loginSuccess(json));
-        return dispatch(push('/'));
-      } else if (responseStatus === 401) {
-        return dispatch(loginError('Incorrect username or password.'));
-      } else {
-        return dispatch(loginError(json.error));
-      }
-    })
-    .catch((error) => dispatch(loginError(error)));
+    });
+
+    return fetch(uri, options)
+      .then(response => {
+        responseStatus = response.status;
+        return response.json();
+      })
+      .then(json => {
+        if (responseStatus > 200 && responseStatus < 300) {
+          dispatch(loginSuccess(json));
+          return dispatch(push('/'));
+        } else if (responseStatus === 401) {
+          return dispatch(loginError('Incorrect username or password.'));
+        } else {
+          return dispatch(loginError(json.error));
+        }
+      })
+      .catch((error) => dispatch(loginError(error)));
   };
 }
