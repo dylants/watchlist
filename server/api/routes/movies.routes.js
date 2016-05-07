@@ -1,4 +1,4 @@
-import { getMovies, pullMovieData } from '../controllers/movies';
+import { getMovies, pullMovieData } from '../controllers/movies.controller';
 
 module.exports = (router) => {
   router.route('/api/secure/movies').get(getMovies);

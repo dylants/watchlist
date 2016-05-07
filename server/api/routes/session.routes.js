@@ -1,4 +1,4 @@
-import { login, logout } from '../controllers/session';
+import { login, logout } from '../controllers/session.controller';
 
 module.exports = (router) => {
   router.route('/api/session').post(login);
