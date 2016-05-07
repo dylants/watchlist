@@ -288,14 +288,19 @@ export function downloadMovieData(callback) {
 /**
  * Returns the movies from our internal database, modified to fit the UI
  */
-export function loadMovies(options, callback) {
-  // take the user input and add our default options if needed
+export function loadMovies(conditions, options, callback) {
+  // apply the user conditions to our defaults
+  _.defaults(conditions, {
+    dismissed: false,
+  });
+
+  // apply the user options to our defaults
   _.defaults(options, {
     skip: 0,
     limit: 20,
   });
 
-  return Movie.find({}, null, options, (findErr, movies) => {
+  return Movie.find(conditions, null, options, (findErr, movies) => {
     if (findErr) { return callback(findErr); }
 
     // build the movies UI list by parsing each movie
@@ -303,4 +308,13 @@ export function loadMovies(options, callback) {
 
     return callback(null, moviesUI);
   });
+}
+
+export function dismissMovie(movieId, callback) {
+  logger.log(`dismissMovie: movieId: ${movieId}`);
+  return Movie.findByIdAndUpdate(movieId, {
+    dismissed: true,
+  }, {
+    new: true,
+  }, callback);
 }

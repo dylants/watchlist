@@ -55,4 +55,31 @@ MovieSchema.pre('save', function storeTitleAsId(next) {
   return next();
 });
 
+// pre-save hook for providing defaults for saved and dismissed
+MovieSchema.pre('save', function provideDefaults(next) {
+  const movie = this;
+
+  if (movie.isNew) {
+    logger.log('pre-save hook for providing defaults');
+
+    // saved must be true or false
+    if (!movie.saved) {
+      logger.log('pre-save hook for providing defaults: defaulting saved to false');
+      movie.saved = false;
+    }
+
+    // dismissed must be true or false
+    if (!movie.dismissed) {
+      logger.log('pre-save hook for providing defaults: defaulting dismissed to false');
+      movie.dismissed = false;
+    }
+
+    logger.log('pre-save hook for providing defaults complete');
+  } else {
+    logger.log('pre-save hook for providing defaults skipped, document is not new');
+  }
+
+  return next();
+});
+
 mongoose.model('Movie', MovieSchema);
