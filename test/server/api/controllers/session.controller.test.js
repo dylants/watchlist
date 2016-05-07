@@ -1,7 +1,7 @@
 import should from 'should';
 import proxyquire from 'proxyquire';
 
-const MODULE_PATH = '../../../server/api/controllers/session';
+const MODULE_PATH = '../../../../server/api/controllers/session.controller';
 
 function mockSession(passport) {
   return proxyquire(MODULE_PATH, {
