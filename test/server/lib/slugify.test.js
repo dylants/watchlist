@@ -22,7 +22,7 @@ describe('The slugify library', () => {
   it('should work with a really long string', () => {
     const string = 'this is something that is really long and should not be kept' +
       'as one string because it\'s too long. Yes, really really long!';
-    (string.length).should.be.above(60);
-    (slugify(string).length).should.equal(60);
+    should(string.length).be.above(60);
+    should(slugify(string).length).equal(60);
   });
 });

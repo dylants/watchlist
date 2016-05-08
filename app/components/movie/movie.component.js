@@ -4,7 +4,7 @@ import style from './movie.component.scss';
 
 export default function Movie(props) {
   const criticIcon = style[props.tomatoIcon];
-  const userIcon = (props.userScore >= 70) ? style.popcorn : style.spilled;
+  const userIcon = props.userScore >= 70 ? style.popcorn : style.spilled;
 
   function dismissMovie() {
     return props.dismiss(props.id);
