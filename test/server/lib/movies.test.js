@@ -447,7 +447,7 @@ describe('The movies library', () => {
     });
   });
 
-  describe('dismissMovie', () => {
+  describe('update movie', () => {
     let Movie;
 
     beforeEach(() => {
@@ -466,14 +466,44 @@ describe('The movies library', () => {
       moviesLib.__set__('Movie', Movie);
     });
 
-    it('should work with defaults', () => {
-      moviesLib.dismissMovie('123', () => {
-        should(Movie._id).equal('123');
-        should(Movie._updates).deepEqual({
-          dismissed: true,
+    describe('enableSaved', () => {
+      it('should work', () => {
+        moviesLib.enableSaved('123', () => {
+          should(Movie._id).equal('123');
+          should(Movie._updates).deepEqual({
+            saved: true,
+          });
+          should(Movie._options).deepEqual({
+            new: true,
+          });
         });
-        should(Movie._options).deepEqual({
-          new: true,
+      });
+    });
+
+    describe('enableDismissed', () => {
+      it('should work', () => {
+        moviesLib.enableDismissed('123', () => {
+          should(Movie._id).equal('123');
+          should(Movie._updates).deepEqual({
+            dismissed: true,
+          });
+          should(Movie._options).deepEqual({
+            new: true,
+          });
+        });
+      });
+    });
+
+    describe('disableDismissed', () => {
+      it('should work', () => {
+        moviesLib.disableDismissed('123', () => {
+          should(Movie._id).equal('123');
+          should(Movie._updates).deepEqual({
+            dismissed: false,
+          });
+          should(Movie._options).deepEqual({
+            new: true,
+          });
         });
       });
     });
