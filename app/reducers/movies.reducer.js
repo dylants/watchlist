@@ -1,6 +1,6 @@
 import {
   LOADING_MOVIES,
-  MOVIES_LOADED,
+  MOVIES_QUEUE_LOADED,
   FAILED_LOADING_MOVIES,
   DISMISSING_MOVIE,
   DISMISSED_MOVIE,
@@ -9,9 +9,9 @@ import {
 
 const initialState = {
   isWaiting: false,
-  skip: 0,
-  limit: 20,
-  movies: [],
+  moviesQueueSkip: 0,
+  moviesQueueLimit: 20,
+  moviesQueue: [],
   error: null,
 };
 
@@ -22,12 +22,12 @@ export default function movies(state = initialState, action) {
         isWaiting: true,
         error: null,
       });
-    case MOVIES_LOADED:
+    case MOVIES_QUEUE_LOADED:
       return Object.assign({}, state, {
         isWaiting: false,
         // increase the skip by the amount we've requested
-        skip: state.skip + state.limit,
-        movies: action.movies,
+        moviesQueueSkip: state.moviesQueueSkip + state.moviesQueueLimit,
+        moviesQueue: action.moviesQueue,
         error: null,
       });
     case FAILED_LOADING_MOVIES:
@@ -43,7 +43,7 @@ export default function movies(state = initialState, action) {
     case DISMISSED_MOVIE:
       return Object.assign({}, state, {
         isWaiting: false,
-        movies: action.movies,
+        moviesQueue: action.moviesQueue,
         error: null,
       });
     case FAILED_UPDATING_MOVIE:

@@ -10,9 +10,9 @@ describe('movies reducer', () => {
   it('should have to correct initial state', () => {
     should(reducer(undefined, {})).deepEqual({
       isWaiting: false,
-      skip: 0,
-      limit: 20,
-      movies: [],
+      moviesQueueSkip: 0,
+      moviesQueueLimit: 20,
+      moviesQueue: [],
       error: null,
     });
   });
@@ -31,9 +31,9 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: true,
-        skip: 0,
-        limit: 20,
-        movies: [],
+        moviesQueueSkip: 0,
+        moviesQueueLimit: 20,
+        moviesQueue: [],
         error: null,
       });
     });
@@ -45,9 +45,9 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: true,
-        skip: 0,
-        limit: 20,
-        movies: [],
+        moviesQueueSkip: 0,
+        moviesQueueLimit: 20,
+        moviesQueue: [],
         error: null,
       });
     });
@@ -65,8 +65,8 @@ describe('movies reducer', () => {
     it('should handle movies loaded', () => {
       should(
         reducer(state, {
-          type: types.MOVIES_LOADED,
-          movies: [
+          type: types.MOVIES_QUEUE_LOADED,
+          moviesQueue: [
             {
               a: 1,
             },
@@ -74,9 +74,9 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: false,
-        skip: 20,
-        limit: 20,
-        movies: [
+        moviesQueueSkip: 20,
+        moviesQueueLimit: 20,
+        moviesQueue: [
           {
             a: 1,
           },
@@ -93,9 +93,9 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: false,
-        skip: 0,
-        limit: 20,
-        movies: [],
+        moviesQueueSkip: 0,
+        moviesQueueLimit: 20,
+        moviesQueue: [],
         error: 'FAIL!',
       });
     });
@@ -106,8 +106,8 @@ describe('movies reducer', () => {
 
     beforeEach(() => {
       state = reducer(undefined, {
-        type: types.MOVIES_LOADED,
-        movies: [{ a: 1 }, { b: 2 }],
+        type: types.MOVIES_QUEUE_LOADED,
+        moviesQueue: [{ a: 1 }, { b: 2 }],
       });
     });
 
@@ -115,13 +115,13 @@ describe('movies reducer', () => {
       should(
         reducer(state, {
           type: types.DISMISSED_MOVIE,
-          movies: [{ a: 1 }],
+          moviesQueue: [{ a: 1 }],
         })
       ).deepEqual({
         isWaiting: false,
-        skip: 20,
-        limit: 20,
-        movies: [{ a: 1 }],
+        moviesQueueSkip: 20,
+        moviesQueueLimit: 20,
+        moviesQueue: [{ a: 1 }],
         error: null,
       });
     });
@@ -134,9 +134,9 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: false,
-        skip: 20,
-        limit: 20,
-        movies: [{ a: 1 }, { b: 2 }],
+        moviesQueueSkip: 20,
+        moviesQueueLimit: 20,
+        moviesQueue: [{ a: 1 }, { b: 2 }],
         error: 'bad',
       });
     });

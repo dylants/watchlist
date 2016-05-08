@@ -15,9 +15,9 @@ describe('movieActions', () => {
   beforeEach(() => {
     store = mockStore({
       moviesState: {
-        movies: [{ id: 'foo' }, { id: 'bar' }, { id: 'baz' }],
-        skip: 0,
-        limit: 20,
+        moviesQueueSkip: 0,
+        moviesQueueLimit: 20,
+        moviesQueue: [{ id: 'foo' }, { id: 'bar' }, { id: 'baz' }],
       },
     });
   });
@@ -30,8 +30,8 @@ describe('movieActions', () => {
     should.exist(movieActions);
   });
 
-  describe('loadMovies', () => {
-    const LOAD_MOVIES_API = '/api/secure/movies?skip=0&limit=20';
+  describe('loadMoviesQueue', () => {
+    const LOAD_MOVIES_QUEUE_API = '/api/secure/movies?saved=false&skip=0&limit=20';
 
     describe('when movies are returned', () => {
       let MOVIES;
@@ -39,13 +39,13 @@ describe('movieActions', () => {
       beforeEach(() => {
         MOVIES = [{ a: 1 }, { b: 2 }];
 
-        fetchMock.mock(LOAD_MOVIES_API, MOVIES);
+        fetchMock.mock(LOAD_MOVIES_QUEUE_API, MOVIES);
       });
 
       it('should return the correct actions', (done) => {
         const expectedActions = [
           { type: types.LOADING_MOVIES, payload: undefined },
-          { type: types.MOVIES_LOADED, movies: [
+          { type: types.MOVIES_QUEUE_LOADED, moviesQueue: [
             { id: 'foo' },
             { id: 'bar' },
             { id: 'baz' },
@@ -54,7 +54,7 @@ describe('movieActions', () => {
           ] },
         ];
 
-        store.dispatch(movieActions.loadMovies())
+        store.dispatch(movieActions.loadMoviesQueue())
           .then(() => {
             should(store.getActions()).deepEqual(expectedActions);
           })
@@ -65,11 +65,11 @@ describe('movieActions', () => {
 
     describe('when the API call fails (401)', () => {
       beforeEach(() => {
-        fetchMock.mock(LOAD_MOVIES_API, 401);
+        fetchMock.mock(LOAD_MOVIES_QUEUE_API, 401);
       });
 
       it('should return the correct actions', (done) => {
-        store.dispatch(movieActions.loadMovies())
+        store.dispatch(movieActions.loadMoviesQueue())
           .then(() => {
             const actions = store.getActions();
 
@@ -84,11 +84,11 @@ describe('movieActions', () => {
 
     describe('when the API call fails (500)', () => {
       beforeEach(() => {
-        fetchMock.mock(LOAD_MOVIES_API, 500);
+        fetchMock.mock(LOAD_MOVIES_QUEUE_API, 500);
       });
 
       it('should return the correct actions', (done) => {
-        store.dispatch(movieActions.loadMovies())
+        store.dispatch(movieActions.loadMoviesQueue())
           .then(() => {
             const actions = store.getActions();
 
@@ -113,7 +113,7 @@ describe('movieActions', () => {
       it('should return the correct actions', (done) => {
         const expectedActions = [
           { type: types.DISMISSING_MOVIE, payload: undefined },
-          { type: types.DISMISSED_MOVIE, movies: [
+          { type: types.DISMISSED_MOVIE, moviesQueue: [
             { id: 'bar' },
             { id: 'baz' },
           ] },

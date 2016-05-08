@@ -9,14 +9,14 @@ import {
 
 import {
   LOADING_MOVIES,
-  MOVIES_LOADED,
+  MOVIES_QUEUE_LOADED,
   FAILED_LOADING_MOVIES,
   DISMISSING_MOVIE,
   DISMISSED_MOVIE,
   FAILED_UPDATING_MOVIE,
 } from '../constants/movie.action-types';
 
-const moviesLoading = createAction(LOADING_MOVIES);
+const loadingMovies = createAction(LOADING_MOVIES);
 
 function failedLoadingMovies(error) {
   return {
@@ -25,23 +25,23 @@ function failedLoadingMovies(error) {
   };
 }
 
-function moviesLoaded(movies) {
+function moviesQueueLoaded(moviesQueue) {
   return {
-    type: MOVIES_LOADED,
-    movies,
+    type: MOVIES_QUEUE_LOADED,
+    moviesQueue,
   };
 }
 
-export function loadMovies() {
+export function loadMoviesQueue() {
   return (dispatch, getState) => {
-    dispatch(moviesLoading());
+    dispatch(loadingMovies());
 
     const moviesState = getState().moviesState;
-    const movies = moviesState.movies;
-    const skip = moviesState.skip;
-    const limit = moviesState.limit;
+    const movies = moviesState.moviesQueue;
+    const skip = moviesState.moviesQueueSkip;
+    const limit = moviesState.moviesQueueLimit;
 
-    const uri = `/api/secure/movies?skip=${skip}&limit=${limit}`;
+    const uri = `/api/secure/movies?saved=false&skip=${skip}&limit=${limit}`;
     const options = Object.assign({}, FETCH_DEFAULT_OPTIONS, {
       method: 'GET',
     });
@@ -51,7 +51,7 @@ export function loadMovies() {
       .then(response => response.json())
       .then(newMovies => {
         const updatedMovies = movies.concat(newMovies);
-        return dispatch(moviesLoaded(updatedMovies));
+        return dispatch(moviesQueueLoaded(updatedMovies));
       })
       .catch((error) => handleHttpError(dispatch, error, failedLoadingMovies));
   };
@@ -59,10 +59,10 @@ export function loadMovies() {
 
 const dismissingMovie = createAction(DISMISSING_MOVIE);
 
-function dismissedMovie(movies) {
+function dismissedMovie(moviesQueue) {
   return {
     type: DISMISSED_MOVIE,
-    movies,
+    moviesQueue,
   };
 }
 
@@ -78,7 +78,7 @@ export function dismissMovie(movieId) {
     dispatch(dismissingMovie());
 
     const moviesState = getState().moviesState;
-    const movies = moviesState.movies;
+    const moviesQueue = moviesState.moviesQueue;
 
     const uri = `/api/secure/movies/${movieId}`;
     const options = Object.assign({}, FETCH_DEFAULT_OPTIONS, {
@@ -91,9 +91,9 @@ export function dismissMovie(movieId) {
     return fetch(uri, options)
       .then(checkHttpStatus)
       .then(() => {
-        // remove the movie from our local (client) state to render
-        remove(movies, (movie) => movieId === movie.id);
-        dispatch(dismissedMovie(movies));
+        // remove the movie from our movies queue locally
+        remove(moviesQueue, (movie) => movieId === movie.id);
+        dispatch(dismissedMovie(moviesQueue));
       })
       .catch((error) => handleHttpError(dispatch, error, failedUpdatingMovie));
   };
