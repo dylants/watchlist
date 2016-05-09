@@ -310,10 +310,28 @@ export function loadMovies(conditions, options, callback) {
   });
 }
 
-export function dismissMovie(movieId, callback) {
-  logger.log(`dismissMovie: movieId: ${movieId}`);
+export function enableSaved(movieId, callback) {
+  logger.log(`enableSaved: movieId: ${movieId}`);
+  return Movie.findByIdAndUpdate(movieId, {
+    saved: true,
+  }, {
+    new: true,
+  }, callback);
+}
+
+export function enableDismissed(movieId, callback) {
+  logger.log(`enableDismissed: movieId: ${movieId}`);
   return Movie.findByIdAndUpdate(movieId, {
     dismissed: true,
+  }, {
+    new: true,
+  }, callback);
+}
+
+export function disableDismissed(movieId, callback) {
+  logger.log(`disableDismissed: movieId: ${movieId}`);
+  return Movie.findByIdAndUpdate(movieId, {
+    dismissed: false,
   }, {
     new: true,
   }, callback);

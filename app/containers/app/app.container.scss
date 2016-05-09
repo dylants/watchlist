@@ -1,4 +1,14 @@
+@import "../../variables";
+
 body {
+  margin: 0;
+}
+
+.app {
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
+}
+
+.main {
+  margin-top: $header-height;
 }

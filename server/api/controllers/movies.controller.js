@@ -5,7 +5,9 @@ const logger = require('../../lib/logger')();
 import {
   loadMovies,
   downloadMovieData,
-  dismissMovie,
+  enableSaved,
+  enableDismissed,
+  disableDismissed,
 } from '../../lib/movies';
 
 function handleError(err, res) {
@@ -15,13 +17,20 @@ function handleError(err, res) {
 }
 
 export function getMovies(req, res) {
-  const skip = req.query.skip;
-  const limit = req.query.limit;
+  const { saved, dismissed, skip, limit } = req.query;
 
-  loadMovies({}, {
-    skip,
-    limit,
-  }, (err, movies) => {
+  // to allow a user to query for dismissed in both saved and not saved,
+  // only apply the saved filter if the user requests it specifically
+  const conditions = { dismissed };
+  if (saved) {
+    if (saved === 'false') {
+      conditions.saved = false;
+    } else {
+      conditions.saved = true;
+    }
+  }
+
+  loadMovies(conditions, { skip, limit }, (err, movies) => {
     if (err) { return handleError(err, res); }
 
     return res.send(movies);
@@ -42,13 +51,21 @@ export function updateMovie(req, res) {
 
   logger.log('updateMovie: body: ', body);
 
-  // we allow dismissing a movie only
-  if (body.dismissed) {
-    return dismissMovie(movieId, (err, movie) => {
-      if (err) { return handleError(err, res); }
+  function handleCallback(err, movie) {
+    if (err) { return handleError(err, res); }
 
-      return res.send(movie);
-    });
+    return res.send(movie);
+  }
+
+  // we allow saved, dismissed, and undo dismissed
+  if (body.hasOwnProperty('dismissed')) {
+    if (body.dismissed) {
+      return enableDismissed(movieId, handleCallback);
+    } else {
+      return disableDismissed(movieId, handleCallback);
+    }
+  } else if (body.saved) {
+    return enableSaved(movieId, handleCallback);
   } else {
     return res.status(400).end();
   }

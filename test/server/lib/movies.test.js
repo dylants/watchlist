@@ -242,16 +242,16 @@ describe('The movies library', () => {
         d: 'hey',
       }, (err, stats) => {
         should(err).be.null();
-        (_id).should.equal('update-movie');
-        (_update).should.deepEqual({
+        should(_id).equal('update-movie');
+        should(_update).deepEqual({
           title: 'update movie',
           a: 1,
           d: 'hey',
         });
-        (_options).should.deepEqual({
+        should(_options).deepEqual({
           new: true,
         });
-        (stats).should.deepEqual({
+        should(stats).deepEqual({
           movie: { x: 1 },
           isNew: false,
         });
@@ -269,7 +269,7 @@ describe('The movies library', () => {
         d: 'ho',
       }, (err, stats) => {
         should(err).be.null();
-        (stats).should.deepEqual({
+        should(stats).deepEqual({
           movie: { y: 2 },
           isNew: true,
         });
@@ -314,7 +314,7 @@ describe('The movies library', () => {
     it('should correctly return the stats', (done) => {
       saveMovies(MOVIES, (err, stats) => {
         should(err).be.null();
-        (stats).should.deepEqual({
+        should(stats).deepEqual({
           totalMovies: 3,
           moviesAdded: 1,
           moviesUpdated: 2,
@@ -447,7 +447,7 @@ describe('The movies library', () => {
     });
   });
 
-  describe('dismissMovie', () => {
+  describe('update movie', () => {
     let Movie;
 
     beforeEach(() => {
@@ -466,14 +466,44 @@ describe('The movies library', () => {
       moviesLib.__set__('Movie', Movie);
     });
 
-    it('should work with defaults', () => {
-      moviesLib.dismissMovie('123', () => {
-        should(Movie._id).equal('123');
-        should(Movie._updates).deepEqual({
-          dismissed: true,
+    describe('enableSaved', () => {
+      it('should work', () => {
+        moviesLib.enableSaved('123', () => {
+          should(Movie._id).equal('123');
+          should(Movie._updates).deepEqual({
+            saved: true,
+          });
+          should(Movie._options).deepEqual({
+            new: true,
+          });
         });
-        should(Movie._options).deepEqual({
-          new: true,
+      });
+    });
+
+    describe('enableDismissed', () => {
+      it('should work', () => {
+        moviesLib.enableDismissed('123', () => {
+          should(Movie._id).equal('123');
+          should(Movie._updates).deepEqual({
+            dismissed: true,
+          });
+          should(Movie._options).deepEqual({
+            new: true,
+          });
+        });
+      });
+    });
+
+    describe('disableDismissed', () => {
+      it('should work', () => {
+        moviesLib.disableDismissed('123', () => {
+          should(Movie._id).equal('123');
+          should(Movie._updates).deepEqual({
+            dismissed: false,
+          });
+          should(Movie._options).deepEqual({
+            new: true,
+          });
         });
       });
     });

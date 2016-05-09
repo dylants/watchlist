@@ -10,9 +10,15 @@ describe('movies reducer', () => {
   it('should have to correct initial state', () => {
     should(reducer(undefined, {})).deepEqual({
       isWaiting: false,
-      skip: 0,
-      limit: 20,
-      movies: [],
+      moviesQueueSkip: 0,
+      moviesQueueLimit: 20,
+      moviesQueue: [],
+      savedMoviesSkip: 0,
+      savedMoviesLimit: 20,
+      savedMovies: [],
+      dismissedMoviesSkip: 0,
+      dismissedMoviesLimit: 20,
+      dismissedMovies: [],
       error: null,
     });
   });
@@ -31,9 +37,15 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: true,
-        skip: 0,
-        limit: 20,
-        movies: [],
+        moviesQueueSkip: 0,
+        moviesQueueLimit: 20,
+        moviesQueue: [],
+        savedMoviesSkip: 0,
+        savedMoviesLimit: 20,
+        savedMovies: [],
+        dismissedMoviesSkip: 0,
+        dismissedMoviesLimit: 20,
+        dismissedMovies: [],
         error: null,
       });
     });
@@ -45,9 +57,35 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: true,
-        skip: 0,
-        limit: 20,
-        movies: [],
+        moviesQueueSkip: 0,
+        moviesQueueLimit: 20,
+        moviesQueue: [],
+        savedMoviesSkip: 0,
+        savedMoviesLimit: 20,
+        savedMovies: [],
+        dismissedMoviesSkip: 0,
+        dismissedMoviesLimit: 20,
+        dismissedMovies: [],
+        error: null,
+      });
+    });
+
+    it('should handle movies already loaded', () => {
+      should(
+        reducer(state, {
+          type: types.MOVIES_ALREADY_LOADED,
+        })
+      ).deepEqual({
+        isWaiting: false,
+        moviesQueueSkip: 0,
+        moviesQueueLimit: 20,
+        moviesQueue: [],
+        savedMoviesSkip: 0,
+        savedMoviesLimit: 20,
+        savedMovies: [],
+        dismissedMoviesSkip: 0,
+        dismissedMoviesLimit: 20,
+        dismissedMovies: [],
         error: null,
       });
     });
@@ -62,11 +100,11 @@ describe('movies reducer', () => {
       });
     });
 
-    it('should handle movies loaded', () => {
+    it('should handle movies queue loaded', () => {
       should(
         reducer(state, {
-          type: types.MOVIES_LOADED,
-          movies: [
+          type: types.MOVIES_QUEUE_LOADED,
+          moviesQueue: [
             {
               a: 1,
             },
@@ -74,9 +112,73 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: false,
-        skip: 20,
-        limit: 20,
-        movies: [
+        moviesQueueSkip: 20,
+        moviesQueueLimit: 20,
+        moviesQueue: [
+          {
+            a: 1,
+          },
+        ],
+        savedMoviesSkip: 0,
+        savedMoviesLimit: 20,
+        savedMovies: [],
+        dismissedMoviesSkip: 0,
+        dismissedMoviesLimit: 20,
+        dismissedMovies: [],
+        error: null,
+      });
+    });
+
+    it('should handle saved movies loaded', () => {
+      should(
+        reducer(state, {
+          type: types.SAVED_MOVIES_LOADED,
+          savedMovies: [
+            {
+              a: 1,
+            },
+          ],
+        })
+      ).deepEqual({
+        isWaiting: false,
+        moviesQueueSkip: 0,
+        moviesQueueLimit: 20,
+        moviesQueue: [],
+        savedMoviesSkip: 20,
+        savedMoviesLimit: 20,
+        savedMovies: [
+          {
+            a: 1,
+          },
+        ],
+        dismissedMoviesSkip: 0,
+        dismissedMoviesLimit: 20,
+        dismissedMovies: [],
+        error: null,
+      });
+    });
+
+    it('should handle dismissed movies loaded', () => {
+      should(
+        reducer(state, {
+          type: types.DISMISSED_MOVIES_LOADED,
+          dismissedMovies: [
+            {
+              a: 1,
+            },
+          ],
+        })
+      ).deepEqual({
+        isWaiting: false,
+        moviesQueueSkip: 0,
+        moviesQueueLimit: 20,
+        moviesQueue: [],
+        savedMoviesSkip: 0,
+        savedMoviesLimit: 20,
+        savedMovies: [],
+        dismissedMoviesSkip: 20,
+        dismissedMoviesLimit: 20,
+        dismissedMovies: [
           {
             a: 1,
           },
@@ -93,9 +195,15 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: false,
-        skip: 0,
-        limit: 20,
-        movies: [],
+        moviesQueueSkip: 0,
+        moviesQueueLimit: 20,
+        moviesQueue: [],
+        savedMoviesSkip: 0,
+        savedMoviesLimit: 20,
+        savedMovies: [],
+        dismissedMoviesSkip: 0,
+        dismissedMoviesLimit: 20,
+        dismissedMovies: [],
         error: 'FAIL!',
       });
     });
@@ -106,8 +214,8 @@ describe('movies reducer', () => {
 
     beforeEach(() => {
       state = reducer(undefined, {
-        type: types.MOVIES_LOADED,
-        movies: [{ a: 1 }, { b: 2 }],
+        type: types.MOVIES_QUEUE_LOADED,
+        moviesQueue: [{ a: 1 }, { b: 2 }],
       });
     });
 
@@ -115,13 +223,19 @@ describe('movies reducer', () => {
       should(
         reducer(state, {
           type: types.DISMISSED_MOVIE,
-          movies: [{ a: 1 }],
+          moviesQueue: [{ a: 1 }],
         })
       ).deepEqual({
         isWaiting: false,
-        skip: 20,
-        limit: 20,
-        movies: [{ a: 1 }],
+        moviesQueueSkip: 20,
+        moviesQueueLimit: 20,
+        moviesQueue: [{ a: 1 }],
+        savedMoviesSkip: 0,
+        savedMoviesLimit: 20,
+        savedMovies: [],
+        dismissedMoviesSkip: 0,
+        dismissedMoviesLimit: 20,
+        dismissedMovies: [],
         error: null,
       });
     });
@@ -134,9 +248,15 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: false,
-        skip: 20,
-        limit: 20,
-        movies: [{ a: 1 }, { b: 2 }],
+        moviesQueueSkip: 20,
+        moviesQueueLimit: 20,
+        moviesQueue: [{ a: 1 }, { b: 2 }],
+        savedMoviesSkip: 0,
+        savedMoviesLimit: 20,
+        savedMovies: [],
+        dismissedMoviesSkip: 0,
+        dismissedMoviesLimit: 20,
+        dismissedMovies: [],
         error: 'bad',
       });
     });

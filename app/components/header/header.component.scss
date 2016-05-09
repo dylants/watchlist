@@ -1,0 +1,17 @@
+@import "../../variables";
+
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: $header-height;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: $swatch03;
+  border-bottom: 1px solid $swatch02;
+}
+
+.element {
+  cursor: pointer;
+}

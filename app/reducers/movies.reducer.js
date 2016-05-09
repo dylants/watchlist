@@ -1,6 +1,9 @@
 import {
   LOADING_MOVIES,
-  MOVIES_LOADED,
+  MOVIES_QUEUE_LOADED,
+  SAVED_MOVIES_LOADED,
+  DISMISSED_MOVIES_LOADED,
+  MOVIES_ALREADY_LOADED,
   FAILED_LOADING_MOVIES,
   DISMISSING_MOVIE,
   DISMISSED_MOVIE,
@@ -9,9 +12,15 @@ import {
 
 const initialState = {
   isWaiting: false,
-  skip: 0,
-  limit: 20,
-  movies: [],
+  moviesQueueSkip: 0,
+  moviesQueueLimit: 20,
+  moviesQueue: [],
+  savedMoviesSkip: 0,
+  savedMoviesLimit: 20,
+  savedMovies: [],
+  dismissedMoviesSkip: 0,
+  dismissedMoviesLimit: 20,
+  dismissedMovies: [],
   error: null,
 };
 
@@ -22,12 +31,31 @@ export default function movies(state = initialState, action) {
         isWaiting: true,
         error: null,
       });
-    case MOVIES_LOADED:
+    case MOVIES_QUEUE_LOADED:
       return Object.assign({}, state, {
         isWaiting: false,
         // increase the skip by the amount we've requested
-        skip: state.skip + state.limit,
-        movies: action.movies,
+        moviesQueueSkip: state.moviesQueueSkip + state.moviesQueueLimit,
+        moviesQueue: action.moviesQueue,
+        error: null,
+      });
+    case SAVED_MOVIES_LOADED:
+      return Object.assign({}, state, {
+        isWaiting: false,
+        savedMoviesSkip: state.savedMoviesSkip + state.savedMoviesLimit,
+        savedMovies: action.savedMovies,
+        error: null,
+      });
+    case DISMISSED_MOVIES_LOADED:
+      return Object.assign({}, state, {
+        isWaiting: false,
+        dismissedMoviesSkip: state.dismissedMoviesSkip + state.dismissedMoviesLimit,
+        dismissedMovies: action.dismissedMovies,
+        error: null,
+      });
+    case MOVIES_ALREADY_LOADED:
+      return Object.assign({}, state, {
+        isWaiting: false,
         error: null,
       });
     case FAILED_LOADING_MOVIES:
@@ -43,7 +71,7 @@ export default function movies(state = initialState, action) {
     case DISMISSED_MOVIE:
       return Object.assign({}, state, {
         isWaiting: false,
-        movies: action.movies,
+        moviesQueue: action.moviesQueue,
         error: null,
       });
     case FAILED_UPDATING_MOVIE:
