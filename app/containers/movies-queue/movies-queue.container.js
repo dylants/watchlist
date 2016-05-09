@@ -3,12 +3,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import Movies from '../../components/movies/movies.component';
-import { loadMoviesQueue } from '../../actions/movie.actions';
+import { loadInitialMoviesQueue, loadMoviesQueue } from '../../actions/movie.actions';
 
-class MoviesContainer extends Component {
+class MoviesQueueContainer extends Component {
   componentWillMount() {
-    // to start, let's load some movies
-    this.props.loadMoviesQueue();
+    this.props.loadInitialMoviesQueue();
   }
 
   render() {
@@ -21,8 +20,9 @@ class MoviesContainer extends Component {
   }
 }
 
-MoviesContainer.propTypes = {
+MoviesQueueContainer.propTypes = {
   moviesState: PropTypes.object.isRequired,
+  loadInitialMoviesQueue: PropTypes.func.isRequired,
   loadMoviesQueue: PropTypes.func.isRequired,
 };
 
@@ -33,10 +33,10 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ loadMoviesQueue }, dispatch);
+  return bindActionCreators({ loadInitialMoviesQueue, loadMoviesQueue }, dispatch);
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(MoviesContainer);
+)(MoviesQueueContainer);

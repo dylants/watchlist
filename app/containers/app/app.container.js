@@ -1,13 +1,17 @@
 import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
 
-import './app.container.scss';
+import HeaderContainer from '../header/header.container';
+
+import style from './app.container.scss';
 
 // function input is shorthand for const { children } = this.props
-function App({ children }) {
+export default function App({ children }) {
   return (
-    <div>
-      {children}
+    <div className={style.app}>
+      <HeaderContainer />
+      <div className={style.main}>
+        {children}
+      </div>
     </div>
   );
 }
@@ -15,18 +19,3 @@ function App({ children }) {
 App.propTypes = {
   children: PropTypes.any,
 };
-
-function mapStateToProps() {
-  return {
-  };
-}
-
-function mapDispatchToProps() {
-  return {
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(App);
