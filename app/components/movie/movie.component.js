@@ -10,6 +10,14 @@ export default function Movie(props) {
     return props.dismiss(props.id);
   }
 
+  const buttons = (
+    <div className={style.buttons}>
+      {!props.saved && !props.dismissed && <button className={style.button}>Save</button>}
+      {!props.dismissed && <button className={style.button} onClick={dismissMovie}>Dismiss</button>}
+      {props.dismissed && <button className={style.button}>Undo Dismiss</button>}
+    </div>
+  );
+
   return (
     <div className={style.movie}>
       <img className={style.image} src={props.image} role="presentation" />
@@ -24,10 +32,7 @@ export default function Movie(props) {
         <span className={style.attribute}>{props.runtime}</span>
         <span className={style.attribute}>{props.mpaaRating}</span>
       </div>
-      <div className={style.buttons}>
-        <button className={style.button}>Save</button>
-        <button className={style.button} onClick={dismissMovie}>Dismiss</button>
-      </div>
+      {buttons}
     </div>
   );
 }
@@ -41,5 +46,7 @@ Movie.propTypes = {
   tomatoIcon: PropTypes.string,
   mpaaRating: PropTypes.string.isRequired,
   runtime: PropTypes.string.isRequired,
+  saved: PropTypes.bool.isRequired,
+  dismissed: PropTypes.bool.isRequired,
   dismiss: PropTypes.func.isRequired,
 };
