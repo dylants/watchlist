@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
 
 import HeaderContainer from '../header/header.container';
 
 import style from './app.container.scss';
 
-function App({ children, loginState }) {
+export default function App({ children, location }) {
+  // don't show the header on the login page
   let header;
-  if (loginState.user) {
+  if (location.pathname !== '/login') {
     header = (
       <HeaderContainer />
     );
@@ -25,13 +25,5 @@ function App({ children, loginState }) {
 
 App.propTypes = {
   children: PropTypes.any,
-  loginState: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
 };
-
-function mapStateToProps(state) {
-  return {
-    loginState: state.loginState,
-  };
-}
-
-export default connect(mapStateToProps)(App);
