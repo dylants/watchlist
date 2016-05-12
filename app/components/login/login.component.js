@@ -44,6 +44,7 @@ export default class Login extends Component {
         <div className={style.heading}>Login</div>
         <form>
           <input
+            autoFocus
             className={style.input}
             name="username"
             placeholder="Username"
