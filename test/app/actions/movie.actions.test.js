@@ -17,13 +17,13 @@ describe('movieActions', () => {
       moviesState: {
         moviesQueueSkip: 0,
         moviesQueueLimit: 20,
-        moviesQueue: [{ id: 'foo' }, { id: 'bar' }, { id: 'baz' }],
+        moviesQueue: [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
         savedMoviesSkip: 0,
         savedMoviesLimit: 20,
-        savedMovies: [{ id: 'foo' }, { id: 'bar' }, { id: 'baz' }],
+        savedMovies: [{ id: 'd' }, { id: 'e' }, { id: 'f' }],
         dismissedMoviesSkip: 0,
         dismissedMoviesLimit: 20,
-        dismissedMovies: [{ id: 'foo' }, { id: 'bar' }, { id: 'baz' }],
+        dismissedMovies: [{ id: 'g' }, { id: 'h' }, { id: 'i' }],
       },
     });
   });
@@ -54,7 +54,7 @@ describe('movieActions', () => {
           moviesState: {
             savedMoviesSkip: 0,
             savedMoviesLimit: 20,
-            savedMovies: [{ id: 'foo' }, { id: 'bar' }, { id: 'baz' }],
+            savedMovies: [{ id: 'd' }, { id: 'e' }, { id: 'f' }],
           },
         });
       });
@@ -75,7 +75,7 @@ describe('movieActions', () => {
           moviesState: {
             dismissedMoviesSkip: 0,
             dismissedMoviesLimit: 20,
-            dismissedMovies: [{ id: 'foo' }, { id: 'bar' }, { id: 'baz' }],
+            dismissedMovies: [{ id: 'g' }, { id: 'h' }, { id: 'i' }],
           },
         });
       });
@@ -96,7 +96,7 @@ describe('movieActions', () => {
       let MOVIES;
 
       beforeEach(() => {
-        MOVIES = [{ a: 1 }, { b: 2 }];
+        MOVIES = [{ id: 'x' }, { id: 'y' }, { id: 'c' }];
 
         fetchMock.mock(LOAD_MOVIES_QUEUE_API, MOVIES);
       });
@@ -105,11 +105,11 @@ describe('movieActions', () => {
         const expectedActions = [
           { type: types.LOADING_MOVIES, payload: undefined },
           { type: types.MOVIES_QUEUE_LOADED, moviesQueue: [
-            { id: 'foo' },
-            { id: 'bar' },
-            { id: 'baz' },
-            { a: 1 },
-            { b: 2 },
+            { id: 'a' },
+            { id: 'b' },
+            { id: 'c' },
+            { id: 'x' },
+            { id: 'y' },
           ] },
         ];
 
@@ -138,8 +138,9 @@ describe('movieActions', () => {
               should(store.getActions()).deepEqual([
                 { type: types.LOADING_MOVIES, payload: undefined },
                 { type: types.MOVIES_QUEUE_LOADED, moviesQueue: [
-                  { a: 1 },
-                  { b: 2 },
+                  { id: 'x' },
+                  { id: 'y' },
+                  { id: 'c' },
                 ] },
               ]);
             })
@@ -195,7 +196,7 @@ describe('movieActions', () => {
       let MOVIES;
 
       beforeEach(() => {
-        MOVIES = [{ a: 1 }, { b: 2 }];
+        MOVIES = [{ id: 'x' }, { id: 'y' }, { id: 'f' }];
 
         fetchMock.mock(LOAD_SAVED_MOVIES_API, MOVIES);
       });
@@ -204,11 +205,11 @@ describe('movieActions', () => {
         const expectedActions = [
           { type: types.LOADING_MOVIES, payload: undefined },
           { type: types.SAVED_MOVIES_LOADED, savedMovies: [
-            { id: 'foo' },
-            { id: 'bar' },
-            { id: 'baz' },
-            { a: 1 },
-            { b: 2 },
+            { id: 'd' },
+            { id: 'e' },
+            { id: 'f' },
+            { id: 'x' },
+            { id: 'y' },
           ] },
         ];
 
@@ -237,8 +238,9 @@ describe('movieActions', () => {
               should(store.getActions()).deepEqual([
                 { type: types.LOADING_MOVIES, payload: undefined },
                 { type: types.SAVED_MOVIES_LOADED, savedMovies: [
-                  { a: 1 },
-                  { b: 2 },
+                  { id: 'x' },
+                  { id: 'y' },
+                  { id: 'f' },
                 ] },
               ]);
             })
@@ -256,7 +258,7 @@ describe('movieActions', () => {
       let MOVIES;
 
       beforeEach(() => {
-        MOVIES = [{ a: 1 }, { b: 2 }];
+        MOVIES = [{ id: 'x' }, { id: 'y' }, { id: 'i' }];
 
         fetchMock.mock(LOAD_DISMISSED_MOVIES_API, MOVIES);
       });
@@ -265,11 +267,11 @@ describe('movieActions', () => {
         const expectedActions = [
           { type: types.LOADING_MOVIES, payload: undefined },
           { type: types.DISMISSED_MOVIES_LOADED, dismissedMovies: [
-            { id: 'foo' },
-            { id: 'bar' },
-            { id: 'baz' },
-            { a: 1 },
-            { b: 2 },
+            { id: 'g' },
+            { id: 'h' },
+            { id: 'i' },
+            { id: 'x' },
+            { id: 'y' },
           ] },
         ];
 
@@ -298,8 +300,9 @@ describe('movieActions', () => {
               should(store.getActions()).deepEqual([
                 { type: types.LOADING_MOVIES, payload: undefined },
                 { type: types.DISMISSED_MOVIES_LOADED, dismissedMovies: [
-                  { a: 1 },
-                  { b: 2 },
+                  { id: 'x' },
+                  { id: 'y' },
+                  { id: 'i' },
                 ] },
               ]);
             })
@@ -310,24 +313,93 @@ describe('movieActions', () => {
     });
   });
 
-  describe('dismissMovie', () => {
-    const DISMISS_MOVIE_API = '/api/secure/movies/foo';
+  describe('saveMovie', () => {
+    const SAVE_MOVIE_API = '/api/secure/movies/a';
 
     describe('when the API call is successful', () => {
       beforeEach(() => {
-        fetchMock.mock(DISMISS_MOVIE_API, 200);
+        fetchMock.mock(SAVE_MOVIE_API, 200);
       });
 
       it('should return the correct actions', (done) => {
         const expectedActions = [
-          { type: types.DISMISSING_MOVIE, payload: undefined },
-          { type: types.DISMISSED_MOVIE, moviesQueue: [
-            { id: 'bar' },
-            { id: 'baz' },
-          ] },
+          { type: types.SAVING_MOVIE, payload: undefined },
+          {
+            type: types.SAVED_MOVIE,
+            moviesQueue: [{ id: 'b' }, { id: 'c' }],
+            savedMovies: [{ id: 'd' }, { id: 'e' }, { id: 'f' }, { id: 'a' }],
+          },
         ];
 
-        store.dispatch(movieActions.dismissMovie('foo'))
+        store.dispatch(movieActions.saveMovie('a'))
+          .then(() => {
+            should(store.getActions()).deepEqual(expectedActions);
+          })
+          .then(done)   // testing complete
+          .catch(done); // we do this in case the tests fail, to end tests
+      });
+    });
+
+    describe('when the API call fails (500)', () => {
+      beforeEach(() => {
+        fetchMock.mock(SAVE_MOVIE_API, 500);
+      });
+
+      it('should return the correct actions', (done) => {
+        store.dispatch(movieActions.saveMovie('a'))
+          .then(() => {
+            const actions = store.getActions();
+
+            should(actions.length).equal(2);
+            should(actions[0].type).equal(types.SAVING_MOVIE);
+            should(actions[1].type).equal(types.FAILED_UPDATING_MOVIE);
+          })
+          .then(done)   // testing complete
+          .catch(done); // we do this in case the tests fail, to end tests
+      });
+    });
+  });
+
+  describe('dismissMovie', () => {
+    const DISMISS_MOVIE_API = '/api/secure/movies/a';
+
+    describe('when the API call is successful', () => {
+      beforeEach(() => {
+        fetchMock.mock(DISMISS_MOVIE_API, 200);
+        fetchMock.mock('/api/secure/movies/d', 200);
+      });
+
+      it('should return the correct actions (moviesQueue)', (done) => {
+        const expectedActions = [
+          { type: types.DISMISSING_MOVIE, payload: undefined },
+          {
+            type: types.DISMISSED_MOVIE,
+            moviesQueue: [{ id: 'b' }, { id: 'c' }],
+            savedMovies: [{ id: 'd' }, { id: 'e' }, { id: 'f' }],
+            dismissedMovies: [{ id: 'g' }, { id: 'h' }, { id: 'i' }, { id: 'a' }],
+          },
+        ];
+
+        store.dispatch(movieActions.dismissMovie('a'))
+          .then(() => {
+            should(store.getActions()).deepEqual(expectedActions);
+          })
+          .then(done)   // testing complete
+          .catch(done); // we do this in case the tests fail, to end tests
+      });
+
+      it('should return the correct actions (savedMovies)', (done) => {
+        const expectedActions = [
+          { type: types.DISMISSING_MOVIE, payload: undefined },
+          {
+            type: types.DISMISSED_MOVIE,
+            moviesQueue: [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
+            savedMovies: [{ id: 'e' }, { id: 'f' }],
+            dismissedMovies: [{ id: 'g' }, { id: 'h' }, { id: 'i' }, { id: 'd' }],
+          },
+        ];
+
+        store.dispatch(movieActions.dismissMovie('d'))
           .then(() => {
             should(store.getActions()).deepEqual(expectedActions);
           })
@@ -342,12 +414,96 @@ describe('movieActions', () => {
       });
 
       it('should return the correct actions', (done) => {
-        store.dispatch(movieActions.dismissMovie('foo'))
+        store.dispatch(movieActions.dismissMovie('a'))
           .then(() => {
             const actions = store.getActions();
 
             should(actions.length).equal(2);
             should(actions[0].type).equal(types.DISMISSING_MOVIE);
+            should(actions[1].type).equal(types.FAILED_UPDATING_MOVIE);
+          })
+          .then(done)   // testing complete
+          .catch(done); // we do this in case the tests fail, to end tests
+      });
+    });
+  });
+
+  describe('undismissMovie', () => {
+    beforeEach(() => {
+      store = mockStore({
+        moviesState: {
+          moviesQueue: [{ id: 'a', saved: false }, { id: 'b', saved: false }],
+          savedMovies: [{ id: 'd', saved: true }, { id: 'e', saved: true }],
+          dismissedMovies: [{ id: 'g', saved: true }, { id: 'h', saved: false }],
+        },
+      });
+    });
+
+    describe('when the API call is successful', () => {
+      beforeEach(() => {
+        fetchMock.mock('/api/secure/movies/g', 200);
+        fetchMock.mock('/api/secure/movies/h', 200);
+      });
+
+      it('should return the correct actions (moviesQueue)', (done) => {
+        const expectedActions = [
+          { type: types.UNDISMISSING_MOVIE, payload: undefined },
+          {
+            type: types.UNDISMISSED_MOVIE,
+            moviesQueue: [
+              { id: 'a', saved: false },
+              { id: 'b', saved: false },
+              { id: 'h', saved: false },
+            ],
+            savedMovies: [{ id: 'd', saved: true }, { id: 'e', saved: true }],
+            dismissedMovies: [{ id: 'g', saved: true }],
+          },
+        ];
+
+        store.dispatch(movieActions.undismissMovie('h'))
+          .then(() => {
+            should(store.getActions()).deepEqual(expectedActions);
+          })
+          .then(done)   // testing complete
+          .catch(done); // we do this in case the tests fail, to end tests
+      });
+
+      it('should return the correct actions (savedMovies)', (done) => {
+        const expectedActions = [
+          { type: types.UNDISMISSING_MOVIE, payload: undefined },
+          {
+            type: types.UNDISMISSED_MOVIE,
+            moviesQueue: [{ id: 'a', saved: false }, { id: 'b', saved: false }],
+            savedMovies: [
+              { id: 'd', saved: true },
+              { id: 'e', saved: true },
+              { id: 'g', saved: true },
+            ],
+            dismissedMovies: [{ id: 'h', saved: false }],
+          },
+        ];
+
+        store.dispatch(movieActions.undismissMovie('g'))
+          .then(() => {
+            should(store.getActions()).deepEqual(expectedActions);
+          })
+          .then(done)   // testing complete
+          .catch(done); // we do this in case the tests fail, to end tests
+      });
+    });
+
+    describe('when the API call fails (500)', () => {
+      beforeEach(() => {
+        fetchMock.mock('/api/secure/movies/g', 500);
+      });
+
+      it('should return the correct actions', (done) => {
+        store.dispatch(movieActions.undismissMovie('g'))
+          .then(() => {
+            const actions = store.getActions();
+
+            should(actions.length).equal(2);
+            should(actions[0].type).equal(types.UNDISMISSING_MOVIE);
             should(actions[1].type).equal(types.FAILED_UPDATING_MOVIE);
           })
           .then(done)   // testing complete
