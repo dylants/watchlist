@@ -1,7 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import * as loginActions from '../../../app/actions/login.actions';
-import * as types from '../../../app/constants/login.action-types';
+import * as types from '../../../app/action-types/login.action-types';
 import should from 'should';
 
 const fetchMock = require('fetch-mock');

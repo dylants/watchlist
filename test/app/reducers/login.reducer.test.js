@@ -1,5 +1,5 @@
 import reducer from '../../../app/reducers/login.reducer';
-import * as types from '../../../app/constants/login.action-types';
+import * as types from '../../../app/action-types/login.action-types';
 import should from 'should';
 
 describe('login reducer', () => {

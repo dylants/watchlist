@@ -8,7 +8,7 @@ import {
   DISMISSING_MOVIE,
   DISMISSED_MOVIE,
   FAILED_UPDATING_MOVIE,
-} from '../constants/movie.action-types';
+} from '../action-types/movie.action-types';
 
 const initialState = {
   isWaiting: false,

@@ -1,7 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import * as movieActions from '../../../app/actions/movie.actions';
-import * as types from '../../../app/constants/movie.action-types';
+import * as types from '../../../app/action-types/movie.action-types';
 import should from 'should';
 
 const fetchMock = require('fetch-mock');
