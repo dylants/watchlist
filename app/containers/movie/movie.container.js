@@ -6,10 +6,18 @@ import Movie from '../../components/movie/movie.component';
 import * as MovieActions from '../../actions/movie.actions';
 
 function MovieContainer({ movie, movieActions }) {
+  const {
+    saveMovie,
+    dismissMovie,
+    undismissMovie,
+  } = movieActions;
+
   return (
     <Movie
       {...movie}
-      dismiss={movieActions.dismissMovie}
+      saveMovie={saveMovie}
+      dismissMovie={dismissMovie}
+      undismissMovie={undismissMovie}
     />
   );
 }

@@ -50,10 +50,50 @@ describe('movies reducer', () => {
       });
     });
 
-    it('should handle dismissed movie', () => {
+    it('should handle saving movie', () => {
+      should(
+        reducer(state, {
+          type: types.SAVING_MOVIE,
+        })
+      ).deepEqual({
+        isWaiting: true,
+        moviesQueueSkip: 0,
+        moviesQueueLimit: 20,
+        moviesQueue: [],
+        savedMoviesSkip: 0,
+        savedMoviesLimit: 20,
+        savedMovies: [],
+        dismissedMoviesSkip: 0,
+        dismissedMoviesLimit: 20,
+        dismissedMovies: [],
+        error: null,
+      });
+    });
+
+    it('should handle dismissing movie', () => {
       should(
         reducer(state, {
           type: types.DISMISSING_MOVIE,
+        })
+      ).deepEqual({
+        isWaiting: true,
+        moviesQueueSkip: 0,
+        moviesQueueLimit: 20,
+        moviesQueue: [],
+        savedMoviesSkip: 0,
+        savedMoviesLimit: 20,
+        savedMovies: [],
+        dismissedMoviesSkip: 0,
+        dismissedMoviesLimit: 20,
+        dismissedMovies: [],
+        error: null,
+      });
+    });
+
+    it('should handle undismissing movie', () => {
+      should(
+        reducer(state, {
+          type: types.UNDISMISSING_MOVIE,
         })
       ).deepEqual({
         isWaiting: true,
@@ -104,21 +144,13 @@ describe('movies reducer', () => {
       should(
         reducer(state, {
           type: types.MOVIES_QUEUE_LOADED,
-          moviesQueue: [
-            {
-              a: 1,
-            },
-          ],
+          moviesQueue: [{ a: 1 }],
         })
       ).deepEqual({
         isWaiting: false,
         moviesQueueSkip: 20,
         moviesQueueLimit: 20,
-        moviesQueue: [
-          {
-            a: 1,
-          },
-        ],
+        moviesQueue: [{ a: 1 }],
         savedMoviesSkip: 0,
         savedMoviesLimit: 20,
         savedMovies: [],
@@ -133,11 +165,7 @@ describe('movies reducer', () => {
       should(
         reducer(state, {
           type: types.SAVED_MOVIES_LOADED,
-          savedMovies: [
-            {
-              a: 1,
-            },
-          ],
+          savedMovies: [{ a: 1 }],
         })
       ).deepEqual({
         isWaiting: false,
@@ -146,11 +174,7 @@ describe('movies reducer', () => {
         moviesQueue: [],
         savedMoviesSkip: 20,
         savedMoviesLimit: 20,
-        savedMovies: [
-          {
-            a: 1,
-          },
-        ],
+        savedMovies: [{ a: 1 }],
         dismissedMoviesSkip: 0,
         dismissedMoviesLimit: 20,
         dismissedMovies: [],
@@ -162,11 +186,7 @@ describe('movies reducer', () => {
       should(
         reducer(state, {
           type: types.DISMISSED_MOVIES_LOADED,
-          dismissedMovies: [
-            {
-              a: 1,
-            },
-          ],
+          dismissedMovies: [{ a: 1 }],
         })
       ).deepEqual({
         isWaiting: false,
@@ -178,11 +198,7 @@ describe('movies reducer', () => {
         savedMovies: [],
         dismissedMoviesSkip: 20,
         dismissedMoviesLimit: 20,
-        dismissedMovies: [
-          {
-            a: 1,
-          },
-        ],
+        dismissedMovies: [{ a: 1 }],
         error: null,
       });
     });
@@ -215,7 +231,37 @@ describe('movies reducer', () => {
     beforeEach(() => {
       state = reducer(undefined, {
         type: types.MOVIES_QUEUE_LOADED,
-        moviesQueue: [{ a: 1 }, { b: 2 }],
+        moviesQueue: [{ a: 1 }],
+      });
+      state = reducer(state, {
+        type: types.SAVED_MOVIES_LOADED,
+        savedMovies: [{ b: 2 }],
+      });
+      state = reducer(state, {
+        type: types.DISMISSED_MOVIES_LOADED,
+        dismissedMovies: [{ c: 3 }],
+      });
+    });
+
+    it('should handle saved movie', () => {
+      should(
+        reducer(state, {
+          type: types.SAVED_MOVIE,
+          moviesQueue: [{ x: 1 }],
+          savedMovies: [{ y: 2 }],
+        })
+      ).deepEqual({
+        isWaiting: false,
+        moviesQueueSkip: 20,
+        moviesQueueLimit: 20,
+        moviesQueue: [{ x: 1 }],
+        savedMoviesSkip: 20,
+        savedMoviesLimit: 20,
+        savedMovies: [{ y: 2 }],
+        dismissedMoviesSkip: 20,
+        dismissedMoviesLimit: 20,
+        dismissedMovies: [{ c: 3 }],
+        error: null,
       });
     });
 
@@ -223,19 +269,44 @@ describe('movies reducer', () => {
       should(
         reducer(state, {
           type: types.DISMISSED_MOVIE,
-          moviesQueue: [{ a: 1 }],
+          moviesQueue: [{ x: 1 }],
+          savedMovies: [{ y: 2 }],
+          dismissedMovies: [{ z: 3 }],
         })
       ).deepEqual({
         isWaiting: false,
         moviesQueueSkip: 20,
         moviesQueueLimit: 20,
-        moviesQueue: [{ a: 1 }],
-        savedMoviesSkip: 0,
+        moviesQueue: [{ x: 1 }],
+        savedMoviesSkip: 20,
         savedMoviesLimit: 20,
-        savedMovies: [],
-        dismissedMoviesSkip: 0,
+        savedMovies: [{ y: 2 }],
+        dismissedMoviesSkip: 20,
         dismissedMoviesLimit: 20,
-        dismissedMovies: [],
+        dismissedMovies: [{ z: 3 }],
+        error: null,
+      });
+    });
+
+    it('should handle undismissed movie', () => {
+      should(
+        reducer(state, {
+          type: types.UNDISMISSED_MOVIE,
+          moviesQueue: [{ x: 1 }],
+          savedMovies: [{ y: 2 }],
+          dismissedMovies: [{ z: 3 }],
+        })
+      ).deepEqual({
+        isWaiting: false,
+        moviesQueueSkip: 20,
+        moviesQueueLimit: 20,
+        moviesQueue: [{ x: 1 }],
+        savedMoviesSkip: 20,
+        savedMoviesLimit: 20,
+        savedMovies: [{ y: 2 }],
+        dismissedMoviesSkip: 20,
+        dismissedMoviesLimit: 20,
+        dismissedMovies: [{ z: 3 }],
         error: null,
       });
     });
@@ -250,13 +321,13 @@ describe('movies reducer', () => {
         isWaiting: false,
         moviesQueueSkip: 20,
         moviesQueueLimit: 20,
-        moviesQueue: [{ a: 1 }, { b: 2 }],
-        savedMoviesSkip: 0,
+        moviesQueue: [{ a: 1 }],
+        savedMoviesSkip: 20,
         savedMoviesLimit: 20,
-        savedMovies: [],
-        dismissedMoviesSkip: 0,
+        savedMovies: [{ b: 2 }],
+        dismissedMoviesSkip: 20,
         dismissedMoviesLimit: 20,
-        dismissedMovies: [],
+        dismissedMovies: [{ c: 3 }],
         error: 'bad',
       });
     });

@@ -3,20 +3,43 @@ import React, { PropTypes } from 'react';
 import style from './movie.component.scss';
 
 export default function Movie(props) {
-  const criticIcon = style[props.tomatoIcon];
-  const userIcon = props.userScore >= 70 ? style.popcorn : style.spilled;
+  function saveMovie() {
+    return props.saveMovie(props.id);
+  }
 
   function dismissMovie() {
-    return props.dismiss(props.id);
+    return props.dismissMovie(props.id);
+  }
+
+  function undismissMovie() {
+    return props.undismissMovie(props.id);
+  }
+
+  let saveButton;
+  if (!props.saved && !props.dismissed) {
+    saveButton = <button className={style.button} onClick={saveMovie}>Save</button>;
+  }
+  let dismissButton;
+  if (!props.dismissed) {
+    dismissButton = <button className={style.button} onClick={dismissMovie}>Dismiss</button>;
+  }
+  let undismissButton;
+  if (props.dismissed) {
+    undismissButton = (
+      <button className={style.button} onClick={undismissMovie}>Undo Dismiss</button>
+    );
   }
 
   const buttons = (
     <div className={style.buttons}>
-      {!props.saved && !props.dismissed && <button className={style.button}>Save</button>}
-      {!props.dismissed && <button className={style.button} onClick={dismissMovie}>Dismiss</button>}
-      {props.dismissed && <button className={style.button}>Undo Dismiss</button>}
+      {saveButton}
+      {dismissButton}
+      {undismissButton}
     </div>
   );
+
+  const criticIcon = style[props.tomatoIcon];
+  const userIcon = props.userScore >= 70 ? style.popcorn : style.spilled;
 
   return (
     <div className={style.movie}>
@@ -48,5 +71,7 @@ Movie.propTypes = {
   runtime: PropTypes.string.isRequired,
   saved: PropTypes.bool.isRequired,
   dismissed: PropTypes.bool.isRequired,
-  dismiss: PropTypes.func.isRequired,
+  saveMovie: PropTypes.func.isRequired,
+  dismissMovie: PropTypes.func.isRequired,
+  undismissMovie: PropTypes.func.isRequired,
 };
