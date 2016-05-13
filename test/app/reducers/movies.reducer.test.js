@@ -1,5 +1,5 @@
 import reducer from '../../../app/reducers/movies.reducer';
-import * as types from '../../../app/constants/movie.action-types';
+import * as types from '../../../app/action-types/movie.action-types';
 import should from 'should';
 
 describe('movies reducer', () => {

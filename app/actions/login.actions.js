@@ -6,7 +6,7 @@ import {
   LOGIN_INITIATED,
   LOGIN_SUCCESS,
   LOGIN_ERROR,
-} from '../constants/login.action-types';
+} from '../action-types/login.action-types';
 
 const loginInitiated = createAction(LOGIN_INITIATED);
 
