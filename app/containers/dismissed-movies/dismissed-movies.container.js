@@ -3,7 +3,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import Movies from '../../components/movies/movies.component';
-import { loadInitialDismissedMovies, loadDismissedMovies } from '../../actions/movie.actions';
+import {
+  loadInitialDismissedMovies,
+  loadDismissedMovies,
+} from '../../actions/dismissed-movies.actions';
 
 class DismissedMoviesContainer extends Component {
   componentWillMount() {

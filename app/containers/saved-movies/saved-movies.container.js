@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import Movies from '../../components/movies/movies.component';
-import { loadInitialSavedMovies, loadSavedMovies } from '../../actions/movie.actions';
+import { loadInitialSavedMovies, loadSavedMovies } from '../../actions/saved-movies.actions';
 
 class SavedMoviesContainer extends Component {
   componentWillMount() {
