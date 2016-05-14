@@ -11,21 +11,21 @@ const mockStore = configureMockStore(middlewares);
 
 describe('movieActions', () => {
   let store;
+  let UPDATED_MOVIE;
 
   beforeEach(() => {
     store = mockStore({
       moviesState: {
-        moviesQueueSkip: 0,
-        moviesQueueLimit: 20,
         moviesQueue: [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
-        savedMoviesSkip: 0,
-        savedMoviesLimit: 20,
         savedMovies: [{ id: 'd' }, { id: 'e' }, { id: 'f' }],
-        dismissedMoviesSkip: 0,
-        dismissedMoviesLimit: 20,
         dismissedMovies: [{ id: 'g' }, { id: 'h' }, { id: 'i' }],
       },
     });
+
+    UPDATED_MOVIE = {
+      a: 1,
+      b: 2,
+    };
   });
 
   afterEach(() => {
@@ -41,17 +41,16 @@ describe('movieActions', () => {
 
     describe('when the API call is successful', () => {
       beforeEach(() => {
-        fetchMock.mock(SAVE_MOVIE_API, 200);
+        fetchMock.mock(SAVE_MOVIE_API, {
+          body: UPDATED_MOVIE,
+          status: 200,
+        });
       });
 
       it('should return the correct actions', (done) => {
         const expectedActions = [
           { type: types.SAVING_MOVIE },
-          {
-            type: types.SAVED_MOVIE,
-            moviesQueue: [{ id: 'b' }, { id: 'c' }],
-            savedMovies: [{ id: 'd' }, { id: 'e' }, { id: 'f' }, { id: 'a' }],
-          },
+          { type: types.SAVED_MOVIE, updatedMovie: UPDATED_MOVIE },
         ];
 
         store.dispatch(movieActions.saveMovie('a'))
@@ -88,41 +87,19 @@ describe('movieActions', () => {
 
     describe('when the API call is successful', () => {
       beforeEach(() => {
-        fetchMock.mock(DISMISS_MOVIE_API, 200);
-        fetchMock.mock('/api/secure/movies/d', 200);
+        fetchMock.mock(DISMISS_MOVIE_API, {
+          body: UPDATED_MOVIE,
+          status: 200,
+        });
       });
 
-      it('should return the correct actions (moviesQueue)', (done) => {
+      it('should return the correct actions', (done) => {
         const expectedActions = [
           { type: types.DISMISSING_MOVIE },
-          {
-            type: types.DISMISSED_MOVIE,
-            moviesQueue: [{ id: 'b' }, { id: 'c' }],
-            savedMovies: [{ id: 'd' }, { id: 'e' }, { id: 'f' }],
-            dismissedMovies: [{ id: 'g' }, { id: 'h' }, { id: 'i' }, { id: 'a' }],
-          },
+          { type: types.DISMISSED_MOVIE, updatedMovie: UPDATED_MOVIE },
         ];
 
         store.dispatch(movieActions.dismissMovie('a'))
-          .then(() => {
-            should(store.getActions()).deepEqual(expectedActions);
-          })
-          .then(done)   // testing complete
-          .catch(done); // we do this in case the tests fail, to end tests
-      });
-
-      it('should return the correct actions (savedMovies)', (done) => {
-        const expectedActions = [
-          { type: types.DISMISSING_MOVIE },
-          {
-            type: types.DISMISSED_MOVIE,
-            moviesQueue: [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
-            savedMovies: [{ id: 'e' }, { id: 'f' }],
-            dismissedMovies: [{ id: 'g' }, { id: 'h' }, { id: 'i' }, { id: 'd' }],
-          },
-        ];
-
-        store.dispatch(movieActions.dismissMovie('d'))
           .then(() => {
             should(store.getActions()).deepEqual(expectedActions);
           })
@@ -152,61 +129,23 @@ describe('movieActions', () => {
   });
 
   describe('undismissMovie', () => {
-    beforeEach(() => {
-      store = mockStore({
-        moviesState: {
-          moviesQueue: [{ id: 'a', saved: false }, { id: 'b', saved: false }],
-          savedMovies: [{ id: 'd', saved: true }, { id: 'e', saved: true }],
-          dismissedMovies: [{ id: 'g', saved: true }, { id: 'h', saved: false }],
-        },
-      });
-    });
+    const UNDISMISS_MOVIE_API = '/api/secure/movies/a';
 
     describe('when the API call is successful', () => {
       beforeEach(() => {
-        fetchMock.mock('/api/secure/movies/g', 200);
-        fetchMock.mock('/api/secure/movies/h', 200);
+        fetchMock.mock(UNDISMISS_MOVIE_API, {
+          body: UPDATED_MOVIE,
+          status: 200,
+        });
       });
 
-      it('should return the correct actions (moviesQueue)', (done) => {
+      it('should return the correct actions', (done) => {
         const expectedActions = [
           { type: types.UNDISMISSING_MOVIE },
-          {
-            type: types.UNDISMISSED_MOVIE,
-            moviesQueue: [
-              { id: 'a', saved: false },
-              { id: 'b', saved: false },
-              { id: 'h', saved: false },
-            ],
-            savedMovies: [{ id: 'd', saved: true }, { id: 'e', saved: true }],
-            dismissedMovies: [{ id: 'g', saved: true }],
-          },
+          { type: types.UNDISMISSED_MOVIE, updatedMovie: UPDATED_MOVIE },
         ];
 
-        store.dispatch(movieActions.undismissMovie('h'))
-          .then(() => {
-            should(store.getActions()).deepEqual(expectedActions);
-          })
-          .then(done)   // testing complete
-          .catch(done); // we do this in case the tests fail, to end tests
-      });
-
-      it('should return the correct actions (savedMovies)', (done) => {
-        const expectedActions = [
-          { type: types.UNDISMISSING_MOVIE },
-          {
-            type: types.UNDISMISSED_MOVIE,
-            moviesQueue: [{ id: 'a', saved: false }, { id: 'b', saved: false }],
-            savedMovies: [
-              { id: 'd', saved: true },
-              { id: 'e', saved: true },
-              { id: 'g', saved: true },
-            ],
-            dismissedMovies: [{ id: 'h', saved: false }],
-          },
-        ];
-
-        store.dispatch(movieActions.undismissMovie('g'))
+        store.dispatch(movieActions.undismissMovie('a'))
           .then(() => {
             should(store.getActions()).deepEqual(expectedActions);
           })
@@ -217,11 +156,11 @@ describe('movieActions', () => {
 
     describe('when the API call fails (500)', () => {
       beforeEach(() => {
-        fetchMock.mock('/api/secure/movies/g', 500);
+        fetchMock.mock(UNDISMISS_MOVIE_API, 500);
       });
 
       it('should return the correct actions', (done) => {
-        store.dispatch(movieActions.undismissMovie('g'))
+        store.dispatch(movieActions.undismissMovie('a'))
           .then(() => {
             const actions = store.getActions();
 

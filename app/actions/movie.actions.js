@@ -1,5 +1,3 @@
-import { remove, unionBy } from 'lodash';
-
 import {
   FETCH_DEFAULT_OPTIONS,
   checkHttpStatus,
@@ -20,11 +18,10 @@ function savingMovie() {
   return { type: SAVING_MOVIE };
 }
 
-function savedMovie(moviesQueue, savedMovies) {
+function savedMovie(updatedMovie) {
   return {
     type: SAVED_MOVIE,
-    moviesQueue,
-    savedMovies,
+    updatedMovie,
   };
 }
 
@@ -32,12 +29,10 @@ function dismissingMovie() {
   return { type: DISMISSING_MOVIE };
 }
 
-function dismissedMovie(moviesQueue, savedMovies, dismissedMovies) {
+function dismissedMovie(updatedMovie) {
   return {
     type: DISMISSED_MOVIE,
-    moviesQueue,
-    savedMovies,
-    dismissedMovies,
+    updatedMovie,
   };
 }
 
@@ -45,12 +40,10 @@ function undismissingMovie() {
   return { type: UNDISMISSING_MOVIE };
 }
 
-function undismissedMovie(moviesQueue, savedMovies, dismissedMovies) {
+function undismissedMovie(updatedMovie) {
   return {
     type: UNDISMISSED_MOVIE,
-    moviesQueue,
-    savedMovies,
-    dismissedMovies,
+    updatedMovie,
   };
 }
 
@@ -62,7 +55,7 @@ function failedUpdatingMovie(error) {
 }
 
 export function saveMovie(movieId) {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(savingMovie());
 
     const uri = `/api/secure/movies/${movieId}`;
@@ -75,23 +68,14 @@ export function saveMovie(movieId) {
 
     return fetch(uri, options)
       .then(checkHttpStatus)
-      .then(() => {
-        const moviesState = getState().moviesState;
-        const { moviesQueue, savedMovies } = moviesState;
-
-        // remove the movie from our movies queue locally
-        const movedMovie = remove(moviesQueue, movie => movieId === movie.id);
-        // add the movie to our local saved movies list
-        const updatedSavedMovies = unionBy(savedMovies, movedMovie, 'id');
-
-        dispatch(savedMovie(moviesQueue, updatedSavedMovies));
-      })
+      .then(response => response.json())
+      .then(updatedMovie => dispatch(savedMovie(updatedMovie)))
       .catch((error) => handleHttpError(dispatch, error, failedUpdatingMovie));
   };
 }
 
 export function dismissMovie(movieId) {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(dismissingMovie());
 
     const uri = `/api/secure/movies/${movieId}`;
@@ -104,27 +88,14 @@ export function dismissMovie(movieId) {
 
     return fetch(uri, options)
       .then(checkHttpStatus)
-      .then(() => {
-        const moviesState = getState().moviesState;
-        const { moviesQueue, savedMovies, dismissedMovies } = moviesState;
-
-        // remove the movie from our movies queue locally
-        let movedMovie = remove(moviesQueue, movie => movieId === movie.id);
-        // if it wasn't in our movies queue, must be in our saved movies
-        if (movedMovie.length === 0) {
-          movedMovie = remove(savedMovies, movie => movieId === movie.id);
-        }
-        // add the movie to our local dismissed movies list
-        const updatedDismissedMovies = unionBy(dismissedMovies, movedMovie, 'id');
-
-        dispatch(dismissedMovie(moviesQueue, savedMovies, updatedDismissedMovies));
-      })
+      .then(response => response.json())
+      .then(updatedMovie => dispatch(dismissedMovie(updatedMovie)))
       .catch((error) => handleHttpError(dispatch, error, failedUpdatingMovie));
   };
 }
 
 export function undismissMovie(movieId) {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(undismissingMovie());
 
     const uri = `/api/secure/movies/${movieId}`;
@@ -137,23 +108,8 @@ export function undismissMovie(movieId) {
 
     return fetch(uri, options)
       .then(checkHttpStatus)
-      .then(() => {
-        const moviesState = getState().moviesState;
-        const { moviesQueue, savedMovies, dismissedMovies } = moviesState;
-
-        // remove the movie from our dismissed movies locally
-        const movedMovie = remove(dismissedMovies, movie => movieId === movie.id);
-        // add the movie to the correct local queue
-        let updatedMoviesQueue = moviesQueue;
-        let updatedSavedMovies = savedMovies;
-        if (movedMovie[0].saved) {
-          updatedSavedMovies = unionBy(savedMovies, movedMovie, 'id');
-        } else {
-          updatedMoviesQueue = unionBy(moviesQueue, movedMovie, 'id');
-        }
-
-        dispatch(undismissedMovie(updatedMoviesQueue, updatedSavedMovies, dismissedMovies));
-      })
+      .then(response => response.json())
+      .then(updatedMovie => dispatch(undismissedMovie(updatedMovie)))
       .catch((error) => handleHttpError(dispatch, error, failedUpdatingMovie));
   };
 }

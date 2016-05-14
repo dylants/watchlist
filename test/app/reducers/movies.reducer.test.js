@@ -229,84 +229,92 @@ describe('movies reducer', () => {
     let state;
 
     beforeEach(() => {
-      state = reducer(undefined, {
-        type: types.MOVIES_QUEUE_LOADED,
-        moviesQueue: [{ a: 1 }],
-      });
-      state = reducer(state, {
-        type: types.SAVED_MOVIES_LOADED,
-        savedMovies: [{ b: 2 }],
-      });
-      state = reducer(state, {
-        type: types.DISMISSED_MOVIES_LOADED,
-        dismissedMovies: [{ c: 3 }],
-      });
+      state = reducer({
+        moviesQueue: [{ id: 'a' }],
+        savedMovies: [{ id: 'b', saved: true }],
+        dismissedMovies: [{ id: 'c', dismissed: true }, { id: 'd', saved: true, dismissed: true }],
+      }, {});
     });
 
     it('should handle saved movie', () => {
       should(
         reducer(state, {
           type: types.SAVED_MOVIE,
-          moviesQueue: [{ x: 1 }],
-          savedMovies: [{ y: 2 }],
+          updatedMovie: { id: 'a' },
         })
       ).deepEqual({
         isWaiting: false,
-        moviesQueueSkip: 20,
-        moviesQueueLimit: 20,
-        moviesQueue: [{ x: 1 }],
-        savedMoviesSkip: 20,
-        savedMoviesLimit: 20,
-        savedMovies: [{ y: 2 }],
-        dismissedMoviesSkip: 20,
-        dismissedMoviesLimit: 20,
-        dismissedMovies: [{ c: 3 }],
+        moviesQueue: [],
+        savedMovies: [{ id: 'b', saved: true }, { id: 'a' }],
+        dismissedMovies: [{ id: 'c', dismissed: true }, { id: 'd', saved: true, dismissed: true }],
         error: null,
       });
     });
 
-    it('should handle dismissed movie', () => {
+    it('should handle dismissed movie (moviesQueue)', () => {
       should(
         reducer(state, {
           type: types.DISMISSED_MOVIE,
-          moviesQueue: [{ x: 1 }],
-          savedMovies: [{ y: 2 }],
-          dismissedMovies: [{ z: 3 }],
+          updatedMovie: { id: 'a', dismissed: true },
         })
       ).deepEqual({
         isWaiting: false,
-        moviesQueueSkip: 20,
-        moviesQueueLimit: 20,
-        moviesQueue: [{ x: 1 }],
-        savedMoviesSkip: 20,
-        savedMoviesLimit: 20,
-        savedMovies: [{ y: 2 }],
-        dismissedMoviesSkip: 20,
-        dismissedMoviesLimit: 20,
-        dismissedMovies: [{ z: 3 }],
+        moviesQueue: [],
+        savedMovies: [{ id: 'b', saved: true }],
+        dismissedMovies: [
+          { id: 'c', dismissed: true },
+          { id: 'd', saved: true, dismissed: true },
+          { id: 'a', dismissed: true },
+        ],
         error: null,
       });
     });
 
-    it('should handle undismissed movie', () => {
+    it('should handle dismissed movie (savedMovies)', () => {
       should(
         reducer(state, {
-          type: types.UNDISMISSED_MOVIE,
-          moviesQueue: [{ x: 1 }],
-          savedMovies: [{ y: 2 }],
-          dismissedMovies: [{ z: 3 }],
+          type: types.DISMISSED_MOVIE,
+          updatedMovie: { id: 'b', saved: true, dismissed: true },
         })
       ).deepEqual({
         isWaiting: false,
-        moviesQueueSkip: 20,
-        moviesQueueLimit: 20,
-        moviesQueue: [{ x: 1 }],
-        savedMoviesSkip: 20,
-        savedMoviesLimit: 20,
-        savedMovies: [{ y: 2 }],
-        dismissedMoviesSkip: 20,
-        dismissedMoviesLimit: 20,
-        dismissedMovies: [{ z: 3 }],
+        moviesQueue: [{ id: 'a' }],
+        savedMovies: [],
+        dismissedMovies: [
+          { id: 'c', dismissed: true },
+          { id: 'd', saved: true, dismissed: true },
+          { id: 'b', saved: true, dismissed: true },
+        ],
+        error: null,
+      });
+    });
+
+    it('should handle undismissed movie (moviesQueue)', () => {
+      should(
+        reducer(state, {
+          type: types.UNDISMISSED_MOVIE,
+          updatedMovie: { id: 'c' },
+        })
+      ).deepEqual({
+        isWaiting: false,
+        moviesQueue: [{ id: 'a' }, { id: 'c' }],
+        savedMovies: [{ id: 'b', saved: true }],
+        dismissedMovies: [{ id: 'd', saved: true, dismissed: true }],
+        error: null,
+      });
+    });
+
+    it('should handle undismissed movie (savedMovies)', () => {
+      should(
+        reducer(state, {
+          type: types.UNDISMISSED_MOVIE,
+          updatedMovie: { id: 'd', saved: true },
+        })
+      ).deepEqual({
+        isWaiting: false,
+        moviesQueue: [{ id: 'a' }],
+        savedMovies: [{ id: 'b', saved: true }, { id: 'd', saved: true }],
+        dismissedMovies: [{ id: 'c', dismissed: true }],
         error: null,
       });
     });
@@ -319,15 +327,9 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: false,
-        moviesQueueSkip: 20,
-        moviesQueueLimit: 20,
-        moviesQueue: [{ a: 1 }],
-        savedMoviesSkip: 20,
-        savedMoviesLimit: 20,
-        savedMovies: [{ b: 2 }],
-        dismissedMoviesSkip: 20,
-        dismissedMoviesLimit: 20,
-        dismissedMovies: [{ c: 3 }],
+        moviesQueue: [{ id: 'a' }],
+        savedMovies: [{ id: 'b', saved: true }],
+        dismissedMovies: [{ id: 'c', dismissed: true }, { id: 'd', saved: true, dismissed: true }],
         error: 'bad',
       });
     });

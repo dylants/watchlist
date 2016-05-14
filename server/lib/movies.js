@@ -310,13 +310,19 @@ export function loadMovies(conditions, options, callback) {
   });
 }
 
+function handleEnableTagCallback(err, movie, callback) {
+  if (err) { return callback(err); }
+
+  return callback(null, buildMovieUI(movie));
+}
+
 export function enableSaved(movieId, callback) {
   logger.log(`enableSaved: movieId: ${movieId}`);
   return Movie.findByIdAndUpdate(movieId, {
     saved: true,
   }, {
     new: true,
-  }, callback);
+  }, (err, movie) => handleEnableTagCallback(err, movie, callback));
 }
 
 export function enableDismissed(movieId, callback) {
@@ -325,7 +331,7 @@ export function enableDismissed(movieId, callback) {
     dismissed: true,
   }, {
     new: true,
-  }, callback);
+  }, (err, movie) => handleEnableTagCallback(err, movie, callback));
 }
 
 export function disableDismissed(movieId, callback) {
@@ -334,5 +340,5 @@ export function disableDismissed(movieId, callback) {
     dismissed: false,
   }, {
     new: true,
-  }, callback);
+  }, (err, movie) => handleEnableTagCallback(err, movie, callback));
 }
