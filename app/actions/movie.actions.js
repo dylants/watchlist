@@ -1,4 +1,3 @@
-import { createAction } from 'redux-actions';
 import { remove, unionBy } from 'lodash';
 
 import {
@@ -23,11 +22,25 @@ import {
   FAILED_UPDATING_MOVIE,
 } from '../action-types/movie.action-types';
 
-const loadingMovies = createAction(LOADING_MOVIES);
-const moviesAlreadyLoaded = createAction(MOVIES_ALREADY_LOADED);
-const savingMovie = createAction(SAVING_MOVIE);
-const dismissingMovie = createAction(DISMISSING_MOVIE);
-const undismissingMovie = createAction(UNDISMISSING_MOVIE);
+function loadingMovies() {
+  return { type: LOADING_MOVIES };
+}
+
+function moviesAlreadyLoaded() {
+  return { type: MOVIES_ALREADY_LOADED };
+}
+
+function savingMovie() {
+  return { type: SAVING_MOVIE };
+}
+
+function dismissingMovie() {
+  return { type: DISMISSING_MOVIE };
+}
+
+function undismissingMovie() {
+  return { type: UNDISMISSING_MOVIE };
+}
 
 function failedLoadingMovies(error) {
   return {

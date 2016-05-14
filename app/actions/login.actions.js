@@ -1,4 +1,3 @@
-import { createAction } from 'redux-actions';
 import { push } from 'react-router-redux';
 
 import { FETCH_DEFAULT_OPTIONS } from '../utils/http.utils';
@@ -8,7 +7,9 @@ import {
   LOGIN_ERROR,
 } from '../action-types/login.action-types';
 
-const loginInitiated = createAction(LOGIN_INITIATED);
+function loginInitiated() {
+  return { type: LOGIN_INITIATED };
+}
 
 function loginSuccess(user) {
   return {
