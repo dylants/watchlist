@@ -20,14 +20,5 @@
 }
 
 .button {
-  padding: 0.5rem 1rem;
-  border-radius: 3px;
-  margin: 0 1rem;
-  border: 0;
-  background: $swatch01;
-  min-width: 70px;
-
-  &:hover {
-    cursor: pointer;
-  }
+  composes: button-default from 'sass!../../base.scss';
 }

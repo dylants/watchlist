@@ -1,6 +1,14 @@
+.movies {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
 .buttons {
   text-align: center;
-  margin: 0.75rem 0 2rem;
+  margin-bottom: 30px;
 }
 
 .button {

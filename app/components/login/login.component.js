@@ -64,7 +64,7 @@ export default class Login extends Component {
             type="submit"
             onClick={::this.submit}
             disabled={this.props.isWaiting}
-          >Login</button>
+          >Submit</button>
         </form>
       </div>
     );
