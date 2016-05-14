@@ -1,23 +1,28 @@
-@import "../../variables";
+@import '../../variables';
 
 .movie {
   border: 1px solid $swatch01;
-  display: inline-block;
-  margin: 1rem;
-  padding: 1rem;
-  width: 240px;
+  margin: 0 20px 20px;
+  padding: 20px;
+  width: 340px;
   text-align: center;
 }
-.title {
-  font-weight: 400;
-  padding: 1rem 0 0.5rem;
-}
+
 .image {
-  height: 270px;
+  height: 300px;
+  margin-bottom: 20px;
 }
+
+.title {
+  font-size: 18px;
+  font-weight: 400;
+  padding-bottom: 10px;
+}
+
 .scores {
-  padding: 0.25rem;
+  padding-bottom: 10px;
 }
+
 .icon {
   background: url('https://s3.amazonaws.com/dylants-watchlist/public/images/movie_icons_sprite.png') no-repeat;
   display: inline-block;
@@ -25,39 +30,50 @@
   height: 32px;
   vertical-align: text-bottom;
 }
+
 .certified {
   composes: icon;
   background-position: -160px -128px;
 }
+
 .fresh {
   composes: icon;
   background-position: -64px -128px;
 }
+
 .rotten {
   composes: icon;
   background-position: -96px -128px;
 }
+
 .popcorn {
   composes: icon;
   background-position: -32px -128px;
 }
+
 .spilled {
   composes: icon;
   background-position: -128px -128px;
 }
+
 .score {
+  font-size: 16px;
   padding: 0 2px;
 }
+
 .attributes {
   font-size: 14px;
+  margin-bottom: 20px;
 }
+
 .attribute {
   padding: 0 3px;
 }
+
 .buttons {
   text-align: center;
-  margin-top: 0.75rem;
 }
+
 .button {
-  composes: button-default button-with-hover from '../../base.scss';
+  composes: button-default from 'sass!../../base.scss';
 }

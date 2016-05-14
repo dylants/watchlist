@@ -1,4 +1,4 @@
-@import "../../variables";
+@import '../../variables';
 
 .header {
   position: fixed;
@@ -9,7 +9,7 @@
   justify-content: space-around;
   align-items: center;
   background-color: $swatch03;
-  border-bottom: 1px solid $swatch02;
+  border-bottom: 1px solid $swatch01;
 }
 
 .element {

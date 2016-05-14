@@ -1,11 +1,19 @@
+@import './variables';
+
 .button-default {
-  padding: 0.5rem 1rem;
+  font-size: 14px;
+  padding: 5px 10px;
   border-radius: 3px;
-  margin: 0 1rem;
-  border: 0;
-  background: $swatch01;
+  margin: 0 20px;
+  border: 1px solid $swatch02;
+  background: $swatch03;
   min-width: 70px;
-}
-.button-with-hover:hover {
-  cursor: pointer;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:focus {
+    outline: 0;
+  }
 }

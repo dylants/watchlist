@@ -1,7 +1,16 @@
+.movies {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
 .buttons {
   text-align: center;
-  margin-top: 0.75rem;
+  margin-bottom: 30px;
 }
+
 .button {
-  composes: button-default button-with-hover from '../../base.scss';
+  composes: button-default from 'sass!../../base.scss';
 }
