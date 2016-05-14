@@ -32,7 +32,7 @@ describe('loginActions', () => {
 
       beforeEach(() => {
         expectedActions = [
-          { type: types.LOGIN_INITIATED, payload: undefined },
+          { type: types.LOGIN_INITIATED },
           { type: types.LOGIN_ERROR, error: 'Please enter a username and password.' },
         ];
       });
@@ -60,7 +60,7 @@ describe('loginActions', () => {
 
       it('should return login error', (done) => {
         const expectedActions = [
-          { type: types.LOGIN_INITIATED, payload: undefined },
+          { type: types.LOGIN_INITIATED },
           { type: types.LOGIN_ERROR, error: 'Incorrect username or password.' },
         ];
 
@@ -91,7 +91,7 @@ describe('loginActions', () => {
             const actions = store.getActions();
 
             should(actions.length).equal(3);
-            should(actions[0]).deepEqual({ type: types.LOGIN_INITIATED, payload: undefined });
+            should(actions[0]).deepEqual({ type: types.LOGIN_INITIATED });
             should(actions[1]).deepEqual({ type: types.LOGIN_SUCCESS, user: { username } });
             should(actions[2].payload.args).deepEqual(['/']);
           })

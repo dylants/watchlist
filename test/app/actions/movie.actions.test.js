@@ -41,7 +41,7 @@ describe('movieActions', () => {
       it('should return the correct state', () => {
         store.dispatch(movieActions.loadInitialMoviesQueue());
         should(store.getActions()).deepEqual([
-          { type: types.MOVIES_ALREADY_LOADED, payload: undefined },
+          { type: types.MOVIES_ALREADY_LOADED },
         ]);
       });
     });
@@ -62,7 +62,7 @@ describe('movieActions', () => {
       it('should return the correct state', () => {
         store.dispatch(movieActions.loadInitialSavedMovies());
         should(store.getActions()).deepEqual([
-          { type: types.MOVIES_ALREADY_LOADED, payload: undefined },
+          { type: types.MOVIES_ALREADY_LOADED },
         ]);
       });
     });
@@ -83,7 +83,7 @@ describe('movieActions', () => {
       it('should return the correct state', () => {
         store.dispatch(movieActions.loadInitialDismissedMovies());
         should(store.getActions()).deepEqual([
-          { type: types.MOVIES_ALREADY_LOADED, payload: undefined },
+          { type: types.MOVIES_ALREADY_LOADED },
         ]);
       });
     });
@@ -103,14 +103,17 @@ describe('movieActions', () => {
 
       it('should return the correct actions', (done) => {
         const expectedActions = [
-          { type: types.LOADING_MOVIES, payload: undefined },
-          { type: types.MOVIES_QUEUE_LOADED, moviesQueue: [
-            { id: 'a' },
-            { id: 'b' },
-            { id: 'c' },
-            { id: 'x' },
-            { id: 'y' },
-          ] },
+          { type: types.LOADING_MOVIES },
+          {
+            type: types.MOVIES_QUEUE_LOADED,
+            moviesQueue: [
+              { id: 'a' },
+              { id: 'b' },
+              { id: 'c' },
+              { id: 'x' },
+              { id: 'y' },
+            ],
+          },
         ];
 
         store.dispatch(movieActions.loadMoviesQueue())
@@ -136,12 +139,15 @@ describe('movieActions', () => {
           store.dispatch(movieActions.loadInitialMoviesQueue())
             .then(() => {
               should(store.getActions()).deepEqual([
-                { type: types.LOADING_MOVIES, payload: undefined },
-                { type: types.MOVIES_QUEUE_LOADED, moviesQueue: [
-                  { id: 'x' },
-                  { id: 'y' },
-                  { id: 'c' },
-                ] },
+                { type: types.LOADING_MOVIES },
+                {
+                  type: types.MOVIES_QUEUE_LOADED,
+                  moviesQueue: [
+                    { id: 'x' },
+                    { id: 'y' },
+                    { id: 'c' },
+                  ],
+                },
               ]);
             })
             .then(done)   // testing complete
@@ -203,14 +209,17 @@ describe('movieActions', () => {
 
       it('should return the correct actions', (done) => {
         const expectedActions = [
-          { type: types.LOADING_MOVIES, payload: undefined },
-          { type: types.SAVED_MOVIES_LOADED, savedMovies: [
-            { id: 'd' },
-            { id: 'e' },
-            { id: 'f' },
-            { id: 'x' },
-            { id: 'y' },
-          ] },
+          { type: types.LOADING_MOVIES },
+          {
+            type: types.SAVED_MOVIES_LOADED,
+            savedMovies: [
+              { id: 'd' },
+              { id: 'e' },
+              { id: 'f' },
+              { id: 'x' },
+              { id: 'y' },
+            ],
+          },
         ];
 
         store.dispatch(movieActions.loadSavedMovies())
@@ -236,12 +245,15 @@ describe('movieActions', () => {
           store.dispatch(movieActions.loadInitialSavedMovies())
             .then(() => {
               should(store.getActions()).deepEqual([
-                { type: types.LOADING_MOVIES, payload: undefined },
-                { type: types.SAVED_MOVIES_LOADED, savedMovies: [
-                  { id: 'x' },
-                  { id: 'y' },
-                  { id: 'f' },
-                ] },
+                { type: types.LOADING_MOVIES },
+                {
+                  type: types.SAVED_MOVIES_LOADED,
+                  savedMovies: [
+                    { id: 'x' },
+                    { id: 'y' },
+                    { id: 'f' },
+                  ],
+                },
               ]);
             })
             .then(done)   // testing complete
@@ -265,14 +277,17 @@ describe('movieActions', () => {
 
       it('should return the correct actions', (done) => {
         const expectedActions = [
-          { type: types.LOADING_MOVIES, payload: undefined },
-          { type: types.DISMISSED_MOVIES_LOADED, dismissedMovies: [
-            { id: 'g' },
-            { id: 'h' },
-            { id: 'i' },
-            { id: 'x' },
-            { id: 'y' },
-          ] },
+          { type: types.LOADING_MOVIES },
+          {
+            type: types.DISMISSED_MOVIES_LOADED,
+            dismissedMovies: [
+              { id: 'g' },
+              { id: 'h' },
+              { id: 'i' },
+              { id: 'x' },
+              { id: 'y' },
+            ],
+          },
         ];
 
         store.dispatch(movieActions.loadDismissedMovies())
@@ -298,12 +313,15 @@ describe('movieActions', () => {
           store.dispatch(movieActions.loadInitialDismissedMovies())
             .then(() => {
               should(store.getActions()).deepEqual([
-                { type: types.LOADING_MOVIES, payload: undefined },
-                { type: types.DISMISSED_MOVIES_LOADED, dismissedMovies: [
-                  { id: 'x' },
-                  { id: 'y' },
-                  { id: 'i' },
-                ] },
+                { type: types.LOADING_MOVIES },
+                {
+                  type: types.DISMISSED_MOVIES_LOADED,
+                  dismissedMovies: [
+                    { id: 'x' },
+                    { id: 'y' },
+                    { id: 'i' },
+                  ],
+                },
               ]);
             })
             .then(done)   // testing complete
@@ -323,7 +341,7 @@ describe('movieActions', () => {
 
       it('should return the correct actions', (done) => {
         const expectedActions = [
-          { type: types.SAVING_MOVIE, payload: undefined },
+          { type: types.SAVING_MOVIE },
           {
             type: types.SAVED_MOVIE,
             moviesQueue: [{ id: 'b' }, { id: 'c' }],
@@ -371,7 +389,7 @@ describe('movieActions', () => {
 
       it('should return the correct actions (moviesQueue)', (done) => {
         const expectedActions = [
-          { type: types.DISMISSING_MOVIE, payload: undefined },
+          { type: types.DISMISSING_MOVIE },
           {
             type: types.DISMISSED_MOVIE,
             moviesQueue: [{ id: 'b' }, { id: 'c' }],
@@ -390,7 +408,7 @@ describe('movieActions', () => {
 
       it('should return the correct actions (savedMovies)', (done) => {
         const expectedActions = [
-          { type: types.DISMISSING_MOVIE, payload: undefined },
+          { type: types.DISMISSING_MOVIE },
           {
             type: types.DISMISSED_MOVIE,
             moviesQueue: [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
@@ -447,7 +465,7 @@ describe('movieActions', () => {
 
       it('should return the correct actions (moviesQueue)', (done) => {
         const expectedActions = [
-          { type: types.UNDISMISSING_MOVIE, payload: undefined },
+          { type: types.UNDISMISSING_MOVIE },
           {
             type: types.UNDISMISSED_MOVIE,
             moviesQueue: [
@@ -470,7 +488,7 @@ describe('movieActions', () => {
 
       it('should return the correct actions (savedMovies)', (done) => {
         const expectedActions = [
-          { type: types.UNDISMISSING_MOVIE, payload: undefined },
+          { type: types.UNDISMISSING_MOVIE },
           {
             type: types.UNDISMISSED_MOVIE,
             moviesQueue: [{ id: 'a', saved: false }, { id: 'b', saved: false }],
