@@ -2,6 +2,7 @@
   text-align: center;
   margin: 0.75rem 0 2rem;
 }
+
 .button {
   composes: button-default from 'sass!../../base.scss';
 }

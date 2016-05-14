@@ -8,16 +8,20 @@
   width: 240px;
   text-align: center;
 }
+
 .title {
   font-weight: 400;
   padding: 1rem 0 0.5rem;
 }
+
 .image {
   height: 270px;
 }
+
 .scores {
   padding: 0.25rem;
 }
+
 .icon {
   background: url('https://s3.amazonaws.com/dylants-watchlist/public/images/movie_icons_sprite.png') no-repeat;
   display: inline-block;
@@ -25,39 +29,49 @@
   height: 32px;
   vertical-align: text-bottom;
 }
+
 .certified {
   composes: icon;
   background-position: -160px -128px;
 }
+
 .fresh {
   composes: icon;
   background-position: -64px -128px;
 }
+
 .rotten {
   composes: icon;
   background-position: -96px -128px;
 }
+
 .popcorn {
   composes: icon;
   background-position: -32px -128px;
 }
+
 .spilled {
   composes: icon;
   background-position: -128px -128px;
 }
+
 .score {
   padding: 0 2px;
 }
+
 .attributes {
   font-size: 14px;
 }
+
 .attribute {
   padding: 0 3px;
 }
+
 .buttons {
   text-align: center;
   margin-top: 0.75rem;
 }
+
 .button {
   composes: button-default from 'sass!../../base.scss';
 }
