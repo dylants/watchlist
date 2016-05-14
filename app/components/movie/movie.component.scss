@@ -1,4 +1,4 @@
-@import '../../variables';
+@import '../../theme/variables';
 
 .movie {
   border: 1px solid $swatch01;
@@ -75,5 +75,5 @@
 }
 
 .button {
-  composes: button-default from 'sass!../../base.scss';
+  composes: button-default from 'sass!../../theme/base.scss';
 }
