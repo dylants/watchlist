@@ -448,9 +448,27 @@ describe('The movies library', () => {
   });
 
   describe('update movie', () => {
+    let MOVIE;
     let Movie;
 
     beforeEach(() => {
+      MOVIE = {
+        _id: 'my-movie',
+        title: 'My Movie',
+        userScore: 100,
+        criticScore: 80,
+        tomatoIcon: 'certified',
+        mpaaRating: 'G',
+        runtime: '1 hour',
+        synopsis: 'Good things',
+        images: [
+          'one.jpg',
+          'two.jpg',
+        ],
+        saved: true,
+        dismissed: false,
+      };
+
       Movie = {
         _id: null,
         _updates: null,
@@ -459,7 +477,7 @@ describe('The movies library', () => {
           this._id = id;
           this._updates = updates;
           this._options = options;
-          return callback();
+          return callback(null, MOVIE);
         },
       };
 
