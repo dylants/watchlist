@@ -1,7 +1,7 @@
 .buttons {
   text-align: center;
-  margin-top: 0.75rem;
+  margin: 0.75rem 0 2rem;
 }
 .button {
-  composes: button-default button-with-hover from '../../base.scss';
+  composes: button-default from 'sass!../../base.scss';
 }

@@ -1,4 +1,4 @@
-@import "../../variables";
+@import '../../variables';
 
 .movie {
   border: 1px solid $swatch01;
@@ -59,5 +59,5 @@
   margin-top: 0.75rem;
 }
 .button {
-  composes: button-default button-with-hover from '../../base.scss';
+  composes: button-default from 'sass!../../base.scss';
 }
