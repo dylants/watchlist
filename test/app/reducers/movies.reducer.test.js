@@ -230,8 +230,14 @@ describe('movies reducer', () => {
 
     beforeEach(() => {
       state = reducer({
+        moviesQueueSkip: 20,
+        moviesQueueLimit: 20,
         moviesQueue: [{ id: 'a' }],
+        savedMoviesSkip: 20,
+        savedMoviesLimit: 20,
         savedMovies: [{ id: 'b', saved: true }],
+        dismissedMoviesSkip: 20,
+        dismissedMoviesLimit: 20,
         dismissedMovies: [{ id: 'c', dismissed: true }, { id: 'd', saved: true, dismissed: true }],
       }, {});
     });
@@ -244,8 +250,14 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: false,
+        moviesQueueSkip: 19,
+        moviesQueueLimit: 20,
         moviesQueue: [],
+        savedMoviesSkip: 20,
+        savedMoviesLimit: 20,
         savedMovies: [{ id: 'b', saved: true }, { id: 'a' }],
+        dismissedMoviesSkip: 20,
+        dismissedMoviesLimit: 20,
         dismissedMovies: [{ id: 'c', dismissed: true }, { id: 'd', saved: true, dismissed: true }],
         error: null,
       });
@@ -259,8 +271,14 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: false,
+        moviesQueueSkip: 19,
+        moviesQueueLimit: 20,
         moviesQueue: [],
+        savedMoviesSkip: 20,
+        savedMoviesLimit: 20,
         savedMovies: [{ id: 'b', saved: true }],
+        dismissedMoviesSkip: 20,
+        dismissedMoviesLimit: 20,
         dismissedMovies: [
           { id: 'c', dismissed: true },
           { id: 'd', saved: true, dismissed: true },
@@ -278,8 +296,14 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: false,
+        moviesQueueSkip: 20,
+        moviesQueueLimit: 20,
         moviesQueue: [{ id: 'a' }],
+        savedMoviesSkip: 19,
+        savedMoviesLimit: 20,
         savedMovies: [],
+        dismissedMoviesSkip: 20,
+        dismissedMoviesLimit: 20,
         dismissedMovies: [
           { id: 'c', dismissed: true },
           { id: 'd', saved: true, dismissed: true },
@@ -297,8 +321,14 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: false,
+        moviesQueueSkip: 20,
+        moviesQueueLimit: 20,
         moviesQueue: [{ id: 'a' }, { id: 'c' }],
+        savedMoviesSkip: 20,
+        savedMoviesLimit: 20,
         savedMovies: [{ id: 'b', saved: true }],
+        dismissedMoviesSkip: 19,
+        dismissedMoviesLimit: 20,
         dismissedMovies: [{ id: 'd', saved: true, dismissed: true }],
         error: null,
       });
@@ -312,8 +342,14 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: false,
+        moviesQueueSkip: 20,
+        moviesQueueLimit: 20,
         moviesQueue: [{ id: 'a' }],
+        savedMoviesSkip: 20,
+        savedMoviesLimit: 20,
         savedMovies: [{ id: 'b', saved: true }, { id: 'd', saved: true }],
+        dismissedMoviesSkip: 19,
+        dismissedMoviesLimit: 20,
         dismissedMovies: [{ id: 'c', dismissed: true }],
         error: null,
       });
@@ -327,8 +363,14 @@ describe('movies reducer', () => {
         })
       ).deepEqual({
         isWaiting: false,
+        moviesQueueSkip: 20,
+        moviesQueueLimit: 20,
         moviesQueue: [{ id: 'a' }],
+        savedMoviesSkip: 20,
+        savedMoviesLimit: 20,
         savedMovies: [{ id: 'b', saved: true }],
+        dismissedMoviesSkip: 20,
+        dismissedMoviesLimit: 20,
         dismissedMovies: [{ id: 'c', dismissed: true }, { id: 'd', saved: true, dismissed: true }],
         error: 'bad',
       });

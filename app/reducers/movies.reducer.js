@@ -75,46 +75,66 @@ export default function movies(state = initialState, action) {
         error: null,
       });
     case SAVED_MOVIE: {
+      const { moviesQueue, savedMovies, moviesQueueSkip } = state;
+
       // remove the movie from our movies queue, and add it to the saved movies
-      const { moviesQueue, savedMovies } = state;
       const updatedMoviesQueue = differenceBy(moviesQueue, [action.updatedMovie], 'id');
       const updatedSavedMovies = unionBy(savedMovies, [action.updatedMovie], 'id');
 
+      // since we removed a movie from the movies queue, we decrement the
+      // movies queue skip by 1 (unless it's already at 0)
+      const updatedMoviesQueueSkip = moviesQueueSkip === 0 ? 0 : moviesQueueSkip - 1;
+
       return Object.assign({}, state, {
         isWaiting: false,
+        moviesQueueSkip: updatedMoviesQueueSkip,
         moviesQueue: updatedMoviesQueue,
         savedMovies: updatedSavedMovies,
         error: null,
       });
     }
-
     case DISMISSING_MOVIE:
       return Object.assign({}, state, {
         isWaiting: true,
         error: null,
       });
     case DISMISSED_MOVIE: {
-      // remove the movie from either the movies queue or saved movies, and
-      // add the movie to our dismissed movies
-      const { moviesQueue, savedMovies, dismissedMovies } = state;
+      const {
+        moviesQueue,
+        savedMovies,
+        dismissedMovies,
+        moviesQueueSkip,
+        savedMoviesSkip,
+      } = state;
 
+      // remove the movie from either the movies queue or saved movies, and
+      // add the movie to our dismissed movies. also update the skip for the
+      // appropriate queue
       let updatedMoviesQueue;
+      let updatedMoviesQueueSkip;
       let updatedSavedMovies;
+      let updatedSavedMoviesSkip;
       // where are you movie?
       if (find(moviesQueue, ['id', action.updatedMovie.id])) {
         // you're in the movies queue!
         updatedMoviesQueue = differenceBy(moviesQueue, [action.updatedMovie], 'id');
+        updatedMoviesQueueSkip = moviesQueueSkip === 0 ? 0 : moviesQueueSkip - 1;
         updatedSavedMovies = savedMovies;
+        updatedSavedMoviesSkip = savedMoviesSkip;
       } else {
         // you're in the saved movies!
         updatedMoviesQueue = moviesQueue;
+        updatedMoviesQueueSkip = moviesQueueSkip;
         updatedSavedMovies = differenceBy(savedMovies, [action.updatedMovie], 'id');
+        updatedSavedMoviesSkip = savedMoviesSkip === 0 ? 0 : savedMoviesSkip - 1;
       }
       const updatedDismissedMovies = unionBy(dismissedMovies, [action.updatedMovie], 'id');
 
       return Object.assign({}, state, {
         isWaiting: false,
+        moviesQueueSkip: updatedMoviesQueueSkip,
         moviesQueue: updatedMoviesQueue,
+        savedMoviesSkip: updatedSavedMoviesSkip,
         savedMovies: updatedSavedMovies,
         dismissedMovies: updatedDismissedMovies,
         error: null,
@@ -126,12 +146,10 @@ export default function movies(state = initialState, action) {
         error: null,
       });
     case UNDISMISSED_MOVIE: {
+      const { moviesQueue, savedMovies, dismissedMovies, dismissedMoviesSkip } = state;
+
       // remove the movie from the dismissed movies and add it to either the
       // movies queue or the saved movies based on the saved flag
-      // remove the movie from either the movies queue or saved movies, and
-      // add the movie to our dismissed movies
-      const { moviesQueue, savedMovies, dismissedMovies } = state;
-
       let updatedMoviesQueue;
       let updatedSavedMovies;
       // was this movie saved before it was dismissed?
@@ -142,12 +160,19 @@ export default function movies(state = initialState, action) {
         updatedMoviesQueue = unionBy(moviesQueue, [action.updatedMovie], 'id');
         updatedSavedMovies = savedMovies;
       }
+
       const updatedDismissedMovies = differenceBy(dismissedMovies, [action.updatedMovie], 'id');
+
+      // since we removed a movie from the dismissed movies, we must update
+      // the dismissed movies skip appropriately
+      const updatedDismissedMoviesSkip = dismissedMoviesSkip === 0 ? 0 :
+        dismissedMoviesSkip - 1;
 
       return Object.assign({}, state, {
         isWaiting: false,
         moviesQueue: updatedMoviesQueue,
         savedMovies: updatedSavedMovies,
+        dismissedMoviesSkip: updatedDismissedMoviesSkip,
         dismissedMovies: updatedDismissedMovies,
         error: null,
       });

@@ -12,6 +12,7 @@ const config = {
     limit: process.env.MOVIES_LIMIT || 100,
     type: process.env.MOVIES_TYPE || 'in-theaters',
     sortBy: process.env.MOVIES_SORT_BY || 'popularity',
+    requestEncoding: process.env.MOVIES_REQUEST_ENCODING || 'binary',
   },
   movieFilter: {
     topMoviesIndex: process.env.TOP_MOVIES_INDEX || 0,

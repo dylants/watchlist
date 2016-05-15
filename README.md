@@ -99,6 +99,10 @@ a list of those variables:
     `in-theaters` and `opening`, defaults to `in-theaters`.
     * `MOVIES_SORT_BY` : How to sort the movies retrieved, possible values
     include `popularity` and `release`, defaults to `popularity`.
+    * `MOVIES_REQUEST_ENCODING` : Encoding of the HTTP request, defaults to
+    `binary`. See
+    [the request options documentation](https://github.com/request/request#requestoptions-callback)
+    for more details.
 * Movie Filter - Attributes here define how the movies are filtered after they
 are retrieved from the movies API. These rules are listed in order of evaluation
 within the filter, so if a movie does not match the first rule, it can still

@@ -28,7 +28,7 @@ const user = new User({
 });
 user.save((err) => {
   if (err) {
-    logger.err(err);
+    logger.error(err);
   }
 
   process.exit();
