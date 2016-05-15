@@ -12,11 +12,7 @@ const logger = require('./logger')();
  */
 function retrieveMovieData(callback) {
   // pull values from the config
-  const domain = config.movies.domain;
-  const api = config.movies.api;
-  const limit = config.movies.limit;
-  const type = config.movies.type;
-  const sortBy = config.movies.sortBy;
+  const { domain, api, limit, type, sortBy, requestEncoding } = config.movies;
 
   const url = `${domain}${api}?limit=${limit}&type=${type}&sortBy=${sortBy}`;
 
@@ -25,6 +21,7 @@ function retrieveMovieData(callback) {
     url,
     method: 'GET',
     json: true,
+    encoding: requestEncoding,
   }, (error, response, body) => {
     if (error) { return callback(error); }
 
