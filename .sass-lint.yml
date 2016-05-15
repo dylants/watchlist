@@ -13,6 +13,7 @@ rules:
     -
       style: 1tbs
       allow-single-line: false
+  class-name-format: 0
   clean-import-paths:
     - 0
   empty-line-between-blocks: 2
