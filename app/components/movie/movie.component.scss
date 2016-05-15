@@ -63,11 +63,50 @@
 
 .attributes {
   font-size: 14px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .attribute {
   padding: 0 3px;
+}
+
+.synopsis {
+  margin-bottom: 20px;
+}
+
+.synopsisContentWrapper {
+  max-height: 30px;
+  overflow-y: hidden;
+  transition: max-height 500ms ease-in-out;
+}
+
+.showMore {
+  max-height: 1000px;
+}
+
+.synopsisContent {
+  text-align: left;
+  font-size: 16px;
+  font-weight: 300;
+  margin: 0;
+}
+
+.synopsisMore {
+  padding-top: 7px;
+  font-weight: 300;
+  font-size: 14px;
+  color: $swatch04;
+  max-height: 1000px;
+  transition: max-height 50ms ease-in-out, opacity 50ms ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.hideMore {
+  opacity: 0;
+  max-height: 0;
 }
 
 .buttons {
