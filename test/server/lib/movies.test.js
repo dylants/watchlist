@@ -92,6 +92,7 @@ describe('The movies library', () => {
             criticScore: 13,
             tomatoIcon: 'rotten',
             mpaaRating: 'PG-13',
+            remoteId: 771376964,
             runtime: '1 hr. 42 min.',
             theaterReleaseDate: 'Jan 15',
             synopsis: 'Ride Along 2 presents a cop-comedy sequel whose well-matched stars...',
@@ -107,6 +108,7 @@ describe('The movies library', () => {
             criticScore: 82,
             tomatoIcon: 'certified',
             mpaaRating: 'R',
+            remoteId: 771379020,
             runtime: '2 hr. 36 min.',
             theaterReleaseDate: 'Dec 25',
             synopsis: 'As starkly beautiful as it is harshly uncompromising, The Revenant uses...',
@@ -346,6 +348,7 @@ describe('The movies library', () => {
           'one.jpg',
           'two.jpg',
         ],
+        trailerUrl: 'http://123.com',
         saved: true,
         dismissed: false,
       })).should.deepEqual({
@@ -358,6 +361,7 @@ describe('The movies library', () => {
         runtime: '1 hour',
         synopsis: 'Good things',
         image: 'one.jpg',
+        trailerUrl: 'http://123.com',
         saved: true,
         dismissed: false,
       });
@@ -383,6 +387,7 @@ describe('The movies library', () => {
         runtime: '1 hour',
         synopsis: 'Good things',
         image: null,
+        trailerUrl: null,
         saved: false,
         dismissed: false,
       });
@@ -447,9 +452,12 @@ describe('The movies library', () => {
     });
   });
 
-  describe('update movie', () => {
+  describe('update movie functions', () => {
     let MOVIE;
     let Movie;
+    let TRAILER_URL;
+    let request;
+    let requestOptions;
 
     beforeEach(() => {
       MOVIE = {
@@ -460,6 +468,7 @@ describe('The movies library', () => {
         tomatoIcon: 'certified',
         mpaaRating: 'G',
         runtime: '1 hour',
+        remoteId: 987654322,
         synopsis: 'Good things',
         images: [
           'one.jpg',
@@ -479,9 +488,26 @@ describe('The movies library', () => {
           this._options = options;
           return callback(null, MOVIE);
         },
+        findById(id, callback) {
+          return callback(null, MOVIE);
+        },
       };
 
       moviesLib.__set__('Movie', Movie);
+
+      TRAILER_URL = 'http://123.com';
+
+      request = (options, callback) => {
+        requestOptions = options;
+        return callback(null, null, {
+          mainTrailer: {
+            mp4Url: TRAILER_URL,
+          },
+        });
+      };
+      requestOptions = null;
+
+      moviesLib.__set__('request', request);
     });
 
     describe('enableSaved', () => {
@@ -518,6 +544,21 @@ describe('The movies library', () => {
           should(Movie._id).equal('123');
           should(Movie._updates).deepEqual({
             dismissed: false,
+          });
+          should(Movie._options).deepEqual({
+            new: true,
+          });
+        });
+      });
+    });
+
+    describe('populateMovieTrailer', () => {
+      it('should work', () => {
+        moviesLib.populateMovieTrailer('123', () => {
+          should(_.includes(requestOptions.url, MOVIE.remoteId)).be.true();
+          should(Movie._id).equal('123');
+          should(Movie._updates).deepEqual({
+            trailerUrl: TRAILER_URL,
           });
           should(Movie._options).deepEqual({
             new: true,

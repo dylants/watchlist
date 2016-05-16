@@ -8,6 +8,7 @@ import {
   enableSaved,
   enableDismissed,
   disableDismissed,
+  populateMovieTrailer,
 } from '../../lib/movies';
 
 function handleError(err, res) {
@@ -69,4 +70,14 @@ export function updateMovie(req, res) {
   } else {
     return res.status(400).end();
   }
+}
+
+export function addMovieTrailer(req, res) {
+  const movieId = req.params.movieId;
+
+  return populateMovieTrailer(movieId, (err, movie) => {
+    if (err) { return handleError(err, res); }
+
+    return res.send(movie);
+  });
 }
