@@ -20,6 +20,12 @@ const config = {
     minCriticScore: process.env.MIN_CRITIC_SCORE || 80,
     minUserCriticScore: process.env.MIN_USER_CRITIC_SCORE || 60,
   },
+  movieTrailer: {
+    domain: process.env.MOVIE_TRAILER_DOMAIN || 'https://www.rottentomatoes.com',
+    api: process.env.MOVIE_TRAILER_API || '/api/private/v1.1a/movies/MOVIE_ID/videos.json',
+    apiMovieIdPlaceholder: process.env.MOVIE_TRAILER_API_MOVIE_ID_PLACEHOLDER || 'MOVIE_ID',
+    limit: process.env.MOVIE_TRAILER_LIMIT || 1,
+  },
 };
 
 export default config;

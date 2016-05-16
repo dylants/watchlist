@@ -20,6 +20,8 @@ const MovieSchema = new Schema({
   synopsis: String,
   images: Array,
   url: String,
+  remoteId: Number,
+  trailerUrl: String,
 
   // user interactions
   saved: Boolean,

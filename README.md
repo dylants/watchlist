@@ -116,6 +116,14 @@ be included by matching the next rule, and so on.
     the movie has not yet been included, defaults to `80`.
     * `MIN_USER_CRITIC_SCORE` : Minimum user AND critic score to include in
     the filter if the movie has not yet been included, defaults to `60`.
+* Movie Trailer API
+    * `MOVIE_TRAILER_DOMAIN` : The domain used to retrieve movie trailer data.
+    * `MOVIE_TRAILER_API` : The API (URL) used to retrieve movie trailer data.
+    * `MOVIE_TRAILER_API_MOVIE_ID_PLACEHOLDER` : The string placeholder within
+    the movie trailer API which should be replaced with the movie ID. Defaults
+    to `MOVIE_ID`.
+    * `MOVIE_TRAILER_LIMIT` : Limit the amount of trailers retrieved, defaults
+    to `1`.
 
 ## Tests ##
 

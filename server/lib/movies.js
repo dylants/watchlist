@@ -1,8 +1,10 @@
-import request from 'request';
 import async from 'async';
 import mongoose from 'mongoose';
 import _ from 'lodash';
 import config from '../config';
+
+// require'd for testing purposes
+const request = require('request');
 
 const Movie = mongoose.model('Movie');
 const logger = require('./logger')();
@@ -38,7 +40,10 @@ function retrieveMovieData(callback) {
 function parseMovies(movies, callback) {
   // convert each movie contained within our list to our schema
   return callback(null, movies.map(movie => {
-    const { title, tomatoIcon, mpaaRating, runtime, theaterReleaseDate, url, synopsis } = movie;
+    const {
+      title, tomatoIcon, mpaaRating, runtime, theaterReleaseDate,
+      url, synopsis, id,
+    } = movie;
 
     // pull in the images if they exist
     const images = [];
@@ -66,6 +71,7 @@ function parseMovies(movies, callback) {
       synopsis,
       images,
       url: fullUrl,
+      remoteId: id,
     };
   }));
 }
@@ -227,6 +233,7 @@ function buildMovieUI(movie) {
     runtime,
     synopsis,
     images,
+    trailerUrl,
     saved,
     dismissed,
   } = movie;
@@ -246,6 +253,7 @@ function buildMovieUI(movie) {
 
     // let's be more declaritive for these "optional" values
     image: image || null,
+    trailerUrl: trailerUrl || null,
     saved: saved || false,
     dismissed: dismissed || false,
   };
@@ -338,4 +346,40 @@ export function disableDismissed(movieId, callback) {
   }, {
     new: true,
   }, (err, movie) => handleEnableTagCallback(err, movie, callback));
+}
+
+export function populateMovieTrailer(movieId, callback) {
+  logger.log(`populateMovieTrailer: movieId: ${movieId}`);
+  return Movie.findById(movieId, (err, movie) => {
+    if (err) { return callback(err); }
+
+    // pull values from the config
+    const { domain, api, apiMovieIdPlaceholder, limit } = config.movieTrailer;
+    // grab the movie ID
+    const { remoteId } = movie;
+    // inject our movie ID into the api
+    const fullAPI = _.replace(api, apiMovieIdPlaceholder, remoteId);
+    // build up the full url
+    const url = `${domain}${fullAPI}?limit=${limit}`;
+    logger.log(`populateMovieTrailer: url: ${url}`);
+
+    // make the request to load the movie trailer data
+    return request({
+      url,
+      method: 'GET',
+      json: true,
+    }, (error, response, body) => {
+      if (error) { return callback(error); }
+
+      const trailerUrl = body.mainTrailer.mp4Url;
+      logger.log(`populateMovieTrailer: found trailerUrl: ${trailerUrl}`);
+
+      // update the movie with the trailer url
+      return Movie.findByIdAndUpdate(movieId, {
+        trailerUrl,
+      }, {
+        new: true,
+      }, (updateErr, updatedMovie) => handleEnableTagCallback(updateErr, updatedMovie, callback));
+    });
+  });
 }
