@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import Movies from '../../components/movies/movies.component';
+import MovieContainer from '../../containers/movie/movie.container';
 import {
   loadInitialDismissedMovies,
   loadDismissedMovies,
@@ -18,6 +19,8 @@ class DismissedMoviesContainer extends Component {
       <Movies
         loadMoreMovies={this.props.loadDismissedMovies}
         movies={this.props.moviesState.dismissedMovies}
+        MovieContainer={MovieContainer}
+        isWaiting={this.props.moviesState.isWaiting}
       />
     );
   }

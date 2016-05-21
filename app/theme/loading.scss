@@ -1,0 +1,18 @@
+.loading {
+  font-size: 20px;
+  text-align: center;
+
+  &:after {
+    overflow: hidden;
+    position: absolute;
+    animation: ellipsis steps(4, end) 1000ms infinite;
+    content: '\2026';
+    width: 0;
+  }
+
+  @keyframes ellipsis {
+    to {
+      width: 19px;
+    }
+  }
+}

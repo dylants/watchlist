@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 
-import './test-app.container.scss';
+import style from './test-app.container.scss';
 
 export default function TestApp({ children }) {
   return (
-    <div>
+    <div className={style.app}>
       {children}
     </div>
   );

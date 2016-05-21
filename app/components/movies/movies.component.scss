@@ -6,11 +6,18 @@
   margin-bottom: 20px;
 }
 
+$component-end-margin-bottom: 30px;
+
+.loading {
+  composes: loading from 'sass!../../theme/loading.scss';
+  margin-bottom: $component-end-margin-bottom;
+}
+
 .buttons {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: $component-end-margin-bottom;
 }
 
 .button {
-  composes: button-default from 'sass!../../theme/base.scss';
+  composes: button-default from 'sass!../../theme/buttons.scss';
 }
