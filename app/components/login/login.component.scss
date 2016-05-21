@@ -20,5 +20,5 @@
 }
 
 .button {
-  composes: button-default from 'sass!../../theme/base.scss';
+  composes: button-default from 'sass!../../theme/buttons.scss';
 }

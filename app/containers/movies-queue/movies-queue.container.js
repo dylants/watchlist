@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import Movies from '../../components/movies/movies.component';
+import MovieContainer from '../../containers/movie/movie.container';
 import { loadInitialMoviesQueue, loadMoviesQueue } from '../../actions/movies-queue.actions';
 
 class MoviesQueueContainer extends Component {
@@ -15,6 +16,8 @@ class MoviesQueueContainer extends Component {
       <Movies
         loadMoreMovies={this.props.loadMoviesQueue}
         movies={this.props.moviesState.moviesQueue}
+        MovieContainer={MovieContainer}
+        isWaiting={this.props.moviesState.isWaiting}
       />
     );
   }
