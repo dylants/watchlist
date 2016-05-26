@@ -84,6 +84,10 @@ function getLoaders() {
 function getEntry() {
   const entry = [];
 
+  // https://github.com/github/fetch
+  // fetch polyfill to support older browsers
+  entry.push('whatwg-fetch');
+
   // hot reload only when in non-production environment
   if (!IS_PRODUCTION) {
     // https://github.com/glenjamin/webpack-hot-middleware#config
