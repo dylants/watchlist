@@ -4,6 +4,8 @@
 
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const git = require('git-rev-sync');
 const path = require('path');
 
 // default the environment to development
@@ -12,6 +14,7 @@ const IS_PRODUCTION = NODE_ENV === 'production';
 const appPath = path.join(__dirname, 'app');
 const assetsPath = path.join(__dirname, 'public');
 const publicPath = '/';
+const GIT_REVISION = git.long();
 
 function getPlugins() {
   // These plugins are used in all environments
@@ -43,6 +46,10 @@ function getPlugins() {
       minimize: true,
       sourceMap: true,
     }));
+
+    // https://webpack.github.io/docs/stylesheets.html
+    // https://github.com/webpack/extract-text-webpack-plugin
+    plugins.push(new ExtractTextPlugin(`[name]-${GIT_REVISION}.min.css`));
   } else {
     // http://webpack.github.io/docs/list-of-plugins.html#hotmodulereplacementplugin
     plugins.push(new webpack.HotModuleReplacementPlugin());
@@ -52,6 +59,28 @@ function getPlugins() {
 }
 
 function getLoaders() {
+  // https://github.com/webpack/style-loader
+  const styleLoaderConfig = 'style';
+  // https://github.com/webpack/css-loader
+  const cssLoaderConfig = 'css' +
+    '?modules' +
+    '&sourceMap' +
+    '&localIdentName=[local]___[hash:base64:5]';
+  // https://github.com/jtangelder/sass-loader
+  const sassLoaderConfig = 'sass' +
+    '?outputStyle=expanded' +
+    '&sourceMap';
+
+  let cssLoaders;
+  if (IS_PRODUCTION) {
+    // https://github.com/webpack/extract-text-webpack-plugin
+    cssLoaders = ExtractTextPlugin.extract(
+      `${cssLoaderConfig}!${sassLoaderConfig}`
+    );
+  } else {
+    cssLoaders = `${styleLoaderConfig}!${cssLoaderConfig}!${sassLoaderConfig}`;
+  }
+
   const loaders = [
     {
       test: /\.js$/,
@@ -63,14 +92,7 @@ function getLoaders() {
     }, {
       test: /(\.scss)$/,
       exclude: /node_modules/,
-      loader: 'style' +
-              '!' +
-              'css?modules' +
-                '&sourceMap' +
-                '&localIdentName=[local]___[hash:base64:5]' +
-              '!' +
-              'sass?outputStyle=expanded' +
-                '&sourceMap',
+      loader: cssLoaders,
     }, {
       test: /\.js$/,
       exclude: /node_modules/,
@@ -83,6 +105,10 @@ function getLoaders() {
 
 function getEntry() {
   const entry = [];
+
+  // https://github.com/github/fetch
+  // fetch polyfill to support older browsers
+  entry.push('whatwg-fetch');
 
   // hot reload only when in non-production environment
   if (!IS_PRODUCTION) {
@@ -108,7 +134,8 @@ function getOutput() {
   if (IS_PRODUCTION) {
     output = {
       path: assetsPath,
-      filename: '[name]-[hash].min.js',
+      publicPath,
+      filename: `[name]-${GIT_REVISION}.min.js`,
     };
   } else {
     output = {
