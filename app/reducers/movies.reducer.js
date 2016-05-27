@@ -14,7 +14,7 @@ import {
   UNDISMISSED_MOVIE,
   UNDISMISSING_MOVIE,
   FAILED_UPDATING_MOVIE,
-} from '../action-types/movie.action-types';
+} from '../constants/action-types';
 
 const initialState = {
   isWaiting: false,

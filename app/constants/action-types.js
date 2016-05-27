@@ -1,3 +1,13 @@
+/*
+ * LOGIN
+ */
+export const LOGIN_INITIATED = 'LOGIN_INITIATED';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_ERROR = 'LOGIN_ERROR';
+
+/*
+ * MOVIE
+ */
 export const LOADING_MOVIES = 'LOADING_MOVIES';
 export const MOVIES_QUEUE_LOADED = 'MOVIES_QUEUE_LOADED';
 export const SAVED_MOVIES_LOADED = 'SAVED_MOVIES_LOADED';

@@ -5,7 +5,7 @@ import {
   LOGIN_INITIATED,
   LOGIN_SUCCESS,
   LOGIN_ERROR,
-} from '../action-types/login.action-types';
+} from '../constants/action-types';
 
 function loginInitiated() {
   return { type: LOGIN_INITIATED };

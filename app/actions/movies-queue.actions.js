@@ -11,7 +11,7 @@ import {
   MOVIES_QUEUE_LOADED,
   MOVIES_ALREADY_LOADED,
   FAILED_LOADING_MOVIES,
-} from '../action-types/movie.action-types';
+} from '../constants/action-types';
 
 function loadingMovies() {
   return { type: LOADING_MOVIES };
