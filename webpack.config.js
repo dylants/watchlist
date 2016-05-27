@@ -5,6 +5,7 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const git = require('git-rev-sync');
 const path = require('path');
 
 // default the environment to development
@@ -13,6 +14,7 @@ const IS_PRODUCTION = NODE_ENV === 'production';
 const appPath = path.join(__dirname, 'app');
 const assetsPath = path.join(__dirname, 'public');
 const publicPath = '/';
+const GIT_REVISION = git.long();
 
 function getPlugins() {
   // These plugins are used in all environments
@@ -47,7 +49,7 @@ function getPlugins() {
 
     // https://webpack.github.io/docs/stylesheets.html
     // https://github.com/webpack/extract-text-webpack-plugin
-    plugins.push(new ExtractTextPlugin('[name]-[hash].min.css'));
+    plugins.push(new ExtractTextPlugin(`[name]-${GIT_REVISION}.min.css`));
   } else {
     // http://webpack.github.io/docs/list-of-plugins.html#hotmodulereplacementplugin
     plugins.push(new webpack.HotModuleReplacementPlugin());
@@ -133,7 +135,7 @@ function getOutput() {
     output = {
       path: assetsPath,
       publicPath,
-      filename: '[name]-[hash].min.js',
+      filename: `[name]-${GIT_REVISION}.min.js`,
     };
   } else {
     output = {
