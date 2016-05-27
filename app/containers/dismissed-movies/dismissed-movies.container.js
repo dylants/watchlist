@@ -15,12 +15,15 @@ class DismissedMoviesContainer extends Component {
   }
 
   render() {
+    const { dismissedMovies, isWaiting, hasMoreDismissedMovies } = this.props.moviesState;
+
     return (
       <Movies
         loadMoreMovies={this.props.loadDismissedMovies}
-        movies={this.props.moviesState.dismissedMovies}
+        movies={dismissedMovies}
         MovieContainer={MovieContainer}
-        isWaiting={this.props.moviesState.isWaiting}
+        isWaiting={isWaiting}
+        hasMore={hasMoreDismissedMovies}
       />
     );
   }

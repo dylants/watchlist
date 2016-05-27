@@ -18,6 +18,7 @@ describe('movies-queue.actions', () => {
         moviesQueueSkip: 0,
         moviesQueueLimit: 20,
         moviesQueue: [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
+        hasMoreMoviesQueue: true,
       },
     });
   });
@@ -59,11 +60,9 @@ describe('movies-queue.actions', () => {
           {
             type: types.MOVIES_QUEUE_LOADED,
             moviesQueue: [
-              { id: 'a' },
-              { id: 'b' },
-              { id: 'c' },
               { id: 'x' },
               { id: 'y' },
+              { id: 'c' },
             ],
           },
         ];
@@ -76,34 +75,57 @@ describe('movies-queue.actions', () => {
           .catch(done); // we do this in case the tests fail, to end tests
       });
 
-      describe('loadInitialMoviesQueue, when no movies exist in store', () => {
-        beforeEach(() => {
-          store = mockStore({
-            moviesState: {
-              moviesQueueSkip: 0,
-              moviesQueueLimit: 20,
-              moviesQueue: [],
-            },
+      describe('loadInitialMoviesQueue', () => {
+        describe('when no movies exist in store (more movies)', () => {
+          beforeEach(() => {
+            store = mockStore({
+              moviesState: {
+                moviesQueueSkip: 0,
+                moviesQueueLimit: 20,
+                moviesQueue: [],
+                hasMoreMoviesQueue: true,
+              },
+            });
+          });
+
+          it('should return the correct state', (done) => {
+            store.dispatch(moviesQueueActions.loadInitialMoviesQueue())
+              .then(() => {
+                should(store.getActions()).deepEqual([
+                  { type: types.LOADING_MOVIES },
+                  {
+                    type: types.MOVIES_QUEUE_LOADED,
+                    moviesQueue: [
+                      { id: 'x' },
+                      { id: 'y' },
+                      { id: 'c' },
+                    ],
+                  },
+                ]);
+              })
+              .then(done)   // testing complete
+              .catch(done); // we do this in case the tests fail, to end tests
           });
         });
 
-        it('should return the correct state', (done) => {
-          store.dispatch(moviesQueueActions.loadInitialMoviesQueue())
-            .then(() => {
-              should(store.getActions()).deepEqual([
-                { type: types.LOADING_MOVIES },
-                {
-                  type: types.MOVIES_QUEUE_LOADED,
-                  moviesQueue: [
-                    { id: 'x' },
-                    { id: 'y' },
-                    { id: 'c' },
-                  ],
-                },
-              ]);
-            })
-            .then(done)   // testing complete
-            .catch(done); // we do this in case the tests fail, to end tests
+        describe('when no movies exist in store (no more movies)', () => {
+          beforeEach(() => {
+            store = mockStore({
+              moviesState: {
+                moviesQueueSkip: 0,
+                moviesQueueLimit: 20,
+                moviesQueue: [],
+                hasMoreMoviesQueue: false,
+              },
+            });
+          });
+
+          it('should return the correct state', () => {
+            store.dispatch(moviesQueueActions.loadInitialMoviesQueue());
+            should(store.getActions()).deepEqual([
+              { type: types.MOVIES_ALREADY_LOADED },
+            ]);
+          });
         });
       });
     });

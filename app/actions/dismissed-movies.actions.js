@@ -1,5 +1,3 @@
-import { unionBy } from 'lodash';
-
 import {
   FETCH_DEFAULT_OPTIONS,
   checkHttpStatus,
@@ -38,7 +36,7 @@ function dismissedMoviesLoaded(dismissedMovies) {
 function fetchDismissedMovies(dispatch, getState) {
   dispatch(loadingMovies());
 
-  const { dismissedMovies, dismissedMoviesSkip, dismissedMoviesLimit } = getState().moviesState;
+  const { dismissedMoviesSkip, dismissedMoviesLimit } = getState().moviesState;
 
   const uri = `/api/secure/movies?dismissed=true&skip=${dismissedMoviesSkip}` +
     `&limit=${dismissedMoviesLimit}`;
@@ -49,19 +47,21 @@ function fetchDismissedMovies(dispatch, getState) {
   return fetch(uri, options)
     .then(checkHttpStatus)
     .then(response => response.json())
-    .then(newMovies => {
-      const updatedMovies = unionBy(dismissedMovies, newMovies, 'id');
-      return dispatch(dismissedMoviesLoaded(updatedMovies));
-    })
+    .then(newMovies => dispatch(dismissedMoviesLoaded(newMovies)))
     .catch((error) => handleHttpError(dispatch, error, failedLoadingMovies));
 }
 
 export function loadInitialDismissedMovies() {
   return (dispatch, getState) => {
-    const { dismissedMovies } = getState().moviesState;
+    const { dismissedMovies, hasMoreDismissedMovies } = getState().moviesState;
 
     // check to see if we have any movies, and if so, stop here
     if (dismissedMovies && dismissedMovies.length > 0) {
+      return dispatch(moviesAlreadyLoaded());
+    }
+
+    // if we have no more movies, stop here
+    if (!hasMoreDismissedMovies) {
       return dispatch(moviesAlreadyLoaded());
     }
 

@@ -12,12 +12,15 @@ class MoviesQueueContainer extends Component {
   }
 
   render() {
+    const { moviesQueue, isWaiting, hasMoreMoviesQueue } = this.props.moviesState;
+
     return (
       <Movies
         loadMoreMovies={this.props.loadMoviesQueue}
-        movies={this.props.moviesState.moviesQueue}
+        movies={moviesQueue}
         MovieContainer={MovieContainer}
-        isWaiting={this.props.moviesState.isWaiting}
+        isWaiting={isWaiting}
+        hasMore={hasMoreMoviesQueue}
       />
     );
   }

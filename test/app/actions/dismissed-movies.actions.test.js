@@ -18,6 +18,7 @@ describe('dismissed-movies.actions', () => {
         dismissedMoviesSkip: 0,
         dismissedMoviesLimit: 20,
         dismissedMovies: [{ id: 'g' }, { id: 'h' }, { id: 'i' }],
+        hasMoreDismissedMovies: true,
       },
     });
   });
@@ -59,11 +60,9 @@ describe('dismissed-movies.actions', () => {
           {
             type: types.DISMISSED_MOVIES_LOADED,
             dismissedMovies: [
-              { id: 'g' },
-              { id: 'h' },
-              { id: 'i' },
               { id: 'x' },
               { id: 'y' },
+              { id: 'i' },
             ],
           },
         ];
@@ -76,34 +75,57 @@ describe('dismissed-movies.actions', () => {
           .catch(done); // we do this in case the tests fail, to end tests
       });
 
-      describe('loadInitialDismissedMovies, when no movies exist in store', () => {
-        beforeEach(() => {
-          store = mockStore({
-            moviesState: {
-              dismissedMoviesSkip: 0,
-              dismissedMoviesLimit: 20,
-              dismissedMovies: [],
-            },
+      describe('loadInitialDismissedMovies', () => {
+        describe('when no movies exist in store (more movies)', () => {
+          beforeEach(() => {
+            store = mockStore({
+              moviesState: {
+                dismissedMoviesSkip: 0,
+                dismissedMoviesLimit: 20,
+                dismissedMovies: [],
+                hasMoreDismissedMovies: true,
+              },
+            });
+          });
+
+          it('should return the correct state', (done) => {
+            store.dispatch(dismissedMoviesActions.loadInitialDismissedMovies())
+              .then(() => {
+                should(store.getActions()).deepEqual([
+                  { type: types.LOADING_MOVIES },
+                  {
+                    type: types.DISMISSED_MOVIES_LOADED,
+                    dismissedMovies: [
+                      { id: 'x' },
+                      { id: 'y' },
+                      { id: 'i' },
+                    ],
+                  },
+                ]);
+              })
+              .then(done)   // testing complete
+              .catch(done); // we do this in case the tests fail, to end tests
           });
         });
 
-        it('should return the correct state', (done) => {
-          store.dispatch(dismissedMoviesActions.loadInitialDismissedMovies())
-            .then(() => {
-              should(store.getActions()).deepEqual([
-                { type: types.LOADING_MOVIES },
-                {
-                  type: types.DISMISSED_MOVIES_LOADED,
-                  dismissedMovies: [
-                    { id: 'x' },
-                    { id: 'y' },
-                    { id: 'i' },
-                  ],
-                },
-              ]);
-            })
-            .then(done)   // testing complete
-            .catch(done); // we do this in case the tests fail, to end tests
+        describe('when no movies exist in store (no more movies)', () => {
+          beforeEach(() => {
+            store = mockStore({
+              moviesState: {
+                dismissedMoviesSkip: 0,
+                dismissedMoviesLimit: 20,
+                dismissedMovies: [],
+                hasMoreDismissedMovies: false,
+              },
+            });
+          });
+
+          it('should return the correct state', () => {
+            store.dispatch(dismissedMoviesActions.loadInitialDismissedMovies());
+            should(store.getActions()).deepEqual([
+              { type: types.MOVIES_ALREADY_LOADED },
+            ]);
+          });
         });
       });
     });
