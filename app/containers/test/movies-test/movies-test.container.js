@@ -29,39 +29,53 @@ export default function MoviesTestContainer() {
 
   return (
     <div>
-      <h1>No Movies</h1>
+      <h1>No Movies, More Left</h1>
       <Movies
         loadMoreMovies={noop}
         movies={[]}
         MovieContainer={FakeMovieContainer}
         isWaiting={false}
+        hasMore
       />
       <hr />
 
-      <h1>One Movie</h1>
+      <h1>No Movies, No More Left</h1>
+      <Movies
+        loadMoreMovies={noop}
+        movies={[]}
+        MovieContainer={FakeMovieContainer}
+        isWaiting={false}
+        hasMore={false}
+      />
+      <hr />
+
+      <h1>One Movie, More Left</h1>
       <Movies
         loadMoreMovies={noop}
         movies={oneMovie}
         MovieContainer={FakeMovieContainer}
         isWaiting={false}
+        hasMore
       />
       <hr />
 
-      <h1>Two Movies</h1>
+      <h1>Two Movies, No More Left</h1>
       <Movies
         loadMoreMovies={noop}
         movies={twoMovies}
         MovieContainer={FakeMovieContainer}
         isWaiting={false}
+        hasMore={false}
       />
       <hr />
 
-      <h1>Lots of Movies</h1>
+      <h1>Lots of Movies, More Left</h1>
       <Movies
         loadMoreMovies={noop}
         movies={lotsOfMovies}
         MovieContainer={FakeMovieContainer}
         isWaiting={false}
+        hasMore
       />
       <hr />
 
@@ -71,6 +85,7 @@ export default function MoviesTestContainer() {
         movies={[]}
         MovieContainer={FakeMovieContainer}
         isWaiting
+        hasMore
       />
       <hr />
 
@@ -80,6 +95,7 @@ export default function MoviesTestContainer() {
         movies={lotsOfMovies}
         MovieContainer={FakeMovieContainer}
         isWaiting
+        hasMore
       />
       <hr />
     </div>

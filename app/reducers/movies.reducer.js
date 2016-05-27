@@ -21,12 +21,15 @@ const initialState = {
   moviesQueueSkip: 0,
   moviesQueueLimit: 20,
   moviesQueue: [],
+  hasMoreMoviesQueue: true,
   savedMoviesSkip: 0,
   savedMoviesLimit: 20,
   savedMovies: [],
+  hasMoreSavedMovies: true,
   dismissedMoviesSkip: 0,
   dismissedMoviesLimit: 20,
   dismissedMovies: [],
+  hasMoreDismissedMovies: true,
   error: null,
 };
 
@@ -37,28 +40,67 @@ export default function movies(state = initialState, action) {
         isWaiting: true,
         error: null,
       });
-    case MOVIES_QUEUE_LOADED:
+    case MOVIES_QUEUE_LOADED: {
+      // check to see if we have any movies left by verifying if the amount of
+      // movies we requested was equal to the amount that we received
+      let hasMoreMoviesQueue = true;
+      if (state.moviesQueueLimit !== action.moviesQueue.length) {
+        hasMoreMoviesQueue = false;
+      }
+
+      // update the movies queue by combining the inbound movies with
+      // the movies we already have stored
+      const updatedMovies = unionBy(state.moviesQueue, action.moviesQueue, 'id');
+
       return Object.assign({}, state, {
         isWaiting: false,
         // increase the skip by the amount we've requested
         moviesQueueSkip: state.moviesQueueSkip + state.moviesQueueLimit,
-        moviesQueue: action.moviesQueue,
+        moviesQueue: updatedMovies,
+        hasMoreMoviesQueue,
         error: null,
       });
-    case SAVED_MOVIES_LOADED:
+    }
+    case SAVED_MOVIES_LOADED: {
+      // check to see if we have any movies left by verifying if the amount of
+      // movies we requested was equal to the amount that we received
+      let hasMoreSavedMovies = true;
+      if (state.savedMoviesLimit !== action.savedMovies.length) {
+        hasMoreSavedMovies = false;
+      }
+
+      // update the saved movies by combining the inbound movies with
+      // the movies we already have stored
+      const updatedMovies = unionBy(state.savedMovies, action.savedMovies, 'id');
+
       return Object.assign({}, state, {
         isWaiting: false,
         savedMoviesSkip: state.savedMoviesSkip + state.savedMoviesLimit,
-        savedMovies: action.savedMovies,
+        savedMovies: updatedMovies,
+        hasMoreSavedMovies,
         error: null,
       });
-    case DISMISSED_MOVIES_LOADED:
+    }
+    case DISMISSED_MOVIES_LOADED: {
+      // check to see if we have any movies left by verifying if the amount of
+      // movies we requested was equal to the amount that we received
+      let hasMoreDismissedMovies = true;
+      if (state.dismissedMoviesLimit !== action.dismissedMovies.length) {
+        hasMoreDismissedMovies = false;
+      }
+
+      // update the dismissed movies by combining the inbound movies with
+      // the movies we already have stored
+      const updatedMovies = unionBy(state.dismissedMovies, action.dismissedMovies, 'id');
+
       return Object.assign({}, state, {
         isWaiting: false,
         dismissedMoviesSkip: state.dismissedMoviesSkip + state.dismissedMoviesLimit,
-        dismissedMovies: action.dismissedMovies,
+        dismissedMovies: updatedMovies,
+        hasMoreDismissedMovies,
         error: null,
       });
+    }
     case MOVIES_ALREADY_LOADED:
       return Object.assign({}, state, {
         isWaiting: false,

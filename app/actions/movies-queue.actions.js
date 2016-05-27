@@ -1,5 +1,3 @@
-import { unionBy } from 'lodash';
-
 import {
   FETCH_DEFAULT_OPTIONS,
   checkHttpStatus,
@@ -38,7 +36,7 @@ function moviesQueueLoaded(moviesQueue) {
 function fetchMoviesQueue(dispatch, getState) {
   dispatch(loadingMovies());
 
-  const { moviesQueue, moviesQueueSkip, moviesQueueLimit } = getState().moviesState;
+  const { moviesQueueSkip, moviesQueueLimit } = getState().moviesState;
 
   const uri = `/api/secure/movies?saved=false&skip=${moviesQueueSkip}` +
     `&limit=${moviesQueueLimit}`;
@@ -49,19 +47,21 @@ function fetchMoviesQueue(dispatch, getState) {
   return fetch(uri, options)
     .then(checkHttpStatus)
     .then(response => response.json())
-    .then(newMovies => {
-      const updatedMovies = unionBy(moviesQueue, newMovies, 'id');
-      return dispatch(moviesQueueLoaded(updatedMovies));
-    })
+    .then(newMovies => dispatch(moviesQueueLoaded(newMovies)))
     .catch((error) => handleHttpError(dispatch, error, failedLoadingMovies));
 }
 
 export function loadInitialMoviesQueue() {
   return (dispatch, getState) => {
-    const { moviesQueue } = getState().moviesState;
+    const { moviesQueue, hasMoreMoviesQueue } = getState().moviesState;
 
     // check to see if we have any movies, and if so, stop here
     if (moviesQueue && moviesQueue.length > 0) {
+      return dispatch(moviesAlreadyLoaded());
+    }
+
+    // if we have no more movies, stop here
+    if (!hasMoreMoviesQueue) {
       return dispatch(moviesAlreadyLoaded());
     }
 
