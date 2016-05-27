@@ -12,7 +12,7 @@ import {
   UNDISMISSED_MOVIE,
   UNDISMISSING_MOVIE,
   FAILED_UPDATING_MOVIE,
-} from '../action-types/movie.action-types';
+} from '../constants/action-types';
 
 function savingMovie() {
   return { type: SAVING_MOVIE };
