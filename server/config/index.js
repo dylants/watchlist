@@ -26,6 +26,9 @@ const config = {
     apiMovieIdPlaceholder: process.env.MOVIE_TRAILER_API_MOVIE_ID_PLACEHOLDER || 'MOVIE_ID',
     limit: process.env.MOVIE_TRAILER_LIMIT || 1,
   },
+  movieCleanup: {
+    modifiedDaysAgo: process.env.MOVIE_CLEANUP_MODIFIED_DAYS_AGO || 5,
+  },
 };
 
 export default config;
