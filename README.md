@@ -124,6 +124,12 @@ be included by matching the next rule, and so on.
     to `MOVIE_ID`.
     * `MOVIE_TRAILER_LIMIT` : Limit the amount of trailers retrieved, defaults
     to `1`.
+* Movie Cleanup
+    * `MOVIE_CLEANUP_MODIFIED_DAYS_AGO` : Dismissed movies that have NOT been
+    modified as recently as this many days ago will be deleted. For example,
+    the default value is `5`, meaning dismissed movies that have not been
+    updated in 5 days (either by a movie update or a user action) will be
+    removed at next scheduled cleanup.
 
 ## Tests ##
 

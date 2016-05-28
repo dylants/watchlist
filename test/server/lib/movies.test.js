@@ -567,4 +567,42 @@ describe('The movies library', () => {
       });
     });
   });
+
+  describe('removeStaleMovies', () => {
+    let DETAILS;
+    let Movie;
+
+    beforeEach(() => {
+      DETAILS = {
+        result: {
+          ok: 1,
+          n: 3,
+        },
+      };
+
+      Movie = {
+        _options: null,
+        remove(options, callback) {
+          this._options = options;
+          return callback(null, DETAILS);
+        },
+      };
+
+      moviesLib.__set__('Movie', Movie);
+    });
+
+    it('should work', (done) => {
+      moviesLib.removeStaleMovies((err, numRemoved) => {
+        should(Movie._options).be.ok();
+        should(Movie._options.dismissed).be.true();
+        should(Movie._options.modified).be.ok();
+        should(Movie._options.modified.$lt).be.ok();
+
+        should(err).be.null();
+        should(numRemoved).equal(3);
+
+        done();
+      });
+    });
+  });
 });

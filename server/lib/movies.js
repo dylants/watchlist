@@ -1,6 +1,7 @@
 import async from 'async';
 import mongoose from 'mongoose';
 import _ from 'lodash';
+import moment from 'moment';
 import config from '../config';
 
 // require'd for testing purposes
@@ -381,5 +382,33 @@ export function populateMovieTrailer(movieId, callback) {
         new: true,
       }, (updateErr, updatedMovie) => handleEnableTagCallback(updateErr, updatedMovie, callback));
     });
+  });
+}
+
+/*
+ * Removes movies that match the following criteria:
+ *   - Dismissed flag is set to true
+ *   - Modified timestamp is older than the configuration value:
+ *     MOVIE_CLEANUP_MODIFIED_DAYS_AGO
+ */
+export function removeStaleMovies(callback) {
+  const { modifiedDaysAgo } = config.movieCleanup;
+  logger.log(`removeStaleMovies: modified days ago: ${modifiedDaysAgo}`);
+
+  const daysAgoDate = moment().subtract(modifiedDaysAgo, 'days').toDate();
+
+  Movie.remove({
+    dismissed: true,
+    modified: { $lt: daysAgoDate },
+  }, (err, details) => {
+    if (err) { return callback(err); }
+
+    const { result } = details;
+    logger.log('removeStaleMovies: result: %j', result);
+
+    const numberOfMoviesRemoved = result.n;
+    logger.log(`removeStaleMovies: removed ${numberOfMoviesRemoved} movies`);
+
+    return callback(null, numberOfMoviesRemoved);
   });
 }

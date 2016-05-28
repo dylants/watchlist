@@ -19,4 +19,14 @@ module.exports = function createdModifiedPlugin(schema) {
 
     next();
   });
+
+  schema.pre('findOneAndUpdate', function update() {
+    /*
+     * When updating, we want to update the modified timestamp. We do so by
+     * executing another update call per the docs:
+     * http://mongoosejs.com/docs/middleware.html
+     * http://github.com/Automattic/mongoose/issues/964
+     */
+    this.findOneAndUpdate({}, { modified: new Date() });
+  });
 };
