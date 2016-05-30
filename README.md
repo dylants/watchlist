@@ -4,14 +4,48 @@
 
 What to watch.
 
+## Overview ##
+
+The intent of this web application is to regularly download metadata about
+movies. The movies are then filtered based on their critic and user score,
+and those that remain are available to be viewed by the user. At a later
+time, the user can look at the available movies and decide to "save" or
+"dismiss" each movie.
+
+Movies that are saved remain in the system until the user has an opportunity
+to add the movies to some wishlist of their own. The saved movies can then
+be dismissed. All dismissed movies are cleaned up and removed from the system.
+
+## Technical Details ##
+
+This web application has both server side and client side components:
+
+The server side is a Node.js application, using Express to serve the APIs and
+Mongo/Mongoose as the data storage solution. Passport security is configured
+using bcrypt encryption.
+
+The client side is a React/Redux application, simply using `fetch` to make
+API calls to the server side. CSS Modules are used within the React
+components. Webpack is responsible for bundling the client side, and
+integrated into the Express application for hot reloading in the development
+environment.
+
+Babel is used throughout both the server and client sides. In the production
+environment, the server side is compiled down to ES5, and Webpack generates
+the single module used for the client side application.
+
+Tests are written using Mocha/Should for both the server and client side code.
+Linting is handled using ESLint and Sass Lint. Travis CI is used as the
+CI framework for branch and pull request builds.
+
 ## Run the Application ##
 
 To run the application, some initial setup is required:
 
 ### Install Node ###
 
-Since this is a [Node.js](http://nodejs.org/) project, please make sure
-Node is installed on the machine. A recommended install method is to use
+Since this is a Node.js project, please make sure Node is installed on the
+machine. A recommended install method is to use
 [nvm](https://github.com/creationix/nvm) which installs Node into your
 home directory.
 
@@ -128,7 +162,7 @@ be included by matching the next rule, and so on.
     * `MOVIE_CLEANUP_MODIFIED_DAYS_AGO` : Dismissed movies that have NOT been
     modified as recently as this many days ago will be deleted. For example,
     the default value is `5`, meaning dismissed movies that have not been
-    updated in 5 days (either by a movie update or a user action) will be
+    updated in `5` days (either by a movie update or a user action) will be
     removed at next scheduled cleanup.
 
 ## Tests ##
