@@ -5,7 +5,7 @@
   "private": true,
   "license": "MIT",
   "engines": {
-    "node": "4.x"
+    "node": "6.x"
   },
   "scripts": {
     "clean:build": "rimraf build && rimraf public",
