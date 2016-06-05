@@ -397,18 +397,32 @@ export function removeStaleMovies(callback) {
 
   const daysAgoDate = moment().subtract(modifiedDaysAgo, 'days').toDate();
 
-  Movie.remove({
+  Movie.find({
     dismissed: true,
     modified: { $lt: daysAgoDate },
-  }, (err, details) => {
-    if (err) { return callback(err); }
+  }, (findErr, movies) => {
+    if (findErr) { return callback(findErr); }
 
-    const { result } = details;
-    logger.log('removeStaleMovies: result: %j', result);
+    logger.log(`removeStaleMovies: found ${movies.length} movies to remove`);
 
-    const numberOfMoviesRemoved = result.n;
-    logger.log(`removeStaleMovies: removed ${numberOfMoviesRemoved} movies`);
+    // collect statistics on the movies we removed
+    const stats = {
+      totalMoviesRemoved: 0,
+    };
 
-    return callback(null, numberOfMoviesRemoved);
+    // process each movie within the array of movies
+    return async.each(movies, (movie, eachCallback) => {
+      logger.log(`removeStaleMovies: removing movie: ${movie.id}`);
+      // remove each movie from the database
+      movie.remove(removeErr => {
+        if (removeErr) { return eachCallback(removeErr); }
+
+        // update the stats
+        stats.totalMoviesRemoved++;
+
+        // next!
+        return eachCallback();
+      });
+    }, (eachErr) => callback(eachErr, stats));
   });
 }

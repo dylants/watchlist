@@ -9,6 +9,7 @@ import {
   enableDismissed,
   disableDismissed,
   populateMovieTrailer,
+  removeStaleMovies,
 } from '../../lib/movies';
 
 function handleError(err, res) {
@@ -35,14 +36,6 @@ export function getMovies(req, res) {
     if (err) { return handleError(err, res); }
 
     return res.send(movies);
-  });
-}
-
-export function pullMovieData(req, res) {
-  downloadMovieData((err, stats) => {
-    if (err) { return handleError(err, res); }
-
-    return res.send(stats);
   });
 }
 
@@ -79,5 +72,21 @@ export function addMovieTrailer(req, res) {
     if (err) { return handleError(err, res); }
 
     return res.send(movie);
+  });
+}
+
+export function pullMovieData(req, res) {
+  return downloadMovieData((err, stats) => {
+    if (err) { return handleError(err, res); }
+
+    return res.send(stats);
+  });
+}
+
+export function deleteStaleMovies(req, res) {
+  return removeStaleMovies((err, stats) => {
+    if (err) { return handleError(err, res); }
+
+    return res.send(stats);
   });
 }

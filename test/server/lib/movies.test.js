@@ -569,22 +569,30 @@ describe('The movies library', () => {
   });
 
   describe('removeStaleMovies', () => {
-    let DETAILS;
+    let MOVIES;
     let Movie;
 
     beforeEach(() => {
-      DETAILS = {
-        result: {
-          ok: 1,
-          n: 3,
+      MOVIES = [
+        {
+          id: 'old-movie-1',
+          remove(callback) {
+            return callback();
+          },
         },
-      };
+        {
+          id: 'old-movie-2',
+          remove(callback) {
+            return callback();
+          },
+        },
+      ];
 
       Movie = {
         _options: null,
-        remove(options, callback) {
+        find(options, callback) {
           this._options = options;
-          return callback(null, DETAILS);
+          return callback(null, MOVIES);
         },
       };
 
@@ -592,14 +600,16 @@ describe('The movies library', () => {
     });
 
     it('should work', (done) => {
-      moviesLib.removeStaleMovies((err, numRemoved) => {
+      moviesLib.removeStaleMovies((err, stats) => {
         should(Movie._options).be.ok();
         should(Movie._options.dismissed).be.true();
         should(Movie._options.modified).be.ok();
         should(Movie._options.modified.$lt).be.ok();
 
         should(err).be.null();
-        should(numRemoved).equal(3);
+        should(stats).deepEqual({
+          totalMoviesRemoved: 2,
+        });
 
         done();
       });
