@@ -119,6 +119,10 @@ a list of those variables:
 * Node Server
     * `PORT` : The port for the node application server, defaults to `3000` in
     all environments.
+* Client Session
+    * `SESSION_NAME` : The name of the cookie used to store the client session,
+    defaults to `watchlist`.
+    * `SESSION_SECRET` : The passphrase used to encrypt the client session cookie.
 * Mongo
     * `MONGO_PROTOCOL` : The protocol for the mongodb connection, defaults to
     `mongodb://`

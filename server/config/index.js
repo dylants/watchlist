@@ -1,5 +1,9 @@
 const config = {
   port: process.env.PORT || 3000,
+  session: {
+    name: process.env.SESSION_NAME || 'watchlist',
+    secret: process.env.SESSION_SECRET || 'super-secret-watchlist',
+  },
   mongo: {
     protocol: process.env.MONGO_PROTOCOL || 'mongodb://',
     host: process.env.MONGO_HOST || 'localhost',
