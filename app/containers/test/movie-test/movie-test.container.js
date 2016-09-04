@@ -5,7 +5,7 @@ import Movie from '../../../components/movie/movie.component';
 import style from './movie-test.container.scss';
 
 export default function MovieTestContainer() {
-  const image = 'http://www.rottentomatoes.com/static/images/redesign/poster_default.gif';
+  const image = 'http://www.fillmurray.com/206/300';
   const synopsis1 = 'Voluptas odit explicabo atque mollitia occaecati sunt. Non ' +
     'esse nostrum doloremque officiis. Dolor voluptatibus fugit cumque soluta.';
   const synopsis2 = 'Nemo est voluptatem non odio voluptatem fugit. Iste ' +

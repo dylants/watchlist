@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Router, Route, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
 import configureStore from './store/configureStore';
@@ -18,8 +18,8 @@ const history = syncHistoryWithStore(browserHistory, store);
 render(
   <Provider store={store}>
     <Router history={history}>
-      <Route path="/" component={App}>
-        <IndexRoute component={MoviesQueueContainer} />
+      <Route component={App}>
+        <Route path="/" component={MoviesQueueContainer} />
         <Route path="saved" component={SavedMoviesContainer} />
         <Route path="dismissed" component={DismissedMoviesContainer} />
         <Route path="login" component={LoginContainer} />

@@ -31,7 +31,7 @@ const config = {
     limit: process.env.MOVIE_TRAILER_LIMIT || 1,
   },
   movieCleanup: {
-    modifiedDaysAgo: process.env.MOVIE_CLEANUP_MODIFIED_DAYS_AGO || 5,
+    modifiedDaysAgo: process.env.MOVIE_CLEANUP_MODIFIED_DAYS_AGO || 90,
   },
 };
 
