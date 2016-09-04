@@ -10,6 +10,7 @@
 
 .image {
   height: 300px;
+  max-width: 205px;
   margin-bottom: 20px;
 }
 
@@ -75,13 +76,13 @@
 }
 
 .synopsisContentWrapper {
-  max-height: 30px;
+  max-height: 80px;
   overflow-y: hidden;
   transition: max-height 500ms ease-in-out;
 }
 
 .showMore {
-  max-height: 1000px;
+  max-height: 2000px;
 }
 
 .synopsisContent {

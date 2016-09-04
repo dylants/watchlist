@@ -4,6 +4,8 @@
 
 What to watch.
 
+<img src="https://camo.githubusercontent.com/8887b11a967e7424105a6bcf8ceba86fd370d2e9/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f64796c616e74732d77617463686c6973742f7075626c69632f696d616765732f73637265656e73686f742e706e67">
+
 ## Overview ##
 
 The intent of this web application is to regularly download metadata about
@@ -49,12 +51,32 @@ machine. A recommended install method is to use
 [nvm](https://github.com/creationix/nvm) which installs Node into your
 home directory.
 
+This project requires Node v4 or above, recommended v6.
+
 ### Install Dependencies ###
 
 Once Node is installed, from this project's root directory run the following
 command to install the project dependencies:
 
 `$ npm install`
+
+### MongoDB ###
+
+This application requires a connection to a
+[Mongo Database](https://www.mongodb.com/). This database can be run locally
+or remotely, with the connection information specified in the configuration
+or in environment variables at startup time. For more information on the
+configuration parameters, please see the [Configuration](#configuration)
+section.
+
+### Create User ###
+
+This application requires an authenticated user to access the APIs. A script
+is available in the root of this project to create a user to use locally if
+needed. Edit the `setup.js` file in the project root to suite your needs, and
+once ready, run the following command to populate the user:
+
+`$ node setup.js`
 
 ### Start the App ###
 
@@ -165,8 +187,8 @@ be included by matching the next rule, and so on.
 * Movie Cleanup
     * `MOVIE_CLEANUP_MODIFIED_DAYS_AGO` : Dismissed movies that have NOT been
     modified as recently as this many days ago will be deleted. For example,
-    the default value is `5`, meaning dismissed movies that have not been
-    updated in `5` days (either by a movie update or a user action) will be
+    the default value is `90`, meaning dismissed movies that have not been
+    updated in `90` days (either by a movie update or a user action) will be
     removed at next scheduled cleanup.
 
 ## Tests ##

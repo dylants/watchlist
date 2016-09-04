@@ -9,7 +9,7 @@ export default function App({ children, location }) {
   let header;
   if (location.pathname !== '/login') {
     header = (
-      <HeaderContainer />
+      <HeaderContainer location={location} />
     );
   }
 
