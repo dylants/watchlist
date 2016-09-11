@@ -7,7 +7,8 @@ import MovieContainer from '../../containers/movie/movie.container';
 import {
   loadInitialDismissedMovies,
   loadDismissedMovies,
-} from '../../actions/dismissed-movies.actions';
+} from '../../actions/movie.actions';
+import { DISMISSED_MOVIES } from '../../constants/movie-types';
 
 class DismissedMoviesContainer extends Component {
   componentWillMount() {
@@ -15,29 +16,30 @@ class DismissedMoviesContainer extends Component {
   }
 
   render() {
-    const { dismissedMovies, isWaiting, hasMoreDismissedMovies } = this.props.moviesState;
+    const movieState = this.props.movieGroupsState[DISMISSED_MOVIES];
+    const { loading, movies, hasMoreMovies } = movieState;
 
     return (
       <Movies
         loadMoreMovies={this.props.loadDismissedMovies}
-        movies={dismissedMovies}
+        movies={movies}
         MovieContainer={MovieContainer}
-        isWaiting={isWaiting}
-        hasMore={hasMoreDismissedMovies}
+        isWaiting={loading}
+        hasMore={hasMoreMovies}
       />
     );
   }
 }
 
 DismissedMoviesContainer.propTypes = {
-  moviesState: PropTypes.object.isRequired,
+  movieGroupsState: PropTypes.object.isRequired,
   loadInitialDismissedMovies: PropTypes.func.isRequired,
   loadDismissedMovies: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    moviesState: state.moviesState,
+    movieGroupsState: state.movieGroupsState,
   };
 }
 

@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 
 import Movies from '../../components/movies/movies.component';
 import MovieContainer from '../../containers/movie/movie.container';
-import { loadInitialSavedMovies, loadSavedMovies } from '../../actions/saved-movies.actions';
+import { loadInitialSavedMovies, loadSavedMovies } from '../../actions/movie.actions';
+import { SAVED_MOVIES } from '../../constants/movie-types';
 
 class SavedMoviesContainer extends Component {
   componentWillMount() {
@@ -12,28 +13,30 @@ class SavedMoviesContainer extends Component {
   }
 
   render() {
-    const { savedMovies, isWaiting, hasMoreSavedMovies } = this.props.moviesState;
+    const movieState = this.props.movieGroupsState[SAVED_MOVIES];
+    const { loading, movies, hasMoreMovies } = movieState;
+
     return (
       <Movies
         loadMoreMovies={this.props.loadSavedMovies}
-        movies={savedMovies}
+        movies={movies}
         MovieContainer={MovieContainer}
-        isWaiting={isWaiting}
-        hasMore={hasMoreSavedMovies}
+        isWaiting={loading}
+        hasMore={hasMoreMovies}
       />
     );
   }
 }
 
 SavedMoviesContainer.propTypes = {
-  moviesState: PropTypes.object.isRequired,
+  movieGroupsState: PropTypes.object.isRequired,
   loadInitialSavedMovies: PropTypes.func.isRequired,
   loadSavedMovies: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    moviesState: state.moviesState,
+    movieGroupsState: state.movieGroupsState,
   };
 }
 

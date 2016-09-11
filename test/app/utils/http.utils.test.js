@@ -78,10 +78,36 @@ describe('App utils', () => {
         error.response.status = 500;
       });
 
-      it('should send to login', () => {
+      it('should dispatch the error', () => {
         utils.handleHttpError(dispatch, error, errorAction);
         should(dispatchResult).be.ok();
         should(dispatchResult).equal(error);
+      });
+    });
+
+    describe('when the error is NOT unauthorized with extra args', () => {
+      let a;
+      let b;
+      let c;
+
+      beforeEach(() => {
+        error.response.status = 500;
+
+        errorAction = (err, x, y, z) => {
+          a = x;
+          b = y;
+          c = z;
+          return err;
+        };
+      });
+
+      it('should dispatch the error correctly', () => {
+        utils.handleHttpError(dispatch, error, errorAction, '1', 2);
+        should(dispatchResult).be.ok();
+        should(dispatchResult).equal(error);
+        should(a).equal('1');
+        should(b).equal(2);
+        should(c).be.undefined();
       });
     });
   });

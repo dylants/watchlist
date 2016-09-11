@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 
 import Movies from '../../components/movies/movies.component';
 import MovieContainer from '../../containers/movie/movie.container';
-import { loadInitialMoviesQueue, loadMoviesQueue } from '../../actions/movies-queue.actions';
+import { loadInitialMoviesQueue, loadMoviesQueue } from '../../actions/movie.actions';
+import { MOVIES_QUEUE } from '../../constants/movie-types';
 
 class MoviesQueueContainer extends Component {
   componentWillMount() {
@@ -12,29 +13,30 @@ class MoviesQueueContainer extends Component {
   }
 
   render() {
-    const { moviesQueue, isWaiting, hasMoreMoviesQueue } = this.props.moviesState;
+    const movieState = this.props.movieGroupsState[MOVIES_QUEUE];
+    const { loading, movies, hasMoreMovies } = movieState;
 
     return (
       <Movies
         loadMoreMovies={this.props.loadMoviesQueue}
-        movies={moviesQueue}
+        movies={movies}
         MovieContainer={MovieContainer}
-        isWaiting={isWaiting}
-        hasMore={hasMoreMoviesQueue}
+        isWaiting={loading}
+        hasMore={hasMoreMovies}
       />
     );
   }
 }
 
 MoviesQueueContainer.propTypes = {
-  moviesState: PropTypes.object.isRequired,
+  movieGroupsState: PropTypes.object.isRequired,
   loadInitialMoviesQueue: PropTypes.func.isRequired,
   loadMoviesQueue: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    moviesState: state.moviesState,
+    movieGroupsState: state.movieGroupsState,
   };
 }
 
