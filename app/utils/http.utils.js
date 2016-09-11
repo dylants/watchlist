@@ -30,10 +30,10 @@ function sendToLogin(dispatch) {
   dispatch(push('/login'));
 }
 
-export function handleHttpError(dispatch, error, errorAction) {
+export function handleHttpError(dispatch, error, errorAction, ...args) {
   if (isUnauthorized(error)) {
     sendToLogin(dispatch);
   } else {
-    dispatch(errorAction(error));
+    dispatch(errorAction(error, ...args));
   }
 }
