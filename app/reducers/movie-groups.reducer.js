@@ -17,9 +17,9 @@ import {
 } from '../constants/action-types';
 
 const initialState = {
-  moviesQueue: {},
-  savedMovies: {},
-  dismissedMovies: {},
+  moviesQueue: moviesReducer(undefined, {}),
+  savedMovies: moviesReducer(undefined, {}),
+  dismissedMovies: moviesReducer(undefined, {}),
 };
 
 export default function movieGroupsReducer(state = initialState, action) {
@@ -118,15 +118,7 @@ export default function movieGroupsReducer(state = initialState, action) {
 
       return updatedState;
     }
-    default: {
-      // initial state is assumed here, but we must populate each sub-movies state
-      const updatedState = cloneDeep(state);
-
-      updatedState.moviesQueue = moviesReducer(undefined, {});
-      updatedState.savedMovies = moviesReducer(undefined, {});
-      updatedState.dismissedMovies = moviesReducer(undefined, {});
-
-      return updatedState;
-    }
+    default:
+      return state;
   }
 }
