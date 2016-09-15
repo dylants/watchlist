@@ -5,7 +5,6 @@ import Movie from '../../../components/movie/movie.component';
 import style from './movie-test.container.scss';
 
 export default function MovieTestContainer() {
-  const image = 'http://www.fillmurray.com/206/300';
   const synopsis1 = 'Voluptas odit explicabo atque mollitia occaecati sunt. Non ' +
     'esse nostrum doloremque officiis. Dolor voluptatibus fugit cumque soluta.';
   const synopsis2 = 'Nemo est voluptatem non odio voluptatem fugit. Iste ' +
@@ -25,7 +24,7 @@ export default function MovieTestContainer() {
       <Movie
         id="1"
         title="Movie Queue Certified Popcorn"
-        image={image}
+        image={'http://www.fillmurray.com/500/300'}
         userScore={80}
         criticScore={90}
         tomatoIcon="certified"
@@ -42,7 +41,7 @@ export default function MovieTestContainer() {
       <Movie
         id="1"
         title="Movie Queue Fresh Spilled"
-        image={image}
+        image={'http://www.fillmurray.com/180/267'}
         userScore={60}
         criticScore={90}
         tomatoIcon="fresh"
@@ -59,7 +58,7 @@ export default function MovieTestContainer() {
       <Movie
         id="1"
         title="Movie Queue Rotten Popcorn"
-        image={image}
+        image={'http://www.fillmurray.com/100/300'}
         userScore={60}
         criticScore={50}
         tomatoIcon="rotten"
@@ -76,7 +75,7 @@ export default function MovieTestContainer() {
       <Movie
         id="1"
         title="Saved Movie"
-        image={image}
+        image={'http://www.fillmurray.com/100/100'}
         userScore={90}
         criticScore={80}
         tomatoIcon="fresh"
@@ -93,7 +92,7 @@ export default function MovieTestContainer() {
       <Movie
         id="1"
         title="Dismissed Saved Movie"
-        image={image}
+        image={'http://www.fillmurray.com/400/400'}
         userScore={40}
         criticScore={30}
         tomatoIcon="rotten"
@@ -110,7 +109,7 @@ export default function MovieTestContainer() {
       <Movie
         id="1"
         title="Dismissed Not Saved Movie"
-        image={image}
+        image={'http://www.fillmurray.com/500/700'}
         userScore={40}
         criticScore={30}
         tomatoIcon="rotten"
