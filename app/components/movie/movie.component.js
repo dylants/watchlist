@@ -63,7 +63,9 @@ export default class Movie extends Component {
 
     return (
       <div className={style.movie}>
-        <img className={style.image} src={this.props.image} role="presentation" />
+        <div className={style.imageContainer}>
+          <img className={style.image} src={this.props.image} role="presentation" />
+        </div>
         <div className={style.title}>{this.props.title}</div>
         <div className={style.scores}>
           <i className={criticIcon}></i>
