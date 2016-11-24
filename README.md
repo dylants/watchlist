@@ -76,7 +76,9 @@ is available in the root of this project to create a user to use locally if
 needed. Edit the `setup.js` file in the project root to suite your needs, and
 once ready, run the following command to populate the user:
 
-`$ node setup.js`
+`$ ./node_modules/.bin/babel-node setup.js`
+
+This assumes you have installed `babel-node` via the `npm install` command above.
 
 ### Start the App ###
 
