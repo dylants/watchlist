@@ -20,8 +20,8 @@ app.use(bodyParser.json());
  * Security / Passport configuration
  * ------------------------------------------ */
 
-// 30 days for session cookie lifetime
-const SESSION_COOKIE_LIFETIME = 1000 * 60 * 60 * 24 * 30;
+// 365 days for session cookie lifetime
+const SESSION_COOKIE_LIFETIME = 1000 * 60 * 60 * 24 * 365;
 
 // use express' session
 app.use(session({
