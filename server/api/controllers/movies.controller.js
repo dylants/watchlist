@@ -1,4 +1,5 @@
 import util from 'util';
+import _ from 'lodash';
 
 const logger = require('../../lib/logger')();
 
@@ -32,7 +33,11 @@ export function getMovies(req, res) {
     }
   }
 
-  loadMovies(conditions, { skip, limit }, (err, movies) => {
+  // skip and limit must both be numbers
+  const parsedSkip = !_.isNaN(skip) ? _.toNumber(skip) : null;
+  const parsedLimit = !_.isNaN(limit) ? _.toNumber(limit) : null;
+
+  loadMovies(conditions, { skip: parsedSkip, limit: parsedLimit }, (err, movies) => {
     if (err) { return handleError(err, res); }
 
     return res.send(movies);
