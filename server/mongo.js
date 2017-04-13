@@ -7,6 +7,10 @@ const logger = require('./lib/logger')();
 const mongoUrl = `${config.mongo.protocol}${config.mongo.host}:` +
   `${config.mongo.port}/${config.mongo.database}`;
 
+// Set the Promise library for mongoose
+// http://mongoosejs.com/docs/promises.html
+mongoose.Promise = global.Promise;
+
 mongoose.connect(mongoUrl, (err) => {
   if (err) {
     logger.error('Could not connect to MongoDB: %s', err.message);

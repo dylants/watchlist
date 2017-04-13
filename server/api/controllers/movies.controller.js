@@ -1,8 +1,3 @@
-import util from 'util';
-import _ from 'lodash';
-
-const logger = require('../../lib/logger')();
-
 import {
   loadMovies,
   downloadMovieData,
@@ -12,12 +7,12 @@ import {
   populateMovieTrailer,
   removeStaleMovies,
 } from '../../lib/movies';
+import {
+  convertQueryStringToNumber,
+  handleError,
+} from '../../lib/http';
 
-function handleError(err, res) {
-  return res.status(500).send({
-    error: typeof err === 'object' ? util.inspect(err) : err,
-  });
-}
+const logger = require('../../lib/logger')();
 
 export function getMovies(req, res) {
   const { saved, dismissed, skip, limit } = req.query;
@@ -34,11 +29,11 @@ export function getMovies(req, res) {
   }
 
   // skip and limit must both be numbers
-  const parsedSkip = !_.isNaN(skip) ? _.toNumber(skip) : null;
-  const parsedLimit = !_.isNaN(limit) ? _.toNumber(limit) : null;
+  const parsedSkip = convertQueryStringToNumber(skip);
+  const parsedLimit = convertQueryStringToNumber(limit);
 
   loadMovies(conditions, { skip: parsedSkip, limit: parsedLimit }, (err, movies) => {
-    if (err) { return handleError(err, res); }
+    if (err) { return handleError(err, 'getMovies', res); }
 
     return res.send(movies);
   });
@@ -51,7 +46,7 @@ export function updateMovie(req, res) {
   logger.log('updateMovie: body: ', body);
 
   function handleCallback(err, movie) {
-    if (err) { return handleError(err, res); }
+    if (err) { return handleError(err, 'updateMovie', res); }
 
     return res.send(movie);
   }
@@ -74,7 +69,7 @@ export function addMovieTrailer(req, res) {
   const movieId = req.params.movieId;
 
   return populateMovieTrailer(movieId, (err, movie) => {
-    if (err) { return handleError(err, res); }
+    if (err) { return handleError(err, 'addMovieTrailer', res); }
 
     return res.send(movie);
   });
@@ -82,7 +77,7 @@ export function addMovieTrailer(req, res) {
 
 export function pullMovieData(req, res) {
   return downloadMovieData((err, stats) => {
-    if (err) { return handleError(err, res); }
+    if (err) { return handleError(err, 'pullMovieData', res); }
 
     return res.send(stats);
   });
@@ -90,7 +85,7 @@ export function pullMovieData(req, res) {
 
 export function deleteStaleMovies(req, res) {
   return removeStaleMovies((err, stats) => {
-    if (err) { return handleError(err, res); }
+    if (err) { return handleError(err, 'deleteStaleMovies', res); }
 
     return res.send(stats);
   });
